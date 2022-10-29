@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "mobvariants",
+  "version": "${version}",
+
+  "name": "Mob Variants",
+  "description": "Give boring mobs a fresh coat of paint!",
+  "authors": [
+    "nyuppo"
+  ],
+  "contributors": [
+    "LlamaLad7"
+  ],
+  "contact": {
+    "homepage": "https://github.com/nyuppo"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/mobvariants/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.nyuppo.MobVariants"
+    ]
+  },
+  "mixins": [
+    "mobvariants.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  }
+}

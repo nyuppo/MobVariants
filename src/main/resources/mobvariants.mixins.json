@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.nyuppo.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MobEntityVariantsMixin",
+    "ChickenVariantsMixin",
+    "ChickenEggMixin",
+    "PigVariantsMixin",
+    "SheepVariantsMixin",
+    "CowVariantsMixin",
+    "WolfVariantsMixin",
+    "ZombieVariantsMixin"
+  ],
+  "client": [
+    "ChickenRendererMixin",
+    "PigRendererMixin",
+    "SheepRendererMixin",
+    "CowRendererMixin",
+    "WolfRendererMixin",
+    "CatFluffMixin",
+    "CatRendererMixin",
+    "ZombieRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
