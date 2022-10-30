@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class MobVariants implements ModInitializer {
-    public static final String MOD_ID = "mobvariants";
+public class MoreMobVariants implements ModInitializer {
+    public static final String MOD_ID = "moremobvariants";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     // Cat variants

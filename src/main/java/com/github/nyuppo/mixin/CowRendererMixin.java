@@ -1,8 +1,7 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.MobVariants;
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.render.entity.CowEntityRenderer;
-import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -14,13 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CowEntityRenderer.class)
 public class CowRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/cow/cow.png");
-    private static final Identifier ASHEN = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/ashen.png");
-    private static final Identifier COOKIE = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/cookie.png");
-    private static final Identifier DAIRY = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/dairy.png");
-    private static final Identifier PINTO = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/pinto.png");
-    private static final Identifier SUNSET = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/sunset.png");
-    private static final Identifier WOOLY = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/wooly.png");
-    private static final Identifier UMBRA = new Identifier(MobVariants.MOD_ID, "textures/entity/cow/umbra.png");
+    private static final Identifier ASHEN = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/ashen.png");
+    private static final Identifier COOKIE = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/cookie.png");
+    private static final Identifier DAIRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/dairy.png");
+    private static final Identifier PINTO = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/pinto.png");
+    private static final Identifier SUNSET = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/sunset.png");
+    private static final Identifier WOOLY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/wooly.png");
+    private static final Identifier UMBRA = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/umbra.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(CowEntity cowEntity, CallbackInfoReturnable<Identifier> ci) {

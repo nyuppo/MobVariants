@@ -1,8 +1,7 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.MobVariants;
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.render.entity.SheepEntityRenderer;
-import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -14,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SheepEntityRenderer.class)
 public class SheepRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/sheep/sheep.png");
-    private static final Identifier PATCHED = new Identifier(MobVariants.MOD_ID, "textures/entity/sheep/patched.png");
-    private static final Identifier FUZZY = new Identifier(MobVariants.MOD_ID, "textures/entity/sheep/fuzzy.png");
-    private static final Identifier ROCKY = new Identifier(MobVariants.MOD_ID, "textures/entity/sheep/rocky.png");
+    private static final Identifier PATCHED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/patched.png");
+    private static final Identifier FUZZY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/fuzzy.png");
+    private static final Identifier ROCKY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/rocky.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(SheepEntity sheepEntity, CallbackInfoReturnable<Identifier> ci) {

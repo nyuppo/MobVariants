@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "mobvariants",
+  "id": "moremobvariants",
   "version": "${version}",
 
-  "name": "Mob Variants",
+  "name": "More Mob Variants",
   "description": "Give boring mobs a fresh coat of paint!",
   "authors": [
     "nyuppo"
@@ -16,16 +16,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/mobvariants/icon.png",
+  "icon": "assets/moremobvariants/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.nyuppo.MobVariants"
+      "com.github.nyuppo.MoreMobVariants"
     ]
   },
   "mixins": [
-    "mobvariants.mixins.json"
+    "moremobvariants.mixins.json"
   ],
 
   "depends": {

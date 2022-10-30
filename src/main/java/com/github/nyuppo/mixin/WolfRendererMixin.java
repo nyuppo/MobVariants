@@ -1,8 +1,7 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.MobVariants;
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.render.entity.WolfEntityRenderer;
-import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -16,21 +15,21 @@ public class WolfRendererMixin {
     private static final Identifier DEFAULT_WILD = new Identifier("textures/entity/wolf/wolf.png");
     private static final Identifier DEFAULT_TAMED = new Identifier("textures/entity/wolf/wolf_tame.png");
     private static final Identifier DEFAULT_ANGRY = new Identifier("textures/entity/wolf/wolf_angry.png");
-    private static final Identifier JUPITER_WILD = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/jupiter_wild.png");
-    private static final Identifier JUPITER_TAMED = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/jupiter_tame.png");
-    private static final Identifier JUPITER_ANGRY = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/jupiter_angry.png");
-    private static final Identifier HUSKY_WILD = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/husky_wild.png");
-    private static final Identifier HUSKY_TAMED = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/husky_tame.png");
-    private static final Identifier HUSKY_ANGRY = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/husky_angry.png");
-    private static final Identifier GERMAN_SHEPHERD_WILD = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_wild.png");
-    private static final Identifier GERMAN_SHEPHERD_TAMED = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_tame.png");
-    private static final Identifier GERMAN_SHEPHERD_ANGRY = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_angry.png");
-    private static final Identifier GOLDEN_RETRIEVER_WILD = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_wild.png");
-    private static final Identifier GOLDEN_RETRIEVER_TAMED = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_tame.png");
-    private static final Identifier GOLDEN_RETRIEVER_ANGRY = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_angry.png");
-    private static final Identifier FRENCH_BULLDOG_WILD = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_wild.png");
-    private static final Identifier FRENCH_BULLDOG_TAMED = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_tame.png");
-    private static final Identifier FRENCH_BULLDOG_ANGRY = new Identifier(MobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_angry.png");
+    private static final Identifier JUPITER_WILD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/jupiter_wild.png");
+    private static final Identifier JUPITER_TAMED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/jupiter_tame.png");
+    private static final Identifier JUPITER_ANGRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/jupiter_angry.png");
+    private static final Identifier HUSKY_WILD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/husky_wild.png");
+    private static final Identifier HUSKY_TAMED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/husky_tame.png");
+    private static final Identifier HUSKY_ANGRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/husky_angry.png");
+    private static final Identifier GERMAN_SHEPHERD_WILD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_wild.png");
+    private static final Identifier GERMAN_SHEPHERD_TAMED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_tame.png");
+    private static final Identifier GERMAN_SHEPHERD_ANGRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/german_shepherd_angry.png");
+    private static final Identifier GOLDEN_RETRIEVER_WILD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_wild.png");
+    private static final Identifier GOLDEN_RETRIEVER_TAMED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_tame.png");
+    private static final Identifier GOLDEN_RETRIEVER_ANGRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/golden_retriever_angry.png");
+    private static final Identifier FRENCH_BULLDOG_WILD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_wild.png");
+    private static final Identifier FRENCH_BULLDOG_TAMED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_tame.png");
+    private static final Identifier FRENCH_BULLDOG_ANGRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/french_bulldog_angry.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(WolfEntity wolfEntity, CallbackInfoReturnable<Identifier> ci) {

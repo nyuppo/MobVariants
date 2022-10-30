@@ -1,9 +1,8 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.MobVariants;
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ZombieBaseEntityRenderer.class)
 public class ZombieRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/zombie/zombie.png");
-    private static final Identifier ALEX = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_alex.png");
-    private static final Identifier ARI = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_ari.png");
-    private static final Identifier EFE = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_efe.png");
-    private static final Identifier KAI = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_kai.png");
-    private static final Identifier MAKENA = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_makena.png");
-    private static final Identifier NOOR = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_noor.png");
-    private static final Identifier SUNNY = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_sunny.png");
-    private static final Identifier ZURI = new Identifier(MobVariants.MOD_ID, "textures/entity/zombie/zombie_zuri.png");
+    private static final Identifier ALEX = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_alex.png");
+    private static final Identifier ARI = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_ari.png");
+    private static final Identifier EFE = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_efe.png");
+    private static final Identifier KAI = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_kai.png");
+    private static final Identifier MAKENA = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_makena.png");
+    private static final Identifier NOOR = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_noor.png");
+    private static final Identifier SUNNY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_sunny.png");
+    private static final Identifier ZURI = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/zombie/zombie_zuri.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(ZombieEntity zombieEntity, CallbackInfoReturnable<Identifier> ci) {

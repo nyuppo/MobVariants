@@ -1,11 +1,9 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.MobVariants;
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.render.entity.ChickenEntityRenderer;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,13 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ChickenEntityRenderer.class)
 public class ChickenRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/chicken.png");
-    private static final Identifier AMBER = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/amber.png");
-    private static final Identifier GOLD_CRESTED = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/gold_crested.png");
-    private static final Identifier BRONZED = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/bronzed.png");
-    private static final Identifier SKEWBALD = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/skewbald.png");
-    private static final Identifier STORMY = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/stormy.png");
-    private static final Identifier MIDNIGHT = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/midnight.png");
-    private static final Identifier BONE = new Identifier(MobVariants.MOD_ID, "textures/entity/chicken/bone.png");
+    private static final Identifier AMBER = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/amber.png");
+    private static final Identifier GOLD_CRESTED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/gold_crested.png");
+    private static final Identifier BRONZED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/bronzed.png");
+    private static final Identifier SKEWBALD = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/skewbald.png");
+    private static final Identifier STORMY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/stormy.png");
+    private static final Identifier MIDNIGHT = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/midnight.png");
+    private static final Identifier BONE = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/chicken/bone.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(ChickenEntity chickenEntity, CallbackInfoReturnable<Identifier> ci) {
