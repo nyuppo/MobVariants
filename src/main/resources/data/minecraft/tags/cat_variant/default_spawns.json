@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "mobvariants:gray_tabby",
-    "mobvariants:doug",
-    "mobvariants:handsome"
+    "moremobvariants:gray_tabby",
+    "moremobvariants:doug",
+    "moremobvariants:handsome"
   ]
 }
