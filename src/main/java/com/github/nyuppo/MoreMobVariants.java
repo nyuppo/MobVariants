@@ -2,9 +2,9 @@ package com.github.nyuppo;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.passive.CatVariant;
-import net.minecraft.tag.CatVariantTags;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +23,8 @@ public class MoreMobVariants implements ModInitializer {
         LOGGER.info("Giving mobs a fresh coat of paint...");
         
         // Register cat variants
-        Registry.register(Registry.CAT_VARIANT, new Identifier(MOD_ID, "gray_tabby"), GRAY_TABBY);
-        Registry.register(Registry.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
-        Registry.register(Registry.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
+        Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "gray_tabby"), GRAY_TABBY);
+        Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
+        Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
     }
 }
