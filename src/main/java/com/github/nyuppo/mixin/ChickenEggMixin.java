@@ -17,25 +17,6 @@ public class ChickenEggMixin {
             at = @At("STORE")
     )
     private ChickenEntity mixin(ChickenEntity chickenEntity) {
-        /*
-        ChickenEntity child = EntityType.CHICKEN.create(chickenEntity.world);
-
-        // Get random variant
-        int i = this.getRandomVariant(chickenEntity.getRandom());
-
-        // If in nether, random chance of bone chicken
-        if (chickenEntity.world.getBiome(chickenEntity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && chickenEntity.getRandom().nextInt(6) == 0) {
-            i = 7;
-        }
-
-        // Write variant to child's NBT
-        NbtCompound childNbt = new NbtCompound();
-        child.writeNbt(childNbt);
-        childNbt.putInt("Variant", i);
-        child.readCustomDataFromNbt(childNbt);
-
-        return child;
-        */
         int i = this.getRandomVariant(chickenEntity.getRandom());
 
         if (chickenEntity.world.getBiome(chickenEntity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && chickenEntity.getRandom().nextInt(6) == 0) {
