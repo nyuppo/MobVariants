@@ -20,7 +20,6 @@
     "CowRendererMixin",
     "WolfRendererMixin",
     "CatFluffMixin",
-    "CatRendererMixin",
     "ZombieRendererMixin"
   ],
   "injectors": {
