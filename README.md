@@ -1,6 +1,8 @@
 # More Mob Variants
 
-Minecraft Fabric mod for adding new variants to existing mobs. Developed for 1.19.2.
+Minecraft Fabric mod for adding new variants to existing mobs. Developed for 1.19.4.
+
+For the Forge version, visit [this page](https://github.com/nyuppo/MobVariantsForge).
 
 ## Installation
 
