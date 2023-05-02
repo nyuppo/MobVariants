@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -96,31 +97,20 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch (variantName) {
+            case "ashen" -> 1;
+            case "cookie" -> 2;
+            case "dairy" -> 3;
+            case "pinto" -> 4;
+            case "sunset" -> 5;
+            case "wooly" -> 6;
+            case "umbra" -> 7;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(Random random) {
-        int i = random.nextInt(16);
-        if (i == 0) {
-            // Umbra
-            return 7;
-        } else if (i > 0 && i <= 2) {
-            // Ashen
-            return 1;
-        } else if (i > 2 && i <= 4) {
-            // Cookie
-            return 2;
-        } else if (i > 4 && i <= 6) {
-            // Dairy
-            return 3;
-        } else if (i > 6 && i <= 8) {
-            // Pinto
-            return 4;
-        } else if (i > 8 && i <= 10) {
-            // Sunset
-            return 5;
-        } else if (i > 10 && i <= 12) {
-            // Wooly
-            return 6;
-        }
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("cow", random));
     }
 }

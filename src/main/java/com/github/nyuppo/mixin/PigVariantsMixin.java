@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -94,27 +95,18 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch (variantName) {
+            case "mottled" -> 1;
+            case "piebald" -> 2;
+            case "pink_footed" -> 3;
+            case "sooty" -> 4;
+            case "spotted" -> 5;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(Random random) {
-        int i = random.nextInt(7);
-
-        if (i == 0) {
-            // Mottled
-            return 1;
-        } else if (i == 1) {
-            // Piebald
-            return 2;
-        } else if (i == 2) {
-            // Pink footed
-            return 3;
-        } else if (i == 3) {
-            // Sooty
-            return 4;
-        } else if (i == 4) {
-            // Spotted
-            return 5;
-        }
-
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("pig", random));
     }
 }

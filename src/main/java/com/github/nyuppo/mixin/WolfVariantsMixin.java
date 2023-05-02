@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -117,18 +118,18 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch (variantName) {
+            case "jupiter" -> 1;
+            case "husky" -> 2;
+            case "german_shepherd" -> 3;
+            case "golden_retriever" -> 4;
+            case "french_bulldog" -> 5;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(Random random) {
-        int i = random.nextInt(3);
-
-        if (i == 0) {
-            // Jupiter
-            return 1;
-        } else if (i == 1) {
-            // Husky
-            return 2;
-        }
-
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("wolf", random));
     }
 }

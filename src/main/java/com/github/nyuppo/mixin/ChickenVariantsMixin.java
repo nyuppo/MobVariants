@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -109,28 +110,19 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch(variantName) {
+            case "amber" -> 1;
+            case "gold_crested" -> 2;
+            case "bronzed" -> 3;
+            case "skewbald" -> 4;
+            case "stormy" -> 5;
+            case "midnight" -> 6;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(Random random) {
-        int i = random.nextInt(14);
-        if (i == 0) {
-            // Midnight
-            return 6;
-        } else if (i > 0 && i <= 2) {
-            // Amber
-            return 1;
-        } else if (i > 2 && i <= 4) {
-            // Gold Crested
-            return 2;
-        } else if (i > 4 && i <= 6) {
-            // Bronzed
-            return 3;
-        } else if (i > 6 && i <= 8) {
-            // Skewbald
-            return 4;
-        } else if (i > 8 && i <= 10) {
-            // Stormy
-            return 5;
-        }
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("chicken", random));
     }
 }
