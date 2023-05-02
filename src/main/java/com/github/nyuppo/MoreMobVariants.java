@@ -22,6 +22,7 @@ public class MoreMobVariants implements ModInitializer {
     public static final CatVariant GRAY_TABBY = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/gray_tabby.png"));
     public static final CatVariant DOUG = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/doug.png"));
     public static final CatVariant HANDSOME = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/handsome.png"));
+    public static final CatVariant TORTOISESHELL = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/tortoiseshell.png"));
 
     @Override
     public void onInitialize() {
@@ -34,5 +35,6 @@ public class MoreMobVariants implements ModInitializer {
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "gray_tabby"), GRAY_TABBY);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
+        Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "tortoiseshell"), TORTOISESHELL);
     }
 }
