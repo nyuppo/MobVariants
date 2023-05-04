@@ -1,9 +1,12 @@
 package com.github.nyuppo.config;
 
+import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.util.WeightedRandomBag;
 import net.minecraft.util.math.random.Random;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class VariantWeights {
     private static HashMap<String, Integer> chickenWeights;
@@ -149,6 +152,59 @@ public class VariantWeights {
         sheepWeights = new HashMap<String, Integer>();
         wolfWeights = new HashMap<String, Integer>();
         zombieWeights = new HashMap<String, Integer>();
+    }
+
+    public static void applyBlacklists() {
+        Iterator<String> i;
+        String variant;
+
+        i = chickenWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("chicken", variant)) {
+                i.remove();
+            }
+        }
+
+        i = cowWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("cow", variant)) {
+                i.remove();
+            }
+        }
+
+        i = pigWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("pig", variant)) {
+                i.remove();
+            }
+        }
+
+        i = sheepWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("sheep", variant)) {
+                i.remove();
+            }
+        }
+
+        i = wolfWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("wolf", variant)) {
+                i.remove();
+            }
+        }
+
+        i = zombieWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("zombie", variant)) {
+                i.remove();
+            }
+        }
     }
 
     static {
