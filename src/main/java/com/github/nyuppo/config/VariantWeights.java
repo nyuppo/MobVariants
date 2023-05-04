@@ -4,7 +4,6 @@ import com.github.nyuppo.util.WeightedRandomBag;
 import net.minecraft.util.math.random.Random;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class VariantWeights {
     private static HashMap<String, Integer> chickenWeights;
@@ -14,12 +13,12 @@ public class VariantWeights {
     private static HashMap<String, Integer> wolfWeights;
     private static HashMap<String, Integer> zombieWeights;
 
-    private static HashMap<String, Integer> defaultChickenWeights;
-    private static HashMap<String, Integer> defaultCowWeights;
-    private static HashMap<String, Integer> defaultPigWeights;
-    private static HashMap<String, Integer> defaultSheepWeights;
-    private static HashMap<String, Integer> defaultWolfWeights;
-    private static HashMap<String, Integer> defaultZombieWeights;
+    private static final HashMap<String, Integer> defaultChickenWeights;
+    private static final HashMap<String, Integer> defaultCowWeights;
+    private static final HashMap<String, Integer> defaultPigWeights;
+    private static final HashMap<String, Integer> defaultSheepWeights;
+    private static final HashMap<String, Integer> defaultWolfWeights;
+    private static final HashMap<String, Integer> defaultZombieWeights;
 
     public static void setChickenWeights(HashMap<String, Integer> weights) {
         chickenWeights = weights;
@@ -169,9 +168,39 @@ public class VariantWeights {
         defaultChickenWeights.put("stormy", 2);
         defaultChickenWeights.put("default", 3);
         defaultCowWeights = new HashMap<String, Integer>();
+        defaultCowWeights.put("umbra", 1);
+        defaultCowWeights.put("ashen", 2);
+        defaultCowWeights.put("cookie", 2);
+        defaultCowWeights.put("dairy", 2);
+        defaultCowWeights.put("pinto", 2);
+        defaultCowWeights.put("sunset", 2);
+        defaultCowWeights.put("wooly", 2);
+        defaultCowWeights.put("default", 3);
         defaultPigWeights = new HashMap<String, Integer>();
+        defaultPigWeights.put("mottled", 1);
+        defaultPigWeights.put("piebald", 1);
+        defaultPigWeights.put("pink_footed", 1);
+        defaultPigWeights.put("sooty", 1);
+        defaultPigWeights.put("spotted", 1);
+        defaultPigWeights.put("default", 2);
         defaultSheepWeights = new HashMap<String, Integer>();
+        defaultSheepWeights.put("patched", 1);
+        defaultSheepWeights.put("fuzzy", 1);
+        defaultSheepWeights.put("rocky", 1);
+        defaultSheepWeights.put("default", 2);
         defaultWolfWeights = new HashMap<String, Integer>();
+        defaultWolfWeights.put("jupiter", 1);
+        defaultWolfWeights.put("husky", 1);
+        defaultWolfWeights.put("default", 1);
         defaultZombieWeights = new HashMap<String, Integer>();
+        defaultZombieWeights.put("alex", 2);
+        defaultZombieWeights.put("ari", 1);
+        defaultZombieWeights.put("efe", 1);
+        defaultZombieWeights.put("kai", 1);
+        defaultZombieWeights.put("makena", 1);
+        defaultZombieWeights.put("noor", 1);
+        defaultZombieWeights.put("sunny", 1);
+        defaultZombieWeights.put("zuri", 1);
+        defaultZombieWeights.put("default", 3);
     }
 }
