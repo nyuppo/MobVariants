@@ -36,7 +36,6 @@ public class CatBlacklistMixin {
                 }).ifPresent((variant) -> {
                     ((CatEntity)(Object)this).setVariant((CatVariant)variant.value());
                 });
-                MoreMobVariants.LOGGER.info("Cat had blacklisted variant \"" + currentVariant.toString() + "\", trying \"" + ((CatEntity)(Object)this).getVariant().toString() + "\"");
             } else {
                 isValidVariant = true;
             }
