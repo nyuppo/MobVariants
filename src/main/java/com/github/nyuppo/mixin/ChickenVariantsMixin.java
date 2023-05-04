@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantBlacklist;
 import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -56,9 +57,12 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         int i = this.getRandomVariant(world.getRandom());
 
         // If in nether, random chance of bone chicken
-        if (world.getBiome(((ChickenEntity)(Object)this).getBlockPos()).isIn(BiomeTags.IS_NETHER) && world.getRandom().nextInt(6) == 0) {
-            i = 7;
+        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
+            if (world.getBiome(((ChickenEntity)(Object)this).getBlockPos()).isIn(BiomeTags.IS_NETHER) && world.getRandom().nextInt(6) == 0) {
+                i = 7;
+            }
         }
+
 
         ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, i);
     }
@@ -97,8 +101,10 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         }
 
         // If in nether, random chance of bone chicken
-        if (world.getBiome(entity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && ((ChickenEntity)(Object)this).getRandom().nextInt(6) == 0) {
-            i = 7;
+        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
+            if (world.getBiome(entity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && ((ChickenEntity)(Object)this).getRandom().nextInt(6) == 0) {
+                i = 7;
+            }
         }
 
         // Write variant to child's NBT
@@ -110,7 +116,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         ci.setReturnValue(child);
     }
 
-    private int getVariantID(String variantName) {
+    public int getVariantID(String variantName) {
         return switch(variantName) {
             case "amber" -> 1;
             case "gold_crested" -> 2;
@@ -122,7 +128,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         };
     }
 
-    private int getRandomVariant(Random random) {
+    public int getRandomVariant(Random random) {
         return getVariantID(VariantWeights.getRandomVariant("chicken", random));
     }
 }
