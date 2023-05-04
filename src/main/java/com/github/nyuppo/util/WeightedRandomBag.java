@@ -1,6 +1,5 @@
 package com.github.nyuppo.util;
 
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.random.Random;
 
 import java.util.ArrayList;

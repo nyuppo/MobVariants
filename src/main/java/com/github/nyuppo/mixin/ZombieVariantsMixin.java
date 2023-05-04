@@ -7,7 +7,6 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;

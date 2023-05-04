@@ -2,7 +2,6 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.config.VariantBlacklist;
 import com.github.nyuppo.config.VariantWeights;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.projectile.thrown.EggEntity;
 import net.minecraft.nbt.NbtCompound;

@@ -1,12 +1,10 @@
 package com.github.nyuppo.config;
 
-import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.util.WeightedRandomBag;
 import net.minecraft.util.math.random.Random;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class VariantWeights {
     private static HashMap<String, Integer> chickenWeights;
