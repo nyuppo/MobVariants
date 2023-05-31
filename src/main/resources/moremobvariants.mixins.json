@@ -21,7 +21,8 @@
     "CowRendererMixin",
     "WolfRendererMixin",
     "CatFluffMixin",
-    "ZombieRendererMixin"
+    "ZombieRendererMixin",
+    "PigFlowerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -32,25 +33,40 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     // 4 = sooty
     // 5 = spotted
 
+    private static final TrackedData<Boolean> MUDDY_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final String MUDDY_NBT_KEY = "IsMuddy";
+
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
         ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, 0);
+        ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_ID, false);
     }
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putInt(NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID));
+        nbt.putBoolean(MUDDY_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_ID));
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, nbt.getInt(NBT_KEY));
+        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, nbt.getBoolean(MUDDY_NBT_KEY));
     }
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
         int i = this.getRandomVariant(world.getRandom());
         ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, i);
+    }
+
+    @Override
+    protected void onTick(CallbackInfo ci) {
+        if (((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
+            ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
+        } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
+            ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+        }
     }
 
     @Inject(

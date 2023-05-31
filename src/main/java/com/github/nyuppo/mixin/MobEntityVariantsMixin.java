@@ -46,4 +46,12 @@ public abstract class MobEntityVariantsMixin {
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
 
     }
+
+    @Inject(
+            method = "tick",
+            at = @At("RETURN")
+    )
+    protected void onTick(CallbackInfo ci) {
+
+    }
 }
