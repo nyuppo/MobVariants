@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -62,10 +63,12 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onTick(CallbackInfo ci) {
-        if (((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
-            ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
-        } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
-            ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+        if (VariantSettings.getEnableMuddyPigs()) {
+            if (((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).world.getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
+                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
+            } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
+                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+            }
         }
     }
 

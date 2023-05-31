@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.config.VariantBlacklist;
+import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -83,17 +84,17 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
                     boolean hasBred = false;
 
                     if ((thisVariant == 2 && parentVariant == 1) || (thisVariant == 1 && parentVariant == 2)) { // German shepherd
-                        if (entity.getRandom().nextBoolean() &&!VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
+                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
                             hasBred = true;
                             i = 3;
                         }
                     } else if ((thisVariant == 1 && parentVariant == 0) || (thisVariant == 0 && parentVariant == 1)) { // Golden retriever
-                        if (entity.getRandom().nextBoolean() &&!VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
+                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
                             hasBred = true;
                             i = 4;
                         }
                     } else if ((thisVariant == 2 && parentVariant == 4) || (thisVariant == 4 && parentVariant == 2)) { // French bulldog
-                        if (entity.getRandom().nextBoolean() &&!VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
+                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
                             hasBred = true;
                             i = 5;
                         }

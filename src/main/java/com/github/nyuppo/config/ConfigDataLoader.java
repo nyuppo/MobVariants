@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
@@ -14,8 +15,11 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener {
+    private final Identifier SETTINGS_ID = new Identifier(MoreMobVariants.MOD_ID, "settings/settings.json");
+
     @Override
     public Identifier getFabricId() {
         return new Identifier(MoreMobVariants.MOD_ID, MoreMobVariants.MOD_ID);
@@ -38,12 +42,23 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         }
 
         for (Identifier id : manager.findResources("blacklist", path -> path.getPath().endsWith(".json")).keySet()) {
+            MoreMobVariants.LOGGER.info(id.toString());
             String target = id.getPath().substring(10, id.getPath().length() - 5);
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                 applyBlacklist(id, new InputStreamReader(stream, StandardCharsets.UTF_8));
             } catch (Exception e) {
                 MoreMobVariants.LOGGER.error("Error occured while loading blacklist config " + id.toShortTranslationKey(), e);
                 VariantBlacklist.resetBlacklist(target);
+            }
+        }
+
+        Optional<Resource> settings = manager.getResource(SETTINGS_ID);
+        if (settings.isPresent()) {
+            try (InputStream stream = manager.getResource(SETTINGS_ID).get().getInputStream()) {
+                applySettings(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                MoreMobVariants.LOGGER.error("Error occured while loading settings config " + SETTINGS_ID.toShortTranslationKey(), e);
+                VariantSettings.resetSettings();
             }
         }
 
@@ -76,6 +91,19 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                 for (JsonElement entry : blacklist) {
                     VariantBlacklist.blacklistVariant(target, entry.getAsString());
                 }
+            }
+        }
+    }
+
+    private void applySettings(Reader reader) {
+        JsonElement element = JsonParser.parseReader(reader);
+
+        if (element.getAsJsonObject().size() != 0) {
+            if (element.getAsJsonObject().has("enable_muddy_pigs")) {
+                VariantSettings.setEnableMuddyPigs(element.getAsJsonObject().get("enable_muddy_pigs").getAsBoolean());
+            }
+            if (element.getAsJsonObject().has("wolf_breeding_chance")) {
+                VariantSettings.setWolfBreedingChance(element.getAsJsonObject().get("wolf_breeding_chance").getAsInt());
             }
         }
     }
