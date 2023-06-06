@@ -8,7 +8,6 @@ public class VariantSettings {
 
     public static void setEnableMuddyPigs(boolean shouldEnableMuddyPigs) {
         enableMuddyPigs = shouldEnableMuddyPigs;
-        MoreMobVariants.LOGGER.info("set enableMuddyPigs to " + enableMuddyPigs);
     }
 
     public static boolean getEnableMuddyPigs() {
@@ -22,8 +21,6 @@ public class VariantSettings {
         } else if (wolfBreedingChance > 10) {
             wolfBreedingChance = 10;
         }
-
-        MoreMobVariants.LOGGER.info("set wolfBreedingChance to " + wolfBreedingChance);
     }
 
     public static int getWolfBreedingChance() {

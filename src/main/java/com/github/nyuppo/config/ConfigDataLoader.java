@@ -42,7 +42,6 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         }
 
         for (Identifier id : manager.findResources("blacklist", path -> path.getPath().endsWith(".json")).keySet()) {
-            MoreMobVariants.LOGGER.info(id.toString());
             String target = id.getPath().substring(10, id.getPath().length() - 5);
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                 applyBlacklist(id, new InputStreamReader(stream, StandardCharsets.UTF_8));
