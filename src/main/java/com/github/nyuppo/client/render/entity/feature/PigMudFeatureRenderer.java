@@ -26,7 +26,7 @@ import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
 public class PigMudFeatureRenderer<T extends PigEntity, M extends PigEntityModel<T>> extends FeatureRenderer<T, M> {
-    private static final RenderLayer MUD_SKIN = RenderLayer.getEntityTranslucent(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/pig/mud_overlay.png"));
+    private static final RenderLayer MUD_SKIN = RenderLayer.getEntityTranslucent(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/pig/mud/mud_overlay.png"));
     private static final String MUDDY_NBT_KEY = "IsMuddy";
 
     public PigMudFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext) {
