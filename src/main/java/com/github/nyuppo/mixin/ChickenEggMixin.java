@@ -21,7 +21,7 @@ public class ChickenEggMixin {
         int i = this.getRandomVariant(chickenEntity.getRandom());
 
         if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
-            if (chickenEntity.world.getBiome(chickenEntity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && chickenEntity.getRandom().nextInt(6) == 0) {
+            if (chickenEntity.getWorld().getBiome(chickenEntity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && chickenEntity.getRandom().nextInt(6) == 0) {
                 i = 7;
             }
         }
