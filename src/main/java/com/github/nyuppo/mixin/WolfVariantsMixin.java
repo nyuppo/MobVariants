@@ -9,7 +9,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.NbtCompound;

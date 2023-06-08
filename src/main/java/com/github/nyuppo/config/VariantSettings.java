@@ -1,7 +1,5 @@
 package com.github.nyuppo.config;
 
-import com.github.nyuppo.MoreMobVariants;
-
 public class VariantSettings {
     private static boolean enableMuddyPigs;
     private static int wolfBreedingChance;

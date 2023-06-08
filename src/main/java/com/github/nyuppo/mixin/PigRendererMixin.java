@@ -1,7 +1,6 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
-import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.PigEntityRenderer;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -9,7 +8,6 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PigEntityRenderer.class)

@@ -1,10 +1,8 @@
 package com.github.nyuppo.client.render.entity.feature;
 
 import com.github.nyuppo.MoreMobVariants;
-import com.github.nyuppo.mixin.PigVariantsMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -12,17 +10,11 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.feature.HeadFeatureRenderer;
 import net.minecraft.client.render.entity.model.PigEntityModel;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
 public class PigMudFeatureRenderer<T extends PigEntity, M extends PigEntityModel<T>> extends FeatureRenderer<T, M> {
