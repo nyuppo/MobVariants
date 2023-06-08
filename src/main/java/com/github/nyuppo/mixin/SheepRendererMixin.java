@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SheepEntityRenderer.class)
 public class SheepRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/sheep/sheep.png");
-    private static final Identifier PATCHED = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/patched.png");
-    private static final Identifier FUZZY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/fuzzy.png");
-    private static final Identifier ROCKY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/rocky.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(SheepEntity sheepEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -23,21 +20,11 @@ public class SheepRendererMixin {
         sheepEntity.writeNbt(nbt);
 
         if (nbt.contains("Variant")) {
-            int i = nbt.getInt("Variant");
-            switch (i) {
-                case 1:
-                    ci.setReturnValue(PATCHED);
-                    break;
-                case 2:
-                    ci.setReturnValue(FUZZY);
-                    break;
-                case 3:
-                    ci.setReturnValue(ROCKY);
-                    break;
-                case 0:
-                default:
-                    ci.setReturnValue(DEFAULT);
-                    break;
+            String variant = nbt.getString("Variant");
+            if (variant.equals("default")) {
+                ci.setReturnValue(DEFAULT);
+            } else {
+                ci.setReturnValue(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/" + variant + ".png"));
             }
         }
     }

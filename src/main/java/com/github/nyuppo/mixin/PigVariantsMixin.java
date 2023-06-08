@@ -24,51 +24,52 @@ import net.minecraft.util.math.random.Random;
 
 @Mixin(PigEntity.class)
 public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
-    private static final TrackedData<Integer> VARIANT_ID =
-            DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<String> VARIANT_ID =
+            DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final String NBT_KEY = "Variant";
-    // 0 = default
-    // 1 = mottled
-    // 2 = piebald
-    // 3 = pink_footed
-    // 4 = sooty
-    // 5 = spotted
 
     private static final TrackedData<Boolean> MUDDY_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final String MUDDY_NBT_KEY = "IsMuddy";
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, 0);
+        ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
         ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_ID, false);
     }
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putInt(NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID));
+        nbt.putString(NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID));
         nbt.putBoolean(MUDDY_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_ID));
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, nbt.getInt(NBT_KEY));
+        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, nbt.getString(NBT_KEY));
         ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, nbt.getBoolean(MUDDY_NBT_KEY));
     }
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        int i = this.getRandomVariant(world.getRandom());
-        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, i);
+        String variant = this.getRandomVariant(world.getRandom());
+        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
     }
 
     @Override
     protected void onTick(CallbackInfo ci) {
+        // Handle muddy pigs
         if (VariantSettings.getEnableMuddyPigs()) {
             if (((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
                 ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
             } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
                 ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
             }
+        }
+
+        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
+        if (((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
+            String variant = this.getRandomVariant(((PigEntity)(Object)this).getWorld().getRandom());
+            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
         }
     }
 
@@ -80,7 +81,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<PigEntity> ci) {
         PigEntity child = (PigEntity)EntityType.PIG.create(world);
 
-        int i = 0;
+        String variant = "default";
         if (entity.getRandom().nextInt(4) != 0) {
             // Make child inherit parent's variants
             NbtCompound thisNbt = new NbtCompound();
@@ -89,43 +90,32 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
             entity.writeNbt(parentNbt);
 
             if (thisNbt.contains("Variant") && parentNbt.contains("Variant")) {
-                int thisVariant = thisNbt.getInt("Variant");
-                int parentVariant = parentNbt.getInt("Variant");
+                String thisVariant = thisNbt.getString("Variant");
+                String parentVariant = parentNbt.getString("Variant");
 
-                if (thisVariant == parentVariant) {
+                if (thisVariant.equals("parentVariant")) {
                     // If both parents are the same variant, just pick that one
-                    i = thisVariant;
+                    variant = thisVariant;
                 } else {
                     // Otherwise, pick a random parent's variant
-                    i = entity.getRandom().nextBoolean() ? thisVariant : parentVariant;
+                    variant = entity.getRandom().nextBoolean() ? thisVariant : parentVariant;
                 }
             }
         } else {
             // Give child random variant
-            i = this.getRandomVariant(entity.getRandom());
+            variant = this.getRandomVariant(entity.getRandom());
         }
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putInt("Variant", i);
+        childNbt.putString("Variant", variant);
         child.readCustomDataFromNbt(childNbt);
 
         ci.setReturnValue(child);
     }
 
-    private int getVariantID(String variantName) {
-        return switch (variantName) {
-            case "mottled" -> 1;
-            case "piebald" -> 2;
-            case "pink_footed" -> 3;
-            case "sooty" -> 4;
-            case "spotted" -> 5;
-            default -> 0;
-        };
-    }
-
-    private int getRandomVariant(Random random) {
-        return getVariantID(VariantWeights.getRandomVariant("pig", random));
+    private String getRandomVariant(Random random) {
+        return VariantWeights.getRandomVariant("pig", random);
     }
 }

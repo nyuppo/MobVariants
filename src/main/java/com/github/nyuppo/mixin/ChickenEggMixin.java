@@ -18,35 +18,23 @@ public class ChickenEggMixin {
             at = @At("STORE")
     )
     private ChickenEntity mixin(ChickenEntity chickenEntity) {
-        int i = this.getRandomVariant(chickenEntity.getRandom());
+        String variant = this.getRandomVariant(chickenEntity.getRandom());
 
         if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
             if (chickenEntity.getWorld().getBiome(chickenEntity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && chickenEntity.getRandom().nextInt(6) == 0) {
-                i = 7;
+                variant = "bone";
             }
         }
 
         NbtCompound newNbt = new NbtCompound();
         chickenEntity.writeNbt(newNbt);
-        newNbt.putInt("Variant", i);
+        newNbt.putString("Variant", variant);
         chickenEntity.readCustomDataFromNbt(newNbt);
 
         return chickenEntity;
     }
 
-    public int getVariantID(String variantName) {
-        return switch(variantName) {
-            case "amber" -> 1;
-            case "gold_crested" -> 2;
-            case "bronzed" -> 3;
-            case "skewbald" -> 4;
-            case "stormy" -> 5;
-            case "midnight" -> 6;
-            default -> 0;
-        };
-    }
-
-    public int getRandomVariant(Random random) {
-        return getVariantID(VariantWeights.getRandomVariant("chicken", random));
+    public String getRandomVariant(Random random) {
+        return VariantWeights.getRandomVariant("chicken", random);
     }
 }

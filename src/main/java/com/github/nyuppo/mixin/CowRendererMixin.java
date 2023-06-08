@@ -13,13 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CowEntityRenderer.class)
 public class CowRendererMixin {
     private static final Identifier DEFAULT = new Identifier("textures/entity/cow/cow.png");
-    private static final Identifier ASHEN = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/ashen.png");
-    private static final Identifier COOKIE = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/cookie.png");
-    private static final Identifier DAIRY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/dairy.png");
-    private static final Identifier PINTO = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/pinto.png");
-    private static final Identifier SUNSET = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/sunset.png");
-    private static final Identifier WOOLY = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/wooly.png");
-    private static final Identifier UMBRA = new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/umbra.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(CowEntity cowEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -27,33 +20,11 @@ public class CowRendererMixin {
         cowEntity.writeNbt(nbt);
 
         if (nbt.contains("Variant")) {
-            int i = nbt.getInt("Variant");
-            switch (i) {
-                case 1:
-                    ci.setReturnValue(ASHEN);
-                    break;
-                case 2:
-                    ci.setReturnValue(COOKIE);
-                    break;
-                case 3:
-                    ci.setReturnValue(DAIRY);
-                    break;
-                case 4:
-                    ci.setReturnValue(PINTO);
-                    break;
-                case 5:
-                    ci.setReturnValue(SUNSET);
-                    break;
-                case 6:
-                    ci.setReturnValue(WOOLY);
-                    break;
-                case 7:
-                    ci.setReturnValue(UMBRA);
-                    break;
-                case 0:
-                default:
-                    ci.setReturnValue(DEFAULT);
-                    break;
+            String variant = nbt.getString("Variant");
+            if (variant.equals("default")) {
+                ci.setReturnValue(DEFAULT);
+            } else {
+                ci.setReturnValue(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/cow/" + variant + ".png"));
             }
         }
     }
