@@ -79,7 +79,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
                 String thisVariant = thisNbt.getString("Variant");
                 String parentVariant = parentNbt.getString("Variant");
 
-                if (thisVariant == parentVariant) {
+                if (thisVariant.equals(parentVariant)) {
                     // If both parents are the same variant, just pick that one
                     variant = thisVariant;
                 } else {
