@@ -45,12 +45,5 @@ public class MoreMobVariants implements ModInitializer {
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "tortoiseshell"), TORTOISESHELL);
-
-        // Add render layers
-        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityRenderer instanceof PigEntityRenderer) {
-                registrationHelper.register(new PigMudFeatureRenderer<PigEntity, PigEntityModel<PigEntity>>((FeatureRendererContext)entityRenderer));
-            }
-        });
     }
 }
