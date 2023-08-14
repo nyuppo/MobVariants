@@ -1,0 +1,8 @@
+{
+  "weights": {
+    "brown": 10,
+    "tarantula": 10,
+    "black_widow": 10,
+    "default": 20
+  }
+}

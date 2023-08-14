@@ -11,6 +11,7 @@ public class VariantWeights {
     private static HashMap<String, Integer> cowWeights;
     private static HashMap<String, Integer> pigWeights;
     private static HashMap<String, Integer> sheepWeights;
+    private static HashMap<String, Integer> spiderWeights;
     private static HashMap<String, Integer> wolfWeights;
     private static HashMap<String, Integer> zombieWeights;
 
@@ -18,6 +19,7 @@ public class VariantWeights {
     private static final HashMap<String, Integer> defaultCowWeights;
     private static final HashMap<String, Integer> defaultPigWeights;
     private static final HashMap<String, Integer> defaultSheepWeights;
+    private static final HashMap<String, Integer> defaultSpiderWeights;
     private static final HashMap<String, Integer> defaultWolfWeights;
     private static final HashMap<String, Integer> defaultZombieWeights;
 
@@ -53,6 +55,14 @@ public class VariantWeights {
         return sheepWeights;
     }
 
+    public static void setSpiderWeights(HashMap<String, Integer> weights) {
+        spiderWeights = weights;
+    }
+
+    public static HashMap<String, Integer> getSpiderWeights() {
+        return spiderWeights;
+    }
+
     public static void setWolfWeights(HashMap<String, Integer> weights) {
         wolfWeights = weights;
     }
@@ -85,6 +95,10 @@ public class VariantWeights {
         sheepWeights = defaultSheepWeights;
     }
 
+    public static void resetSpiderWeights() {
+        spiderWeights = defaultSpiderWeights;
+    }
+
     public static void resetWolfWeights() {
         wolfWeights = defaultWolfWeights;
     }
@@ -99,6 +113,7 @@ public class VariantWeights {
             case "cow" -> setCowWeights(weights);
             case "pig" -> setPigWeights(weights);
             case "sheep" -> setSheepWeights(weights);
+            case "spider" -> setSpiderWeights(weights);
             case "wolf" -> setWolfWeights(weights);
             case "zombie" -> setZombieWeights(weights);
         }
@@ -110,6 +125,7 @@ public class VariantWeights {
             case "cow" -> resetCowWeights();
             case "pig" -> resetPigWeights();
             case "sheep" -> resetSheepWeights();
+            case "spider" -> resetSpiderWeights();
             case "wolf" -> resetWolfWeights();
             case "zombie" -> resetZombieWeights();
         }
@@ -121,6 +137,7 @@ public class VariantWeights {
             case "cow" -> getCowWeights();
             case "pig" -> getPigWeights();
             case "sheep" -> getSheepWeights();
+            case "spider" -> getSpiderWeights();
             case "wolf" -> getWolfWeights();
             case "zombie" -> getZombieWeights();
             default -> new HashMap<>();
@@ -139,6 +156,7 @@ public class VariantWeights {
         resetCowWeights();
         resetPigWeights();
         resetSheepWeights();
+        resetSpiderWeights();
         resetWolfWeights();
         resetZombieWeights();
     }
@@ -148,6 +166,7 @@ public class VariantWeights {
         cowWeights = new HashMap<String, Integer>();
         pigWeights = new HashMap<String, Integer>();
         sheepWeights = new HashMap<String, Integer>();
+        spiderWeights = new HashMap<String, Integer>();
         wolfWeights = new HashMap<String, Integer>();
         zombieWeights = new HashMap<String, Integer>();
     }
@@ -188,6 +207,14 @@ public class VariantWeights {
             }
         }
 
+        i = spiderWeights.keySet().iterator();
+        while (i.hasNext()) {
+            variant = i.next();
+            if (VariantBlacklist.isBlacklisted("spider", variant)) {
+                i.remove();
+            }
+        }
+
         i = wolfWeights.keySet().iterator();
         while (i.hasNext()) {
             variant = i.next();
@@ -210,6 +237,7 @@ public class VariantWeights {
         cowWeights = new HashMap<String, Integer>();
         pigWeights = new HashMap<String, Integer>();
         sheepWeights = new HashMap<String, Integer>();
+        spiderWeights = new HashMap<String, Integer>();
         wolfWeights = new HashMap<String, Integer>();
         zombieWeights = new HashMap<String, Integer>();
 
@@ -242,6 +270,11 @@ public class VariantWeights {
         defaultSheepWeights.put("fuzzy", 1);
         defaultSheepWeights.put("rocky", 1);
         defaultSheepWeights.put("default", 2);
+        defaultSpiderWeights = new HashMap<String, Integer>();
+        defaultSpiderWeights.put("brown", 10);
+        defaultSpiderWeights.put("tarantula", 10);
+        defaultSpiderWeights.put("black_widow", 1);
+        defaultSpiderWeights.put("default", 20);
         defaultWolfWeights = new HashMap<String, Integer>();
         defaultWolfWeights.put("jupiter", 1);
         defaultWolfWeights.put("husky", 1);

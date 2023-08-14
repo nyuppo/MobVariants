@@ -8,6 +8,7 @@ public class VariantBlacklist {
     private static ArrayList<String> cowBlacklist;
     private static ArrayList<String> pigBlacklist;
     private static ArrayList<String> sheepBlacklist;
+    private static ArrayList<String> spiderBlacklist;
     private static ArrayList<String> wolfBlacklist;
     private static ArrayList<String> zombieBlacklist;
 
@@ -28,6 +29,9 @@ public class VariantBlacklist {
             case "sheep" -> {
                 if (!sheepBlacklist.contains(variant)) sheepBlacklist.add(variant);
             }
+            case "spider" -> {
+                if (!spiderBlacklist.contains(variant)) spiderBlacklist.add(variant);
+            }
             case "wolf" -> {
                 if (!wolfBlacklist.contains(variant)) wolfBlacklist.add(variant);
             }
@@ -44,6 +48,7 @@ public class VariantBlacklist {
             case "cow" -> cowBlacklist.contains(variant);
             case "pig" -> pigBlacklist.contains(variant);
             case "sheep" -> sheepBlacklist.contains(variant);
+            case "spider" -> spiderBlacklist.contains(variant);
             case "wolf" -> wolfBlacklist.contains(variant);
             case "zombie" -> zombieBlacklist.contains(variant);
             default -> false;
@@ -57,6 +62,7 @@ public class VariantBlacklist {
             case "cow" -> cowBlacklist.clear();
             case "pig" -> pigBlacklist.clear();
             case "sheep" -> sheepBlacklist.clear();
+            case "spider" -> spiderBlacklist.clear();
             case "wolf" -> wolfBlacklist.clear();
             case "zombie" -> zombieBlacklist.clear();
         }
@@ -68,6 +74,7 @@ public class VariantBlacklist {
         cowBlacklist.clear();
         pigBlacklist.clear();
         sheepBlacklist.clear();
+        spiderBlacklist.clear();
         wolfBlacklist.clear();
         zombieBlacklist.clear();
     }
@@ -78,6 +85,7 @@ public class VariantBlacklist {
         cowBlacklist = new ArrayList<String>();
         pigBlacklist = new ArrayList<String>();
         sheepBlacklist = new ArrayList<String>();
+        spiderBlacklist = new ArrayList<String>();
         wolfBlacklist = new ArrayList<String>();
         zombieBlacklist = new ArrayList<String>();
     }
