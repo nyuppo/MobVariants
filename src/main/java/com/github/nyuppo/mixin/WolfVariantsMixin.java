@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.UUID;
+
 @Mixin(WolfEntity.class)
 public class WolfVariantsMixin extends MobEntityVariantsMixin {
     private static final TrackedData<String> VARIANT_ID =
@@ -66,6 +68,13 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<WolfEntity> ci) {
         WolfEntity child = (WolfEntity) EntityType.WOLF.create(world);
+        if (child != null) {
+            UUID uUID = ((WolfEntity)(Object)this).getOwnerUuid();
+            if (uUID != null) {
+                child.setOwnerUuid(uUID);
+                child.setTamed(true);
+            }
+        }
 
         String variant = "default";
         if (entity.getRandom().nextInt(10) != 0) {
