@@ -87,17 +87,17 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
                     boolean hasBred = false;
 
                     if ((thisVariant.equals("husky") && parentVariant.equals("jupiter")) || (thisVariant.equals("jupiter") && parentVariant.equals("husky"))) { // German shepherd
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
                             hasBred = true;
                             variant = "german_shepherd";
                         }
                     } else if ((thisVariant.equals("jupiter") && parentVariant.equals("default")) || (thisVariant.equals("default") && parentVariant.equals("jupiter"))) { // Golden retriever
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
                             hasBred = true;
                             variant = "golden_retriever";
                         }
                     } else if ((thisVariant.equals("husky") && parentVariant.equals("golden_retriever")) || (thisVariant.equals("golden_retriever") && parentVariant.equals("husky"))) { // French bulldog
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
                             hasBred = true;
                             variant = "french_bulldog";
                         }
