@@ -21,7 +21,7 @@ public class PigRendererMixin {
 
         if (nbt.contains("Variant")) {
             String variant = nbt.getString("Variant");
-            if (variant.equals("default")) {
+            if (variant.equals("default") || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {
                 ci.setReturnValue(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/pig/" + variant + ".png"));

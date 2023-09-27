@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.UUID;
+
 @Mixin(WolfEntity.class)
 public class WolfVariantsMixin extends MobEntityVariantsMixin {
     private static final TrackedData<String> VARIANT_ID =
@@ -66,6 +68,13 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<WolfEntity> ci) {
         WolfEntity child = (WolfEntity) EntityType.WOLF.create(world);
+        if (child != null) {
+            UUID uUID = ((WolfEntity)(Object)this).getOwnerUuid();
+            if (uUID != null) {
+                child.setOwnerUuid(uUID);
+                child.setTamed(true);
+            }
+        }
 
         String variant = "default";
         if (entity.getRandom().nextInt(10) != 0) {
@@ -87,17 +96,17 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
                     boolean hasBred = false;
 
                     if ((thisVariant.equals("husky") && parentVariant.equals("jupiter")) || (thisVariant.equals("jupiter") && parentVariant.equals("husky"))) { // German shepherd
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
                             hasBred = true;
                             variant = "german_shepherd";
                         }
                     } else if ((thisVariant.equals("jupiter") && parentVariant.equals("default")) || (thisVariant.equals("default") && parentVariant.equals("jupiter"))) { // Golden retriever
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
                             hasBred = true;
                             variant = "golden_retriever";
                         }
                     } else if ((thisVariant.equals("husky") && parentVariant.equals("golden_retriever")) || (thisVariant.equals("golden_retriever") && parentVariant.equals("husky"))) { // French bulldog
-                        if (entity.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
+                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
                             hasBred = true;
                             variant = "french_bulldog";
                         }
