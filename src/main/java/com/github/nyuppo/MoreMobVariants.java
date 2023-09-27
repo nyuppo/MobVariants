@@ -1,8 +1,10 @@
 package com.github.nyuppo;
 
 import com.github.nyuppo.config.ConfigDataLoader;
+import com.github.nyuppo.networking.ICanHasMoreMobVariantsPayload;
 import com.github.nyuppo.polymer.PolymerCatVariant;
-import eu.pb4.polymer.networking.api.PolymerServerNetworking;
+import eu.pb4.polymer.networking.api.PolymerNetworking;
+import eu.pb4.polymer.networking.api.server.PolymerServerNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
@@ -45,7 +47,7 @@ public class MoreMobVariants implements ModInitializer {
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "tortoiseshell"), TORTOISESHELL);
-        PolymerServerNetworking.registerSendPacket(HAS_MORE_MOB_VARIANTS, 0);
+        PolymerNetworking.registerCommonPayload(HAS_MORE_MOB_VARIANTS, 0, ICanHasMoreMobVariantsPayload::read);
 
     }
 
