@@ -17,7 +17,7 @@ public record ICanHasMoreMobVariantsPayload() implements VersionedPayload {
         return ID;
     }
 
-    public static ICanHasMoreMobVariantsPayload read(PacketContext context, Identifier identifier, int version, PacketByteBuf buf) {
+    public static ICanHasMoreMobVariantsPayload readPacket(PacketContext context, Identifier identifier, int version, PacketByteBuf buf) {
         return new ICanHasMoreMobVariantsPayload();
     }
 }

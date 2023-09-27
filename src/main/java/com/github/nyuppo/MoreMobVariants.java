@@ -47,7 +47,7 @@ public class MoreMobVariants implements ModInitializer {
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "tortoiseshell"), TORTOISESHELL);
-        PolymerNetworking.registerCommonPayload(HAS_MORE_MOB_VARIANTS, 0, ICanHasMoreMobVariantsPayload::read);
+        PolymerNetworking.registerCommonPayload(HAS_MORE_MOB_VARIANTS, 0, ICanHasMoreMobVariantsPayload::readPacket);
 
     }
 
