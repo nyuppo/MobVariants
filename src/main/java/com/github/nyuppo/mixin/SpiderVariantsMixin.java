@@ -46,10 +46,6 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
     }
 
     private String getRandomVariant(Random random) {
-        String test = VariantWeights.getRandomVariant("spider", random);
-        MoreMobVariants.LOGGER.info(test);
-        MoreMobVariants.LOGGER.info(VariantWeights.getSpiderWeights().toString());
-        return test;
+        return VariantWeights.getRandomVariant("spider", random);
     }
-
 }
