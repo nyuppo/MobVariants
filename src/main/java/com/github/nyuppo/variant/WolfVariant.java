@@ -6,14 +6,14 @@ public class WolfVariant extends MobVariant implements BreedingCombination {
     private final Identifier parent1Identifier;
     private final Identifier parent2Identifier;
 
-    public WolfVariant(String namespace, String id, Identifier parent1Identifier, Identifier parent2Identifier) {
-        super(namespace, id);
+    public WolfVariant(String namespace, String id, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
+        super(namespace, id, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
     }
 
-    public WolfVariant(Identifier identifier, Identifier parent1Identifier, Identifier parent2Identifier) {
-        super(identifier);
+    public WolfVariant(Identifier identifier, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
+        super(identifier, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
     }
