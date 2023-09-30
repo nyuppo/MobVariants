@@ -5,33 +5,33 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-public class BreedingAndBiomeVariant extends MobVariant implements BreedingCombination, SpawnInBiome {
+public class WolfVariant extends MobVariant implements BreedingCombination, SpawnInBiome {
     @Nullable private final TagKey<Biome> spawnBiomes;
     private final Identifier parent1Identifier;
     private final Identifier parent2Identifier;
 
-    public BreedingAndBiomeVariant(String namespace, String id, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
+    public WolfVariant(String namespace, String id, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
         super(namespace, id, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
         this.spawnBiomes = null;
     }
 
-    public BreedingAndBiomeVariant(String namespace, String id, int weight, Identifier parent1Identifier, Identifier parent2Identifier, TagKey<Biome> spawnBiomes) {
+    public WolfVariant(String namespace, String id, int weight, Identifier parent1Identifier, Identifier parent2Identifier, TagKey<Biome> spawnBiomes) {
         super(namespace, id, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
         this.spawnBiomes = spawnBiomes;
     }
 
-    public BreedingAndBiomeVariant(Identifier identifier, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
+    public WolfVariant(Identifier identifier, int weight, Identifier parent1Identifier, Identifier parent2Identifier) {
         super(identifier, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
         this.spawnBiomes = null;
     }
 
-    public BreedingAndBiomeVariant(Identifier identifier, int weight, Identifier parent1Identifier, Identifier parent2Identifier, TagKey<Biome> spawnBiomes) {
+    public WolfVariant(Identifier identifier, int weight, Identifier parent1Identifier, Identifier parent2Identifier, TagKey<Biome> spawnBiomes) {
         super(identifier, weight);
         this.parent1Identifier = parent1Identifier;
         this.parent2Identifier = parent2Identifier;
