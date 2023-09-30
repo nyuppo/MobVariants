@@ -1,0 +1,6 @@
+{
+  "weight": 1,
+  "parent1": "husky",
+  "parent2": "jupiter",
+  "breeding_chance": 0.5
+}
