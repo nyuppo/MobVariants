@@ -51,6 +51,10 @@ public class MoreMobVariants implements ModInitializer {
 
     }
 
+    public static Identifier id(String path) {
+        return new Identifier(MOD_ID, path);
+    }
+
     public static boolean hasClientMod(@Nullable ServerPlayerEntity player) {
         if(player != null &&  player.networkHandler != null) {
             var version = PolymerServerNetworking.getSupportedVersion(player.networkHandler, HAS_MORE_MOB_VARIANTS);
