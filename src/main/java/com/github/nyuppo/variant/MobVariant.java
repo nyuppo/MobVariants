@@ -74,6 +74,15 @@ public class MobVariant {
         return false;
     }
 
+    public boolean shouldBreed(Random random) {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof BreedingResultModifier) {
+                return ((BreedingResultModifier) modifier).shouldBreed(random);
+            }
+        }
+        return false;
+    }
+
     public boolean hasSpawnableBiomeModifier() {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof SpawnableBiomesModifier) {
