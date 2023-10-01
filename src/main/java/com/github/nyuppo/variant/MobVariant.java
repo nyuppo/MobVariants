@@ -25,8 +25,9 @@ public class MobVariant {
         this.modifiers = modifiers;
     }
 
-    public void addModifier(VariantModifier modifier) {
+    public MobVariant addModifier(VariantModifier modifier) {
         this.modifiers.add(modifier);
+        return this;
     }
 
     public Identifier getIdentifier() {
@@ -61,10 +62,10 @@ public class MobVariant {
                 return ((SpawnableBiomesModifier) modifier).canSpawnInBiome(biome);
             }
         }
-        return false;
+        return true;
     }
 
-    public boolean validParents(MobVariant parent1, MobVariant parent2) {
+    public boolean canBreed(MobVariant parent1, MobVariant parent2) {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof BreedingResultModifier) {
                 return ((BreedingResultModifier) modifier).validParents(parent1, parent2);
@@ -73,12 +74,23 @@ public class MobVariant {
         return false;
     }
 
-    public boolean shouldBreed(Random random) {
+    public boolean hasSpawnableBiomeModifier() {
         for (VariantModifier modifier : this.modifiers) {
-            if (modifier instanceof BreedingResultModifier) {
-                return ((BreedingResultModifier) modifier).shouldBreed(random);
+            if (modifier instanceof SpawnableBiomesModifier) {
+                return true;
             }
         }
+
+        return false;
+    }
+
+    public boolean hasBreedingResultModifier() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof BreedingResultModifier) {
+                return true;
+            }
+        }
+
         return false;
     }
 

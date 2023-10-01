@@ -1,7 +1,8 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.config.VariantBlacklist;
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -11,7 +12,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.minecraft.util.math.random.Random;
 
 @Mixin(ChickenEntity.class)
 public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
@@ -31,7 +30,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((ChickenEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((ChickenEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
     }
 
     @Override
@@ -46,24 +45,18 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-
-        // If in nether, random chance of bone chicken
-        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
-            if (world.getBiome(((ChickenEntity)(Object)this).getBlockPos()).isIn(BiomeTags.IS_NETHER) && world.getRandom().nextInt(6) == 0) {
-                variant = "bone";
-            }
-        }
-
-        ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.CHICKEN, world.getRandom(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
+        ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onTick(CallbackInfo ci) {
-        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
-        if (((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
-            String variant = this.getRandomVariant(((ChickenEntity)(Object)this).getWorld().getRandom());
-            ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        // Handle mod version upgrades
+        if (((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
+            MobVariant variant = Variants.getRandomVariant(Variants.Mob.CHICKEN, ((ChickenEntity)(Object)this).getWorld().getRandom(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
+            ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        } else if (!((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
     }
 
@@ -73,50 +66,16 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
             cancellable = true
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<ChickenEntity> ci) {
-        ChickenEntity child = EntityType.CHICKEN.create(world);
+        ChickenEntity child = (ChickenEntity)EntityType.CHICKEN.create(world);
 
-        String variant = "default";
-        if (entity.getRandom().nextInt(4) != 0) {
-            // Make child inherit parent's variants
-            NbtCompound thisNbt = new NbtCompound();
-            ((ChickenEntity)(Object)this).writeNbt(thisNbt);
-            NbtCompound parentNbt = new NbtCompound();
-            entity.writeNbt(parentNbt);
-
-            if (thisNbt.contains("Variant") && parentNbt.contains("Variant")) {
-                String thisVariant = thisNbt.getString("Variant");
-                String parentVariant = parentNbt.getString("Variant");
-
-                if (thisVariant.equals("parentVariant")) {
-                    // If both parents are the same variant, just pick that one
-                    variant = thisVariant;
-                } else {
-                    // Otherwise, pick a random parent's variant
-                    variant = ((ChickenEntity)(Object)this).getRandom().nextBoolean() ? thisVariant : parentVariant;
-                }
-            }
-        } else {
-            // Give child random variant
-            variant = this.getRandomVariant(entity.getRandom());
-        }
-
-        // If in nether, random chance of bone chicken
-        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
-            if (world.getBiome(entity.getBlockPos()).isIn(BiomeTags.IS_NETHER) && ((ChickenEntity)(Object)this).getRandom().nextInt(6) == 0) {
-                variant = "bone";
-            }
-        }
+        MobVariant variant = Variants.getChildVariant(Variants.Mob.CHICKEN, world, ((ChickenEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant);
+        childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
 
         ci.setReturnValue(child);
-    }
-
-    public String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("chicken", random);
     }
 }

@@ -1,8 +1,8 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.config.VariantBlacklist;
-import com.github.nyuppo.config.VariantSettings;
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -13,7 +13,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +32,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((WolfEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((WolfEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
     }
 
     @Override
@@ -48,16 +47,18 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-        ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.WOLF, world.getRandom(), world.getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
+        ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onTick(CallbackInfo ci) {
-        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
-        if (((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
-            String variant = this.getRandomVariant(((WolfEntity)(Object)this).getWorld().getRandom());
-            ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        // Handle mod version upgrades
+        if (((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
+            MobVariant variant = Variants.getRandomVariant(Variants.Mob.WOLF, ((WolfEntity)(Object)this).getWorld().getRandom(), ((WolfEntity)(Object)this).getWorld().getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
+            ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        } else if (!((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
     }
 
@@ -76,63 +77,14 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
             }
         }
 
-        String variant = "default";
-        if (entity.getRandom().nextInt(10) != 0) {
-            // Make child inherit parent's variants
-            NbtCompound thisNbt = new NbtCompound();
-            ((WolfEntity)(Object)this).writeNbt(thisNbt);
-            NbtCompound parentNbt = new NbtCompound();
-            entity.writeNbt(parentNbt);
-
-            if (thisNbt.contains("Variant") && parentNbt.contains("Variant")) {
-                String thisVariant = thisNbt.getString("Variant");
-                String parentVariant = parentNbt.getString("Variant");
-
-                if (thisVariant.equals(parentVariant)) {
-                    // If both parents are the same variant, just pick that one
-                    variant = thisVariant;
-                } else {
-                    // Handle breeding
-                    boolean hasBred = false;
-
-                    if ((thisVariant.equals("husky") && parentVariant.equals("jupiter")) || (thisVariant.equals("jupiter") && parentVariant.equals("husky"))) { // German shepherd
-                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
-                            hasBred = true;
-                            variant = "german_shepherd";
-                        }
-                    } else if ((thisVariant.equals("jupiter") && parentVariant.equals("default")) || (thisVariant.equals("default") && parentVariant.equals("jupiter"))) { // Golden retriever
-                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
-                            hasBred = true;
-                            variant = "golden_retriever";
-                        }
-                    } else if ((thisVariant.equals("husky") && parentVariant.equals("golden_retriever")) || (thisVariant.equals("golden_retriever") && parentVariant.equals("husky"))) { // French bulldog
-                        if (entity.getRandom().nextFloat() < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
-                            hasBred = true;
-                            variant = "french_bulldog";
-                        }
-                    }
-
-                    // Otherwise, pick a random parent's variant
-                    if (!hasBred) {
-                        variant = entity.getRandom().nextBoolean() ? thisVariant : parentVariant;
-                    }
-                }
-            }
-        } else {
-            // Give child random variant
-            variant = this.getRandomVariant(entity.getRandom());
-        }
+        MobVariant variant = Variants.getChildVariant(Variants.Mob.WOLF, world, ((WolfEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant);
+        childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
 
         ci.setReturnValue(child);
-    }
-
-    private String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("wolf", random);
     }
 }

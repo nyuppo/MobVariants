@@ -1,16 +1,15 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.SpiderEntity;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +25,7 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((SpiderEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((SpiderEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
     }
 
     @Override
@@ -41,11 +40,15 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-        ((SpiderEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.SPIDER, world.getRandom(), world.getBiome(((SpiderEntity)(Object)this).getBlockPos()), null);
+        ((SpiderEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
-    private String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("spider", random);
+    @Override
+    protected void onTick(CallbackInfo ci) {
+        // Handle mod version upgrades
+        if (!((SpiderEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((SpiderEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((SpiderEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
+        }
     }
 }

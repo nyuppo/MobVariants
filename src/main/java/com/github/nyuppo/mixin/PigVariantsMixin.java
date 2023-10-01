@@ -2,7 +2,8 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantSettings;
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -20,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.minecraft.util.math.random.Random;
 
 @Mixin(PigEntity.class)
 public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
@@ -33,7 +33,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
         ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_ID, false);
     }
 
@@ -51,8 +51,8 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
     @Override
@@ -66,10 +66,12 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
             }
         }
 
-        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
-        if (((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
-            String variant = this.getRandomVariant(((PigEntity)(Object)this).getWorld().getRandom());
-            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        // Handle mod version upgrades
+        if (((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
+            MobVariant variant = Variants.getRandomVariant(Variants.Mob.PIG, ((PigEntity)(Object)this).getWorld().getRandom(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        } else if (!((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
     }
 
@@ -81,41 +83,14 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<PigEntity> ci) {
         PigEntity child = (PigEntity)EntityType.PIG.create(world);
 
-        String variant = "default";
-        if (entity.getRandom().nextInt(4) != 0) {
-            // Make child inherit parent's variants
-            NbtCompound thisNbt = new NbtCompound();
-            ((PigEntity)(Object)this).writeNbt(thisNbt);
-            NbtCompound parentNbt = new NbtCompound();
-            entity.writeNbt(parentNbt);
-
-            if (thisNbt.contains("Variant") && parentNbt.contains("Variant")) {
-                String thisVariant = thisNbt.getString("Variant");
-                String parentVariant = parentNbt.getString("Variant");
-
-                if (thisVariant.equals("parentVariant")) {
-                    // If both parents are the same variant, just pick that one
-                    variant = thisVariant;
-                } else {
-                    // Otherwise, pick a random parent's variant
-                    variant = entity.getRandom().nextBoolean() ? thisVariant : parentVariant;
-                }
-            }
-        } else {
-            // Give child random variant
-            variant = this.getRandomVariant(entity.getRandom());
-        }
+        MobVariant variant = Variants.getChildVariant(Variants.Mob.PIG, world, ((PigEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant);
+        childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
 
         ci.setReturnValue(child);
-    }
-
-    private String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("pig", random);
     }
 }

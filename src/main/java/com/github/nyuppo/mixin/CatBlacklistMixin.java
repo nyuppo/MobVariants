@@ -2,6 +2,7 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantBlacklist;
+import com.github.nyuppo.config.Variants;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.CatEntity;
@@ -25,10 +26,10 @@ public class CatBlacklistMixin {
 
         while (!isValidVariant) {
             CatVariant currentVariant = ((CatEntity)(Object)this).getVariant();
-            if ((currentVariant.equals(MoreMobVariants.DOUG) && VariantBlacklist.isBlacklisted("cat", "doug"))
-                || (currentVariant.equals(MoreMobVariants.HANDSOME) && VariantBlacklist.isBlacklisted("cat", "handsome"))
-                || (currentVariant.equals(MoreMobVariants.GRAY_TABBY) && VariantBlacklist.isBlacklisted("cat", "gray_tabby"))
-                || (currentVariant.equals(MoreMobVariants.TORTOISESHELL) && VariantBlacklist.isBlacklisted("cat", "tortoiseshell"))) {
+            if ((currentVariant.equals(MoreMobVariants.DOUG) && VariantBlacklist.isBlacklisted(Variants.Mob.CAT, MoreMobVariants.id("doug")))
+                || (currentVariant.equals(MoreMobVariants.HANDSOME) && VariantBlacklist.isBlacklisted(Variants.Mob.CAT, MoreMobVariants.id("handsome")))
+                || (currentVariant.equals(MoreMobVariants.GRAY_TABBY) && VariantBlacklist.isBlacklisted(Variants.Mob.CAT, MoreMobVariants.id("gray_tabby")))
+                || (currentVariant.equals(MoreMobVariants.TORTOISESHELL) && VariantBlacklist.isBlacklisted(Variants.Mob.CAT, MoreMobVariants.id("tortoiseshell")))) {
                 boolean bl = world.getMoonSize() > 0.9F;
                 TagKey<CatVariant> tagKey = bl ? CatVariantTags.FULL_MOON_SPAWNS : CatVariantTags.DEFAULT_SPAWNS;
                 Registries.CAT_VARIANT.getEntryList(tagKey).flatMap((list) -> {

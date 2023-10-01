@@ -21,10 +21,11 @@ public class SheepRendererMixin {
 
         if (nbt.contains("Variant")) {
             String variant = nbt.getString("Variant");
-            if (variant.equals("default") || variant.isEmpty()) {
+            if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {
-                ci.setReturnValue(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/" + variant + ".png"));
+                String[] split = variant.split(":");
+                ci.setReturnValue(new Identifier(split[0], "textures/entity/sheep/" + split[1] + ".png"));
             }
         }
     }

@@ -23,17 +23,18 @@ public class WolfRendererMixin {
 
         if (nbt.contains("Variant")) {
             String variant = nbt.getString("Variant");
-            if (variant.equals("default") || variant.isEmpty()) {
+            if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 if (wolfEntity.isTamed()) {
                     ci.setReturnValue(DEFAULT_TAMED);
                 } else {
                     ci.setReturnValue(wolfEntity.hasAngerTime() ? DEFAULT_ANGRY : DEFAULT_WILD);
                 }
             } else {
+                String[] split = variant.split(":");
                 if (wolfEntity.isTamed()) {
-                    ci.setReturnValue(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/" + variant + "_tame.png"));
+                    ci.setReturnValue(new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_tame.png"));
                 } else {
-                    ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/" + variant + "_angry.png") : new Identifier(MoreMobVariants.MOD_ID, "textures/entity/wolf/" + variant + "_wild.png"));
+                    ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_angry.png") : new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_wild.png"));
                 }
             }
         }

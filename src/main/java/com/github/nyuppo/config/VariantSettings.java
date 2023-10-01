@@ -2,6 +2,7 @@ package com.github.nyuppo.config;
 
 public class VariantSettings {
     private static boolean enableMuddyPigs;
+    private static double childRandomVariantChance;
     private static float wolfBreedingChance;
 
     public static void setEnableMuddyPigs(boolean shouldEnableMuddyPigs) {
@@ -25,13 +26,19 @@ public class VariantSettings {
         return wolfBreedingChance;
     }
 
+    public static double getChildRandomVariantChance() {
+        return childRandomVariantChance;
+    }
+
     public static void resetSettings() {
         enableMuddyPigs = true;
         wolfBreedingChance = 0.5f;
+        childRandomVariantChance = 0.25d;
     }
 
     static {
         enableMuddyPigs = true;
         wolfBreedingChance = 0.5f;
+        childRandomVariantChance = 0.25d;
     }
 }

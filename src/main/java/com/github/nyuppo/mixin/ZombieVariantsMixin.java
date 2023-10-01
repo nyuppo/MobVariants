@@ -1,6 +1,8 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.data.DataTracker;
@@ -8,7 +10,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +25,7 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((ZombieEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((ZombieEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
     }
 
     @Override
@@ -39,20 +40,18 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-        ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.ZOMBIE, world.getRandom(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
+        ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onTick(CallbackInfo ci) {
-        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
-        if (((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
-            String variant = this.getRandomVariant(((ZombieEntity)(Object)this).getWorld().getRandom());
-            ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        // Handle mod version upgrades
+        if (((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
+            MobVariant variant = Variants.getRandomVariant(Variants.Mob.ZOMBIE, ((ZombieEntity)(Object)this).getWorld().getRandom(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
+            ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        } else if (!((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
-    }
-
-    private String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("zombie", random);
     }
 }

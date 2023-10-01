@@ -1,6 +1,8 @@
 package com.github.nyuppo.mixin;
 
-import com.github.nyuppo.config.VariantWeights;
+import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -23,8 +25,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.util.math.random.Random;
-
 @Mixin(SheepEntity.class)
 public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
     @Shadow
@@ -36,7 +36,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
-        ((SheepEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, "default");
+        ((SheepEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
     }
 
     @Override
@@ -51,16 +51,18 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        String variant = this.getRandomVariant(world.getRandom());
-        ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        MobVariant variant = Variants.getRandomVariant(Variants.Mob.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
+        ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onTick(CallbackInfo ci) {
-        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
-        if (((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) {
-            String variant = this.getRandomVariant(((SheepEntity)(Object)this).getWorld().getRandom());
-            ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant);
+        // Handle mod version upgrades
+        if (((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
+            MobVariant variant = Variants.getRandomVariant(Variants.Mob.SHEEP, ((SheepEntity)(Object)this).getWorld().getRandom(), ((SheepEntity)(Object)this).getWorld().getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
+            ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        } else if (!((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
+            ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
     }
 
@@ -75,42 +77,14 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
             child.setColor(this.getChildColor(((SheepEntity)(Object)this), (SheepEntity)entity));
         }
 
-        String variant = "default";
-        if (entity.getRandom().nextInt(4) != 0) {
-            // Make child inherit parent's variants
-            NbtCompound thisNbt = new NbtCompound();
-            ((SheepEntity)(Object)this).writeNbt(thisNbt);
-            NbtCompound parentNbt = new NbtCompound();
-            entity.writeNbt(parentNbt);
-
-            if (thisNbt.contains("Variant") && parentNbt.contains("Variant")) {
-                String thisVariant = thisNbt.getString("Variant");
-                String parentVariant = parentNbt.getString("Variant");
-
-                if (thisVariant.equals(parentVariant)) {
-                    // If both parents are the same variant, just pick that one
-                    variant = thisVariant;
-                } else {
-                    // Otherwise, pick a random parent's variant
-                    variant = entity.getRandom().nextBoolean() ? thisVariant : parentVariant;
-                }
-            }
-        } else {
-            // Give child random variant
-            variant = this.getRandomVariant(entity.getRandom());
-        }
+        MobVariant variant = Variants.getChildVariant(Variants.Mob.SHEEP, world, ((SheepEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant);
+        childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
 
         ci.setReturnValue(child);
-    }
-
-
-    private String getRandomVariant(Random random) {
-        return VariantWeights.getRandomVariant("sheep", random);
     }
 }
