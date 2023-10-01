@@ -118,8 +118,8 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                     double breedingChance = breeding.getAsJsonObject().get("breeding_chance").getAsDouble();
 
                     modifiers.add(new BreedingResultModifier(
-                            Variants.getVariant(Variants.getMob(mobId), new Identifier(parent1[0], parent1[1])),
-                            Variants.getVariant(Variants.getMob(mobId), new Identifier(parent2[0], parent2[1])),
+                            new Identifier(parent1[0], parent1[1]),
+                            new Identifier(parent2[0], parent2[1]),
                             breedingChance));
                 }
             }
@@ -138,8 +138,6 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         }
 
         Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantId), weight, modifiers));
-        // DEBUG
-        MoreMobVariants.LOGGER.info("added variant " + namespace + ":" + mobId + "/" + variantId);
     }
 
     private void applyBlacklist(Identifier identifier, Reader reader, String mob) {
