@@ -1,31 +1,24 @@
 package com.github.nyuppo.config;
 
 import com.github.nyuppo.MoreMobVariants;
-import com.github.nyuppo.util.BiomeSpawnData;
 import com.github.nyuppo.util.BreedingResultData;
 import com.github.nyuppo.util.VariantBag;
 import com.github.nyuppo.variant.*;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Variants {
-    private static HashMap<Mob, ArrayList<MobVariant>> variants;
-    private static HashMap<Mob, ArrayList<MobVariant>> defaultVariants;
+    private static EnumMap<Mob, ArrayList<MobVariant>> variants;
+    private static EnumMap<Mob, ArrayList<MobVariant>> defaultVariants;
 
     public static void addVariant(Mob mob, MobVariant variant) {
         if (variants.get(mob) == null) {
@@ -37,13 +30,14 @@ public class Variants {
 
     public static ArrayList<MobVariant> getVariants(Mob mob) {
         if (variants.get(mob) != null) {
-            return variants.get(mob);
+            return new ArrayList<>(variants.get(mob));
         }
-        return defaultVariants.get(mob);
+
+        return new ArrayList<>(defaultVariants.get(mob));
     }
 
     public static ArrayList<MobVariant> getDefaultVariants(Mob mob) {
-        return defaultVariants.get(mob);
+        return new ArrayList<>(defaultVariants.get(mob));
     }
 
     public static MobVariant getDefaultVariant(Mob mob) {
@@ -93,12 +87,15 @@ public class Variants {
 
     public static void applyBlacklists() {
         for (Mob mob : Mob.values()) {
-            List<MobVariant> variants = getVariants(mob);
-            if (variants.isEmpty()) {
+            if (mob.equals(Mob.CAT) || mob.equals(Mob.NULL) || variants.get(mob) == null) {
+                continue;
+            }
+            List<MobVariant> variantsList = variants.get(mob);
+            if (variantsList.isEmpty()) {
                 continue;
             }
 
-            Iterator<MobVariant> i = variants.iterator();
+            Iterator<MobVariant> i = variantsList.iterator();
             MobVariant variant;
             while (i.hasNext()) {
                 variant = i.next();
@@ -139,7 +136,7 @@ public class Variants {
             }
 
             // Discard if special breeding result (handled later)
-            if (breedingResultData != null && variant.hasBreedingResultModifier()) {
+            if (variant.hasBreedingResultModifier()) {
                 i.remove();
                 continue;
             }
@@ -157,8 +154,8 @@ public class Variants {
         if (breedingResultData != null) {
             // Collect all specialized breeding combination results
             List<MobVariant> possibleVariants = new ArrayList<>();
-            for (MobVariant v : variants) {
-                if (v.hasBreedingResultModifier() && v.canBreed(breedingResultData.parent1(), breedingResultData.parent2())) {
+            for (MobVariant v : getVariants(mob)) {
+                if (v.hasBreedingResultModifier() && v.canBreed(breedingResultData.parent1(), breedingResultData.parent2()) && v.shouldBreed(random)) {
                     possibleVariants.add(v);
                 }
             }
@@ -215,10 +212,17 @@ public class Variants {
         public String getId() {
             return this.id;
         }
+
+        @Override
+        public String toString() {
+            return this.id;
+        }
     }
 
     static {
-        defaultVariants = new HashMap<Mob, ArrayList<MobVariant>>();
+        variants = new EnumMap<Mob, ArrayList<MobVariant>>(Mob.class);
+
+        defaultVariants = new EnumMap<Mob, ArrayList<MobVariant>>(Mob.class);
         defaultVariants.put(Mob.CHICKEN, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("midnight"), 1),
                 new MobVariant(MoreMobVariants.id("amber"), 2),
@@ -226,9 +230,8 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("bronzed"), 2),
                 new MobVariant(MoreMobVariants.id("skewbald"), 2),
                 new MobVariant(MoreMobVariants.id("stormy"), 2),
-                new MobVariant(MoreMobVariants.id("bone"), 1)
-                        .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_NETHER))
-                        .addModifier(new DiscardableModifier(0.8333)),
+                new MobVariant(MoreMobVariants.id("bone"), 2)
+                        .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_NETHER)),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
         defaultVariants.put(Mob.COW, new ArrayList<>(List.of(
@@ -275,18 +278,18 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("default"), 1),
                 new MobVariant(MoreMobVariants.id("german_shepherd"), 1)
                         .addModifier(new BreedingResultModifier(
-                                getVariant(Mob.WOLF, MoreMobVariants.id("husky")),
-                                getVariant(Mob.WOLF, MoreMobVariants.id("jupiter")),
+                                MoreMobVariants.id("husky"),
+                                MoreMobVariants.id("jupiter"),
                                 0.5)),
                 new MobVariant(MoreMobVariants.id("golden_retriever"), 1)
                         .addModifier(new BreedingResultModifier(
-                                getVariant(Mob.WOLF, MoreMobVariants.id("jupiter")),
-                                getVariant(Mob.WOLF, MoreMobVariants.id("default")),
+                                MoreMobVariants.id("jupiter"),
+                                MoreMobVariants.id("default"),
                                 0.5)),
                 new MobVariant(MoreMobVariants.id("french_bulldog"), 1)
                         .addModifier(new BreedingResultModifier(
-                                getVariant(Mob.WOLF, MoreMobVariants.id("husky")),
-                                getVariant(Mob.WOLF, MoreMobVariants.id("golden_retriever")),
+                                MoreMobVariants.id("husky"),
+                                MoreMobVariants.id("golden_retriever"),
                                 0.5))
         )));
         defaultVariants.put(Mob.ZOMBIE, new ArrayList<>(List.of(
