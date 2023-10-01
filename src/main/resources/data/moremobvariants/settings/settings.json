@@ -1,4 +1,5 @@
 {
   "enable_muddy_pigs": true,
-  "wolf_breeding_chance": 0.5
+  "muddy_pig_timeout": 0,
+  "child_random_variant_chance": 0.25
 }

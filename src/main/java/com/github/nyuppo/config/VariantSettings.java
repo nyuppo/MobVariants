@@ -1,9 +1,9 @@
 package com.github.nyuppo.config;
 
 public class VariantSettings {
-    private static boolean enableMuddyPigs;
-    private static double childRandomVariantChance;
-    private static float wolfBreedingChance;
+    private static boolean enableMuddyPigs; // Should pigs be able to get muddy/wash their mud off
+    private static int muddyPigTimeout; // How long pigs should stay muddy for in seconds (0 to disable)
+    private static double childRandomVariantChance; // The chance to get a random variant instead of inheriting from parents
 
     public static void setEnableMuddyPigs(boolean shouldEnableMuddyPigs) {
         enableMuddyPigs = shouldEnableMuddyPigs;
@@ -13,17 +13,16 @@ public class VariantSettings {
         return enableMuddyPigs;
     }
 
-    public static void setWolfBreedingChance(int chance) {
-        wolfBreedingChance = chance;
-        if (wolfBreedingChance < 0.0f) {
-            wolfBreedingChance = 0.0f;
-        } else if (wolfBreedingChance > 1.0f) {
-            wolfBreedingChance = 1.0f;
-        }
+    public static void setMuddyPigTimeout(int seconds) {
+        muddyPigTimeout = seconds;
     }
 
-    public static float getWolfBreedingChance() {
-        return wolfBreedingChance;
+    public static int getMuddyPigTimeout() {
+        return muddyPigTimeout;
+    }
+
+    public static void setChildRandomVariantChance(double chance) {
+        childRandomVariantChance = chance;
     }
 
     public static double getChildRandomVariantChance() {
@@ -32,13 +31,13 @@ public class VariantSettings {
 
     public static void resetSettings() {
         enableMuddyPigs = true;
-        wolfBreedingChance = 0.5f;
+        muddyPigTimeout = 0;
         childRandomVariantChance = 0.25d;
     }
 
     static {
         enableMuddyPigs = true;
-        wolfBreedingChance = 0.5f;
+        muddyPigTimeout = 0;
         childRandomVariantChance = 0.25d;
     }
 }

@@ -161,8 +161,11 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             if (element.getAsJsonObject().has("enable_muddy_pigs")) {
                 VariantSettings.setEnableMuddyPigs(element.getAsJsonObject().get("enable_muddy_pigs").getAsBoolean());
             }
-            if (element.getAsJsonObject().has("wolf_breeding_chance")) {
-                VariantSettings.setWolfBreedingChance(element.getAsJsonObject().get("wolf_breeding_chance").getAsInt());
+            if (element.getAsJsonObject().has("muddy_pig_timeout")) {
+                VariantSettings.setMuddyPigTimeout(element.getAsJsonObject().get("muddy_pig_timeout").getAsInt());
+            }
+            if (element.getAsJsonObject().has("child_random_variant_chance")) {
+                VariantSettings.setChildRandomVariantChance(element.getAsJsonObject().get("child_random_variant_chance").getAsDouble());
             }
         }
     }
