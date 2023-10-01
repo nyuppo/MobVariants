@@ -40,7 +40,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
 
             if (manager.getResource(id).isPresent()) {
                 try (InputStream stream = manager.getResource(id).get().getInputStream()) {
-                    applyVariant(id, new InputStreamReader(stream, StandardCharsets.UTF_8), id.getNamespace(), split[0], split[1]);
+                    applyVariant(new InputStreamReader(stream, StandardCharsets.UTF_8), id.getNamespace(), split[0], split[1]);
                 } catch (Exception e) {
                     MoreMobVariants.LOGGER.error("Error occured while loading " + split[0] + " variant '" + split[1] + "' (" + id.toShortTranslationKey() + ")", e);
                 }
@@ -56,7 +56,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
 
             if (manager.getResource(id).isPresent()) {
                 try (InputStream stream = manager.getResource(id).get().getInputStream()) {
-                    applyBlacklist(id, new InputStreamReader(stream, StandardCharsets.UTF_8), mob);
+                    applyBlacklist(new InputStreamReader(stream, StandardCharsets.UTF_8), mob);
                 } catch (Exception e) {
                     MoreMobVariants.LOGGER.error("Error occured while loading blacklist config " + id.toShortTranslationKey(), e);
                     VariantBlacklist.clearBlacklist(Variants.getMob(mob));
@@ -78,7 +78,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         }
     }
 
-    private void applyVariant(Identifier identifier, Reader reader, String namespace, String mobId, String variantId) {
+    private void applyVariant(Reader reader, String namespace, String mobId, String variantId) {
         JsonElement element = JsonParser.parseReader(reader);
 
         int weight = 0;
@@ -140,7 +140,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantId), weight, modifiers));
     }
 
-    private void applyBlacklist(Identifier identifier, Reader reader, String mob) {
+    private void applyBlacklist(Reader reader, String mob) {
         JsonElement element = JsonParser.parseReader(reader);
 
         if (element.getAsJsonObject().size() != 0) {
