@@ -1,6 +1,8 @@
 {
   "weight": 1,
-  "parent1": "husky",
-  "parent2": "golden_retriever",
-  "breeding_chance": 0.5
+  "breeding": {
+    "parent1": "moremobvariants:husky",
+    "parent2": "moremobvariants:golden_retriever",
+    "breeding_chance": 0.5
+  }
 }
