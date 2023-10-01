@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VariantBlacklist {
-    private static HashMap<Variants.Mob, ArrayList<Identifier>> blacklistedIdentifiers;
+    private static HashMap<Variants.Mob, ArrayList<Identifier>> blacklistedIdentifiers = new HashMap<>();
 
     public static void blacklist(Variants.Mob mob, Identifier identifier) {
         if (!blacklistedIdentifiers.containsKey(mob)) {
