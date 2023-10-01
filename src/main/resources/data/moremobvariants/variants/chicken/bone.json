@@ -1,5 +1,4 @@
 {
   "weight": 2,
-  "biome_tag": "minecraft:is_nether",
-  "discard_chance": 0.83
+  "biome_tag": "minecraft:is_nether"
 }
