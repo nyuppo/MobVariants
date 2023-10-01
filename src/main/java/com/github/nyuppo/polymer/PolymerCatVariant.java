@@ -15,7 +15,7 @@ public class PolymerCatVariant extends CatVariant implements PolymerSyncedObject
 
     @Override
     public CatVariant getPolymerReplacement(ServerPlayerEntity player) {
-        if(MoreMobVariants.hasClientMod(player))return this;
+        //if(MoreMobVariants.hasClientMod(player))return this;
         return Registries.CAT_VARIANT.get(CatVariant.ALL_BLACK);
     }
 }

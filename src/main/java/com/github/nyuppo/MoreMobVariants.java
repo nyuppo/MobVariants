@@ -27,10 +27,10 @@ public class MoreMobVariants implements ModInitializer {
     public static final Identifier HAS_MORE_MOB_VARIANTS = new Identifier(MOD_ID, "hasmoremobvariants");
 
     // Cat variants
-    public static final CatVariant GRAY_TABBY = new PolymerCatVariant(new Identifier(MOD_ID, "textures/entity/cat/gray_tabby.png"));
-    public static final CatVariant DOUG = new PolymerCatVariant(new Identifier(MOD_ID, "textures/entity/cat/doug.png"));
-    public static final CatVariant HANDSOME = new PolymerCatVariant(new Identifier(MOD_ID, "textures/entity/cat/handsome.png"));
-    public static final CatVariant TORTOISESHELL = new PolymerCatVariant(new Identifier(MOD_ID, "textures/entity/cat/tortoiseshell.png"));
+    public static final CatVariant GRAY_TABBY = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/gray_tabby.png"));
+    public static final CatVariant DOUG = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/doug.png"));
+    public static final CatVariant HANDSOME = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/handsome.png"));
+    public static final CatVariant TORTOISESHELL = new CatVariant(new Identifier(MOD_ID, "textures/entity/cat/tortoiseshell.png"));
 
     // Pig mud tag
     public static final TagKey<Block> PIG_MUD_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "pig_mud_blocks"));
@@ -47,14 +47,14 @@ public class MoreMobVariants implements ModInitializer {
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "doug"), DOUG);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "handsome"), HANDSOME);
         Registry.register(Registries.CAT_VARIANT, new Identifier(MOD_ID, "tortoiseshell"), TORTOISESHELL);
-        PolymerNetworking.registerCommonPayload(HAS_MORE_MOB_VARIANTS, 0, ICanHasMoreMobVariantsPayload::readPacket);
-
+        //PolymerNetworking.registerCommonPayload(HAS_MORE_MOB_VARIANTS, 0, ICanHasMoreMobVariantsPayload::readPacket);
     }
 
     public static Identifier id(String path) {
         return new Identifier(MOD_ID, path);
     }
 
+    /*
     public static boolean hasClientMod(@Nullable ServerPlayerEntity player) {
         if(player != null &&  player.networkHandler != null) {
             var version = PolymerServerNetworking.getSupportedVersion(player.networkHandler, HAS_MORE_MOB_VARIANTS);
@@ -62,4 +62,5 @@ public class MoreMobVariants implements ModInitializer {
         }
         return false;
     }
+    */
 }
