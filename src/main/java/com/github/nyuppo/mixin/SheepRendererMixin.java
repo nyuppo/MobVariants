@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
 import net.minecraft.client.render.entity.SheepEntityRenderer;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -24,7 +25,7 @@ public class SheepRendererMixin {
             if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {
-                String[] split = variant.split(":");
+                String[] split = Variants.splitVariant(variant);;
                 ci.setReturnValue(new Identifier(split[0], "textures/entity/sheep/" + split[1] + ".png"));
             }
         }

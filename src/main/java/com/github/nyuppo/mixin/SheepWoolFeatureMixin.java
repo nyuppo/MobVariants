@@ -31,7 +31,7 @@ public class SheepWoolFeatureMixin {
                 return;
             }
 
-            String[] split = variant.split(":");
+            String[] split = Variants.splitVariant(variant);
 
             if (Variants.getVariant(Variants.Mob.SHEEP, Identifier.of(split[0], split[1])).hasCustomWool()) {
                 args.set(2, new Identifier(split[0], "textures/entity/sheep/wool/" + split[1] + ".png"));

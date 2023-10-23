@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
 import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -24,7 +25,7 @@ public class ZombieRendererMixin {
             if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {
-                String[] split = variant.split(":");
+                String[] split = Variants.splitVariant(variant);
                 ci.setReturnValue(new Identifier(split[0], "textures/entity/zombie/" + split[1] + ".png"));
             }
         }

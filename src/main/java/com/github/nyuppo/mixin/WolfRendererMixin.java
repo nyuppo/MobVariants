@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.Variants;
 import net.minecraft.client.render.entity.WolfEntityRenderer;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -30,7 +31,7 @@ public class WolfRendererMixin {
                     ci.setReturnValue(wolfEntity.hasAngerTime() ? DEFAULT_ANGRY : DEFAULT_WILD);
                 }
             } else {
-                String[] split = variant.split(":");
+                String[] split = Variants.splitVariant(variant);
                 if (wolfEntity.isTamed()) {
                     ci.setReturnValue(new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_tame.png"));
                 } else {

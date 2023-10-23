@@ -192,6 +192,18 @@ public class Variants {
         }
     }
 
+    public static String[] splitVariant(String namespacedVariant) {
+        String[] split = namespacedVariant.split(":");
+
+        if (split.length == 1) {
+            MoreMobVariants.LOGGER.warn("Passed in non-namespaced variant id '" + namespacedVariant + "'. Auto-assigning to moremobvariants:" + namespacedVariant);
+
+            return new String[]{"moremobvariants", split[0]};
+        }
+
+        return split;
+    }
+
     public enum Mob {
         CAT("cat"),
         CHICKEN("chicken"),
