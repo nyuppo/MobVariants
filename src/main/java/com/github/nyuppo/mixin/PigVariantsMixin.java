@@ -31,22 +31,28 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     private static final TrackedData<Boolean> MUDDY_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final String MUDDY_NBT_KEY = "IsMuddy";
 
+    private static final TrackedData<Integer> MUDDY_TIMEOUT_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final String MUDDY_TIMEOUT_NBT_KEY = "MuddyTimeLeft";
+
     @Override
     protected void onInitDataTracker(CallbackInfo ci) {
         ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
         ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_ID, false);
+        ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_TIMEOUT_ID, -1);
     }
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putString(NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID));
         nbt.putBoolean(MUDDY_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_ID));
+        nbt.putInt(MUDDY_TIMEOUT_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_TIMEOUT_ID));
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, nbt.getString(NBT_KEY));
         ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, nbt.getBoolean(MUDDY_NBT_KEY));
+        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
     }
 
     @Override
@@ -59,10 +65,28 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle muddy pigs
         if (VariantSettings.getEnableMuddyPigs()) {
-            if (((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
-                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
-            } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
-                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+            int muddyPigTimeout = VariantSettings.getMuddyPigTimeout();
+            int currentTimeLeft = ((PigEntity)(Object)this).getDataTracker().get(MUDDY_TIMEOUT_ID);
+
+            if (currentTimeLeft == -1) {
+                if (((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
+                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
+                    if (muddyPigTimeout > 0 ) {
+                        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, 20 * muddyPigTimeout);
+                    }
+                } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
+                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, -1);
+                }
+            }
+
+            if (muddyPigTimeout > 0 && currentTimeLeft > 0) {
+                currentTimeLeft--;
+                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, currentTimeLeft);
+                if (currentTimeLeft == 0) {
+                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
+                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, -1);
+                }
             }
         }
 
