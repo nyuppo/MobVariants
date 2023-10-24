@@ -68,14 +68,10 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Inject(
             method = "createChild(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/PassiveEntity;)Lnet/minecraft/entity/passive/SheepEntity;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<SheepEntity> ci) {
-        SheepEntity child = (SheepEntity)EntityType.SHEEP.create(world);
-        if (child != null) {
-            child.setColor(this.getChildColor(((SheepEntity)(Object)this), (SheepEntity)entity));
-        }
+        SheepEntity child = ci.getReturnValue();
 
         MobVariant variant = Variants.getChildVariant(Variants.Mob.SHEEP, world, ((SheepEntity)(Object)this), entity);
 
@@ -84,7 +80,5 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-
-        ci.setReturnValue(child);
     }
 }

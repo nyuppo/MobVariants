@@ -61,11 +61,10 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
 
     @Inject(
             method = "createChild(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/PassiveEntity;)Lnet/minecraft/entity/passive/CowEntity;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<CowEntity> ci) {
-        CowEntity child = (CowEntity)EntityType.COW.create(world);
+        CowEntity child = ci.getReturnValue();
 
         MobVariant variant = Variants.getChildVariant(Variants.Mob.COW, world, ((CowEntity)(Object)this), entity);
 
@@ -74,7 +73,5 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-
-        ci.setReturnValue(child);
     }
 }

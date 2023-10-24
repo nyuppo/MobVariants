@@ -64,18 +64,10 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
 
     @Inject(
             method = "createChild(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/PassiveEntity;)Lnet/minecraft/entity/passive/WolfEntity;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<WolfEntity> ci) {
-        WolfEntity child = (WolfEntity) EntityType.WOLF.create(world);
-        if (child != null) {
-            UUID uUID = ((WolfEntity)(Object)this).getOwnerUuid();
-            if (uUID != null) {
-                child.setOwnerUuid(uUID);
-                child.setTamed(true);
-            }
-        }
+        WolfEntity child = ci.getReturnValue();
 
         MobVariant variant = Variants.getChildVariant(Variants.Mob.WOLF, world, ((WolfEntity)(Object)this), entity);
 
@@ -84,7 +76,5 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-
-        ci.setReturnValue(child);
     }
 }

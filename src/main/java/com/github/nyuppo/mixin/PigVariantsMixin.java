@@ -101,11 +101,10 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Inject(
             method = "createChild(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/PassiveEntity;)Lnet/minecraft/entity/passive/PigEntity;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<PigEntity> ci) {
-        PigEntity child = (PigEntity)EntityType.PIG.create(world);
+        PigEntity child = ci.getReturnValue();
 
         MobVariant variant = Variants.getChildVariant(Variants.Mob.PIG, world, ((PigEntity)(Object)this), entity);
 
@@ -114,7 +113,5 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-
-        ci.setReturnValue(child);
     }
 }
