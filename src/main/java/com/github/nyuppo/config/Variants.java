@@ -210,33 +210,6 @@ public class Variants {
         return split;
     }
 
-    public enum Mob {
-        CAT("cat"),
-        CHICKEN("chicken"),
-        COW("cow"),
-        PIG("pig"),
-        SHEEP("sheep"),
-        SPIDER("spider"),
-        WOLF("wolf"),
-        ZOMBIE("zombie"),
-        NULL("null");
-
-        private final String id;
-
-        Mob(String id) {
-            this.id = id;
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        @Override
-        public String toString() {
-            return this.id;
-        }
-    }
-
     static {
         variants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
 
