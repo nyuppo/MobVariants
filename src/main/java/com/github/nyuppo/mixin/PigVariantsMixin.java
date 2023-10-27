@@ -57,7 +57,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
         ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -92,7 +92,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
         // Handle mod version upgrades
         if (((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.PIG, ((PigEntity)(Object)this).getWorld().getRandom(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getWorld().getRandom(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null);
             ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
@@ -107,7 +107,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<PigEntity> ci) {
         PigEntity child = (PigEntity)EntityType.PIG.create(world);
 
-        MobVariant variant = Variants.getChildVariant(Variants.Mob.PIG, world, ((PigEntity)(Object)this), entity);
+        MobVariant variant = Variants.getChildVariant(EntityType.PIG, world, ((PigEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();

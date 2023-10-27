@@ -51,7 +51,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
         ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -59,7 +59,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle mod version upgrades
         if (((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.SHEEP, ((SheepEntity)(Object)this).getWorld().getRandom(), ((SheepEntity)(Object)this).getWorld().getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.SHEEP, ((SheepEntity)(Object)this).getWorld().getRandom(), ((SheepEntity)(Object)this).getWorld().getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
             ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((SheepEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((SheepEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
@@ -77,7 +77,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
             child.setColor(this.getChildColor(((SheepEntity)(Object)this), (SheepEntity)entity));
         }
 
-        MobVariant variant = Variants.getChildVariant(Variants.Mob.SHEEP, world, ((SheepEntity)(Object)this), entity);
+        MobVariant variant = Variants.getChildVariant(EntityType.SHEEP, world, ((SheepEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();

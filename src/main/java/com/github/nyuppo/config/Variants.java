@@ -4,8 +4,10 @@ import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.util.BreedingResultData;
 import com.github.nyuppo.util.VariantBag;
 import com.github.nyuppo.variant.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.server.world.ServerWorld;
@@ -17,10 +19,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class Variants {
-    private static EnumMap<Mob, ArrayList<MobVariant>> variants;
-    private static EnumMap<Mob, ArrayList<MobVariant>> defaultVariants;
+    private static HashMap<EntityType<?>, ArrayList<MobVariant>> variants;
+    private static HashMap<EntityType<?>, ArrayList<MobVariant>> defaultVariants;
 
-    public static void addVariant(Mob mob, MobVariant variant) {
+    public static void addVariant(EntityType<?> mob, MobVariant variant) {
         if (variants.get(mob) == null) {
             variants.put(mob, new ArrayList<MobVariant>());
         }
@@ -28,7 +30,7 @@ public class Variants {
         variants.get(mob).add(variant);
     }
 
-    public static ArrayList<MobVariant> getVariants(Mob mob) {
+    public static ArrayList<MobVariant> getVariants(EntityType<?> mob) {
         if (variants.get(mob) != null) {
             return new ArrayList<>(variants.get(mob));
         }
@@ -36,11 +38,11 @@ public class Variants {
         return new ArrayList<>(defaultVariants.get(mob));
     }
 
-    public static ArrayList<MobVariant> getDefaultVariants(Mob mob) {
+    public static ArrayList<MobVariant> getDefaultVariants(EntityType<?> mob) {
         return new ArrayList<>(defaultVariants.get(mob));
     }
 
-    public static MobVariant getDefaultVariant(Mob mob) {
+    public static MobVariant getDefaultVariant(EntityType<?> mob) {
         ArrayList<MobVariant> variants = getVariants(mob);
         for (MobVariant variant : variants) {
             if (variant.getIdentifier().equals(MoreMobVariants.id("default"))) {
@@ -50,7 +52,7 @@ public class Variants {
         return new MobVariant(MoreMobVariants.id("default"), 1);
     }
 
-    public static MobVariant getVariant(Mob mob, Identifier identifier) {
+    public static MobVariant getVariant(EntityType<?> mob, Identifier identifier) {
         ArrayList<MobVariant> variants = getVariants(mob);
 
         for (MobVariant variant : variants) {
@@ -61,33 +63,29 @@ public class Variants {
         return getDefaultVariant(mob);
     }
 
-    public static void resetVariants(Mob mob) {
+    public static void resetVariants(EntityType<?> mob) {
         variants.remove(mob);
         variants.put(mob, defaultVariants.get(mob));
     }
 
-    public static void clearVariants(Mob mob) {
+    public static void clearVariants(EntityType<?> mob) {
         variants.remove(mob);
         variants.put(mob, new ArrayList<>());
     }
 
     public static void clearAllVariants() {
-        for (Mob mob : Mob.values()) {
-            clearVariants(mob);
-        }
+        //TODO: Test this
+        variants.clear();
     }
 
     public static void validateEmptyVariants() {
-        for (Mob mob : Mob.values()) {
-            if (variants.get(mob).isEmpty()) {
-                resetVariants(mob);
-            }
-        }
+        variants.keySet().forEach(Variants::resetVariants);
     }
 
     public static void applyBlacklists() {
-        for (Mob mob : Mob.values()) {
-            if (mob.equals(Mob.CAT) || mob.equals(Mob.NULL) || variants.get(mob) == null) {
+        for (EntityType<?> mob : variants.keySet()) {
+            //TODO: Check this.
+            if (mob.equals(EntityType.CAT) /*|| mob.equals(Mob.NULL)*/ || variants.get(mob) == null) {
                 continue;
             }
             List<MobVariant> variantsList = variants.get(mob);
@@ -106,16 +104,24 @@ public class Variants {
         }
     }
 
-    public static Mob getMob(String mobId) {
-        for (Mob mob : Mob.values()) {
-            if (mob.getId().equalsIgnoreCase(mobId)) {
-                return mob;
+    //TODO: Change this to Identifier? And make the code!
+    public static EntityType<?> getMob(String mobId) {
+        final EntityType<?>[] toReturn = {null};
+        variants.forEach((entityType, variants) -> {
+            if(toReturn[0] != null) return;
+            for (MobVariant variant : variants) {
+                if (variant.getIdentifier().equals(Identifier.tryParse(mobId))) {
+                    toReturn[0] = entityType;
+                    return;
+                }
             }
-        }
-        return Mob.NULL;
+        });
+        if(toReturn[0] != null) return toReturn[0];
+
+        throw new IllegalArgumentException("Unknown mob: " + mobId);
     }
 
-    public static MobVariant getRandomVariant(Mob mob, Random random, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData) {
+    public static MobVariant getRandomVariant(EntityType<?> mob, Random random, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData) {
         ArrayList<MobVariant> variants = getVariants(mob);
         if (variants.isEmpty()) {
             return getDefaultVariant(mob);
@@ -173,7 +179,7 @@ public class Variants {
         return bag.getRandomEntry();
     }
 
-    public static MobVariant getChildVariant(Mob mob, ServerWorld world, PassiveEntity parent1, PassiveEntity parent2) {
+    public static MobVariant getChildVariant(EntityType<?> mob, ServerWorld world, PassiveEntity parent1, PassiveEntity parent2) {
         // Collect data about parents
         NbtCompound parent1Nbt = new NbtCompound();
         parent1.writeNbt(parent1Nbt);
@@ -232,10 +238,10 @@ public class Variants {
     }
 
     static {
-        variants = new EnumMap<Mob, ArrayList<MobVariant>>(Mob.class);
+        variants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
 
-        defaultVariants = new EnumMap<Mob, ArrayList<MobVariant>>(Mob.class);
-        defaultVariants.put(Mob.CHICKEN, new ArrayList<>(List.of(
+        defaultVariants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
+        defaultVariants.put(EntityType.CHICKEN, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("midnight"), 1),
                 new MobVariant(MoreMobVariants.id("amber"), 2),
                 new MobVariant(MoreMobVariants.id("gold_crested"), 2),
@@ -246,7 +252,7 @@ public class Variants {
                         .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_NETHER)),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
-        defaultVariants.put(Mob.COW, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.COW, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("umbra"), 1),
                 new MobVariant(MoreMobVariants.id("ashen"), 2),
                 new MobVariant(MoreMobVariants.id("cookie"), 2),
@@ -260,7 +266,7 @@ public class Variants {
                         .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_TAIGA)),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
-        defaultVariants.put(Mob.PIG, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.PIG, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("mottled"), 1),
                 new MobVariant(MoreMobVariants.id("piebald"), 1),
                 new MobVariant(MoreMobVariants.id("pink_footed"), 1),
@@ -268,7 +274,7 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("spotted"), 1),
                 new MobVariant(MoreMobVariants.id("default"), 2)
         )));
-        defaultVariants.put(Mob.SHEEP, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.SHEEP, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("patched"), 1)
                         .addModifier(new CustomWoolModifier()),
                 new MobVariant(MoreMobVariants.id("fuzzy"), 1)
@@ -277,14 +283,14 @@ public class Variants {
                         .addModifier(new CustomWoolModifier()),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
-        defaultVariants.put(Mob.SPIDER, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.SPIDER, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("brown"), 3)
                         .addModifier(new CustomEyesModifier()),
                 new MobVariant(MoreMobVariants.id("tarantula"), 2),
                 new MobVariant(MoreMobVariants.id("black_widow"), 1),
                 new MobVariant(MoreMobVariants.id("default"), 5)
         )));
-        defaultVariants.put(Mob.WOLF, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.WOLF, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("jupiter"), 1),
                 new MobVariant(MoreMobVariants.id("husky"), 1),
                 new MobVariant(MoreMobVariants.id("default"), 1),
@@ -304,7 +310,7 @@ public class Variants {
                                 MoreMobVariants.id("golden_retriever"),
                                 0.5))
         )));
-        defaultVariants.put(Mob.ZOMBIE, new ArrayList<>(List.of(
+        defaultVariants.put(EntityType.ZOMBIE, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("alex"), 2),
                 new MobVariant(MoreMobVariants.id("ari"), 1),
                 new MobVariant(MoreMobVariants.id("efe"), 1),

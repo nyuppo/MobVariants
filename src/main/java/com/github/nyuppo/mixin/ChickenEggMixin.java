@@ -2,6 +2,7 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.config.Variants;
 import com.github.nyuppo.variant.MobVariant;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.projectile.thrown.EggEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -16,7 +17,7 @@ public class ChickenEggMixin {
             at = @At("STORE")
     )
     private ChickenEntity mixin(ChickenEntity chickenEntity) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.CHICKEN, chickenEntity.getWorld().getRandom(), chickenEntity.getWorld().getBiome(chickenEntity.getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.CHICKEN, chickenEntity.getWorld().getRandom(), chickenEntity.getWorld().getBiome(chickenEntity.getBlockPos()), null);
 
         NbtCompound newNbt = new NbtCompound();
         chickenEntity.writeNbt(newNbt);

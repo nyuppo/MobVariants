@@ -3,6 +3,7 @@ package com.github.nyuppo.mixin;
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
 import net.minecraft.client.render.entity.feature.SheepWoolFeatureRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -33,7 +34,7 @@ public class SheepWoolFeatureMixin {
 
             String[] split = Variants.splitVariant(variant);
 
-            if (Variants.getVariant(Variants.Mob.SHEEP, Identifier.of(split[0], split[1])).hasCustomWool()) {
+            if (Variants.getVariant(EntityType.SHEEP, Identifier.of(split[0], split[1])).hasCustomWool()) {
                 args.set(2, new Identifier(split[0], "textures/entity/sheep/wool/" + split[1] + ".png"));
             }
         }

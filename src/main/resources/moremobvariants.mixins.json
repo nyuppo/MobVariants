@@ -23,7 +23,6 @@
     "CowRendererMixin",
     "WolfRendererMixin",
     "CatFluffMixin",
-    "ZombieRendererMixin",
     "PigFlowerMixin",
     "SheepWoolFeatureMixin"
   ],
