@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(EyesFeatureRenderer.class)
-public class SpiderEyesFeatureMixin<T extends Entity> {
+public class CustomEyesFeatureMixin<T extends Entity> {
     @ModifyArgs(
             method = "render",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;")
