@@ -62,11 +62,10 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Inject(
             method = "createChild(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/PassiveEntity;)Lnet/minecraft/entity/passive/ChickenEntity;",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("RETURN")
     )
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<ChickenEntity> ci) {
-        ChickenEntity child = (ChickenEntity)EntityType.CHICKEN.create(world);
+        ChickenEntity child = ci.getReturnValue();
 
         MobVariant variant = Variants.getChildVariant(Variants.Mob.CHICKEN, world, ((ChickenEntity)(Object)this), entity);
 
@@ -75,7 +74,5 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString("Variant", variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-
-        ci.setReturnValue(child);
     }
 }
