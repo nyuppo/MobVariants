@@ -44,7 +44,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.COW, world.getRandom(), world.getBiome(((CowEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.COW, world.getRandom(), world.getBiome(((CowEntity)(Object)this).getBlockPos()), null);
         ((CowEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -52,7 +52,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle mod version upgrades
         if (((CowEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.COW, ((CowEntity)(Object)this).getWorld().getRandom(), ((CowEntity)(Object)this).getWorld().getBiome(((CowEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.COW, ((CowEntity)(Object)this).getWorld().getRandom(), ((CowEntity)(Object)this).getWorld().getBiome(((CowEntity)(Object)this).getBlockPos()), null);
             ((CowEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((CowEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((CowEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((CowEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
@@ -66,7 +66,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<CowEntity> ci) {
         CowEntity child = ci.getReturnValue();
 
-        MobVariant variant = Variants.getChildVariant(Variants.Mob.COW, world, ((CowEntity)(Object)this), entity);
+        MobVariant variant = Variants.getChildVariant(EntityType.COW, world, ((CowEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();

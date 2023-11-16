@@ -4,6 +4,7 @@ import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
 import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -40,7 +41,7 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.ZOMBIE, world.getRandom(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.ZOMBIE, world.getRandom(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
         ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -48,7 +49,7 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle mod version upgrades
         if (((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.ZOMBIE, ((ZombieEntity)(Object)this).getWorld().getRandom(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((ZombieEntity)(Object)this).getWorld().getRandom(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
             ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((ZombieEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((ZombieEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());

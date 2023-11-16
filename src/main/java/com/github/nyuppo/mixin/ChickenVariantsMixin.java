@@ -45,7 +45,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.CHICKEN, world.getRandom(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.CHICKEN, world.getRandom(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
         ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -53,7 +53,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle mod version upgrades
         if (((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.CHICKEN, ((ChickenEntity)(Object)this).getWorld().getRandom(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getWorld().getRandom(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
             ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((ChickenEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((ChickenEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
@@ -67,7 +67,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<ChickenEntity> ci) {
         ChickenEntity child = ci.getReturnValue();
 
-        MobVariant variant = Variants.getChildVariant(Variants.Mob.CHICKEN, world, ((ChickenEntity)(Object)this), entity);
+        MobVariant variant = Variants.getChildVariant(EntityType.CHICKEN, world, ((ChickenEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();

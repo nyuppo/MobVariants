@@ -2,6 +2,7 @@ package com.github.nyuppo.util;
 
 import com.github.nyuppo.config.Variants;
 import com.github.nyuppo.variant.MobVariant;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.random.Random;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class VariantBag {
     private List<Entry> entries = new ArrayList<>();
     private double accumulatedWeight;
     private final Random random;
-    private final Variants.Mob mob;
+    private final EntityType<?> mob;
 
-    public VariantBag(Variants.Mob mob, Random random, List<MobVariant> variants) {
+    public VariantBag(EntityType<?> mob, Random random, List<MobVariant> variants) {
         this.mob = mob;
         this.random = random;
         for (MobVariant variant : variants) {

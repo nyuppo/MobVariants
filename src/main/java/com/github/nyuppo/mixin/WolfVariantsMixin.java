@@ -47,7 +47,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(Variants.Mob.WOLF, world.getRandom(), world.getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
+        MobVariant variant = Variants.getRandomVariant(EntityType.WOLF, world.getRandom(), world.getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
         ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
     }
 
@@ -55,7 +55,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
     protected void onTick(CallbackInfo ci) {
         // Handle mod version upgrades
         if (((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(Variants.Mob.WOLF, ((WolfEntity)(Object)this).getWorld().getRandom(), ((WolfEntity)(Object)this).getWorld().getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
+            MobVariant variant = Variants.getRandomVariant(EntityType.WOLF, ((WolfEntity)(Object)this).getWorld().getRandom(), ((WolfEntity)(Object)this).getWorld().getBiome(((WolfEntity)(Object)this).getBlockPos()), null);
             ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
         } else if (!((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
             ((WolfEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((WolfEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
@@ -69,7 +69,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
     private void onCreateChild(ServerWorld world, PassiveEntity entity, CallbackInfoReturnable<WolfEntity> ci) {
         WolfEntity child = ci.getReturnValue();
 
-        MobVariant variant = Variants.getChildVariant(Variants.Mob.WOLF, world, ((WolfEntity)(Object)this), entity);
+        MobVariant variant = Variants.getChildVariant(EntityType.WOLF, world, ((WolfEntity)(Object)this), entity);
 
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
