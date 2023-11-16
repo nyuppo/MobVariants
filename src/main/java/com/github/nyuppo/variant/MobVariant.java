@@ -1,5 +1,6 @@
 package com.github.nyuppo.variant;
 
+import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;

@@ -138,7 +138,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
 
             if (element.getAsJsonObject().has("custom_eyes")) {
                 if (element.getAsJsonObject().get("custom_eyes").getAsBoolean()) {
-                    modifiers.add(new CustomWoolModifier());
+                    modifiers.add(new CustomEyesModifier());
                 }
             }
         }

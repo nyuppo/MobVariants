@@ -214,35 +214,6 @@ public class Variants {
         return split;
     }
 
-    /*
-    public enum Mob {
-        CAT("cat"),
-        CHICKEN("chicken"),
-        COW("cow"),
-        PIG("pig"),
-        SHEEP("sheep"),
-        SPIDER("spider"),
-        WOLF("wolf"),
-        ZOMBIE("zombie"),
-        NULL("null");
-
-        private final String id;
-
-        Mob(String id) {
-            this.id = id;
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        @Override
-        public String toString() {
-            return this.id;
-        }
-    }
-     */
-
     static {
         variants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
 
@@ -290,6 +261,10 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
         defaultVariants.put(EntityType.SPIDER, new ArrayList<>(List.of(
+                new MobVariant(MoreMobVariants.id("bone"), 1)
+                        .addModifier(new ShinyModifier())
+                        .addModifier(new DiscardableModifier(0.8))
+                        .addModifier(new CustomEyesModifier()),
                 new MobVariant(MoreMobVariants.id("brown"), 3)
                         .addModifier(new CustomEyesModifier()),
                 new MobVariant(MoreMobVariants.id("tarantula"), 2),

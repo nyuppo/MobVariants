@@ -25,7 +25,8 @@
     "CatFluffMixin",
     "ZombieRendererMixin",
     "PigFlowerMixin",
-    "SheepWoolFeatureMixin"
+    "SheepWoolFeatureMixin",
+    "SpiderEyesFeatureMixin"
   ],
   "injectors": {
     "defaultRequire": 1
