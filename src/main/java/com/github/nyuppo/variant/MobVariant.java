@@ -32,6 +32,10 @@ public class MobVariant {
     }
 
     public Identifier getIdentifier() {
+        return this.hasCustomVariantName() ? this.getCustomVariantName() : this.identifier;
+    }
+
+    public Identifier getRawIdentifier() {
         return this.identifier;
     }
 
@@ -46,6 +50,25 @@ public class MobVariant {
             }
         }
         return false;
+    }
+
+    public boolean hasCustomVariantName() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof CustomVariantNameModifier) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Identifier getCustomVariantName() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof CustomVariantNameModifier) {
+                return new Identifier(this.identifier.getNamespace(), ((CustomVariantNameModifier) modifier).variantName());
+            }
+        }
+
+        return MoreMobVariants.id("default");
     }
 
     public boolean shouldDiscard(Random random) {

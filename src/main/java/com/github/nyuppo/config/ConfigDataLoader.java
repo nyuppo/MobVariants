@@ -84,8 +84,6 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
         int weight = 0;
         List<VariantModifier> modifiers = new ArrayList<>();
 
-        String variantName = variantId;
-
         if (element.getAsJsonObject().size() != 0) {
             if (element.getAsJsonObject().has("weight")) {
                 weight = element.getAsJsonObject().get("weight").getAsInt();
@@ -95,7 +93,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             }
 
             if (element.getAsJsonObject().has("name")) {
-                variantName = element.getAsJsonObject().get("name").getAsString();
+                modifiers.add(new CustomVariantNameModifier(element.getAsJsonObject().get("name").getAsString()));
             }
 
             if (element.getAsJsonObject().has("shiny")) {
@@ -143,7 +141,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             }
         }
 
-        Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantName), weight, modifiers));
+        Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantId), weight, modifiers));
     }
 
     private void applyBlacklist(Reader reader, String mob) {
