@@ -241,6 +241,9 @@ public class Variants {
                         .addModifier(new ShinyModifier())
                         .addModifier(new DiscardableModifier(0.9))
                         .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_TAIGA)),
+                new MobVariant(MoreMobVariants.id("cream"), 1)
+                        .addModifier(new ShinyModifier())
+                        .addModifier(new DiscardableModifier(0.8)),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
         defaultVariants.put(EntityType.PIG, new ArrayList<>(List.of(
