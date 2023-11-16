@@ -1,5 +1,6 @@
 {
   "weight": 1,
   "shiny": true,
-  "discard_chance": 0.8
+  "discard_chance": 0.8,
+  "custom_eyes": true
 }
