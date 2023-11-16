@@ -260,6 +260,17 @@ public class Variants {
                         .addModifier(new CustomWoolModifier()),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
+        defaultVariants.put(EntityType.SKELETON, new ArrayList<>(List.of(
+                new MobVariant(MoreMobVariants.id("dungeons"), 3),
+                new MobVariant(MoreMobVariants.id("weathered"), 2),
+                new MobVariant(MoreMobVariants.id("sandy"), 1),
+                new MobVariant(MoreMobVariants.id("mossy"), 2)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_MOSSY_SKELETONS)),
+                new MobVariant(MoreMobVariants.id("sandy_increased_spawns_in_deserts"), 3)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.INCREASED_SANDY_SKELETONS))
+                        .addModifier(new CustomVariantNameModifier("sandy")),
+                new MobVariant(MoreMobVariants.id("default"), 4)
+        )));
         defaultVariants.put(EntityType.SPIDER, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("bone"), 1)
                         .addModifier(new ShinyModifier())
