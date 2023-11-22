@@ -303,6 +303,21 @@ public class Variants {
                         .addModifier(new BreedingResultModifier(
                                 MoreMobVariants.id("husky"),
                                 MoreMobVariants.id("golden_retriever"),
+                                0.5)),
+                new MobVariant(MoreMobVariants.id("black"), 1)
+                        .addModifier(new BreedingResultModifier(
+                                MoreMobVariants.id("husky"),
+                                MoreMobVariants.id("german_shepherd"),
+                                0.5)),
+                new MobVariant(MoreMobVariants.id("basenji"), 1)
+                        .addModifier(new BreedingResultModifier(
+                                MoreMobVariants.id("jupiter"),
+                                MoreMobVariants.id("golden_retriever"),
+                                0.5)),
+                new MobVariant(MoreMobVariants.id("white_terrier"), 1)
+                        .addModifier(new BreedingResultModifier(
+                                MoreMobVariants.id("default"),
+                                MoreMobVariants.id("golden_retriever"),
                                 0.5))
         )));
         defaultVariants.put(EntityType.ZOMBIE, new ArrayList<>(List.of(
