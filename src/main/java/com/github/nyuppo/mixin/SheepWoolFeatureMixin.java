@@ -1,6 +1,7 @@
 package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.client.render.entity.feature.SheepWoolFeatureRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
@@ -35,6 +36,14 @@ public class SheepWoolFeatureMixin {
 
             if (Variants.getVariant(EntityType.SHEEP, Identifier.of(split[0], split[1])).hasCustomWool()) {
                 args.set(2, new Identifier(split[0], "textures/entity/sheep/wool/" + split[1] + ".png"));
+
+                if (sheepEntity.hasCustomName()) {
+                    MobVariant nametagVariant = Variants.getVariantFromNametag(EntityType.SHEEP, sheepEntity.getName().getString());
+                    if (nametagVariant != null) {
+                        Identifier identifier = nametagVariant.getIdentifier();
+                        args.set(2, new Identifier(identifier.getNamespace(), "textures/entity/sheep/wool/" + identifier.getPath() + ".png"));
+                    }
+                }
             }
         }
     }

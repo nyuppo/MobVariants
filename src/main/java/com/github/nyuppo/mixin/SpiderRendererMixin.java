@@ -2,7 +2,9 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.client.render.entity.SpiderEntityRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -27,6 +29,14 @@ public class SpiderRendererMixin {
             } else {
                 String[] split = Variants.splitVariant(variant);
                 ci.setReturnValue(new Identifier(split[0], "textures/entity/spider/" + split[1] + ".png"));
+            }
+        }
+
+        if (spiderEntity.hasCustomName()) {
+            MobVariant variant = Variants.getVariantFromNametag(EntityType.SPIDER, spiderEntity.getName().getString());
+            if (variant != null) {
+                Identifier identifier = variant.getIdentifier();
+                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/spider/" + identifier.getPath() + ".png"));
             }
         }
     }

@@ -19,6 +19,7 @@ import java.util.*;
 
 public class Variants {
     private static HashMap<EntityType<?>, ArrayList<MobVariant>> variants;
+    private static HashMap<EntityType<?>, ArrayList<MobVariant>> nametagOverrides;
     private static HashMap<EntityType<?>, ArrayList<MobVariant>> defaultVariants;
 
     public static void addVariant(EntityType<?> mob, MobVariant variant) {
@@ -26,7 +27,14 @@ public class Variants {
             variants.put(mob, new ArrayList<MobVariant>());
         }
 
-        variants.get(mob).add(variant);
+        if (variant.isNametagOverride()) {
+            if (nametagOverrides.get(mob) == null) {
+                nametagOverrides.put(mob, new ArrayList<MobVariant>());
+            }
+            nametagOverrides.get(mob).add(variant);
+        } else {
+            variants.get(mob).add(variant);
+        }
     }
 
     public static ArrayList<MobVariant> getVariants(EntityType<?> mob) {
@@ -35,6 +43,14 @@ public class Variants {
         }
 
         return new ArrayList<>(defaultVariants.get(mob));
+    }
+
+    public static ArrayList<MobVariant> getNametagOverrides(EntityType<?> mob) {
+        if (nametagOverrides.get(mob) != null) {
+            return new ArrayList<>(nametagOverrides.get(mob));
+        }
+
+        return new ArrayList<>();
     }
 
     public static ArrayList<MobVariant> getDefaultVariants(EntityType<?> mob) {
@@ -82,6 +98,7 @@ public class Variants {
 
     public static void clearAllVariants() {
         variants.clear();
+        nametagOverrides.clear();
     }
 
     public static void validateEmptyVariants() {
@@ -155,6 +172,12 @@ public class Variants {
             if (variant.shouldDiscard(random)) {
                 i.remove();
             }
+
+            // Discord if variant has nametag override
+            // Note: they shouldn't be in this pool in the first place, but better safe than sorry
+            if (variant.isNametagOverride()) {
+                i.remove();
+            }
         }
 
         // Create weighted bag from variants
@@ -181,6 +204,20 @@ public class Variants {
         }
 
         return bag.getRandomEntry();
+    }
+
+    @Nullable
+    public static MobVariant getVariantFromNametag(EntityType<?> mob, String nametag) {
+        ArrayList<MobVariant> nametagOverrides = getNametagOverrides(mob);
+        if (!nametagOverrides.isEmpty()) {
+            for (MobVariant mv : nametagOverrides) {
+                if (mv.getNametagOverride().equalsIgnoreCase(nametag)) {
+                    return mv;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static MobVariant getChildVariant(EntityType<?> mob, ServerWorld world, PassiveEntity parent1, PassiveEntity parent2) {
@@ -216,6 +253,7 @@ public class Variants {
 
     static {
         variants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
+        nametagOverrides = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
 
         defaultVariants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
         defaultVariants.put(EntityType.CHICKEN, new ArrayList<>(List.of(

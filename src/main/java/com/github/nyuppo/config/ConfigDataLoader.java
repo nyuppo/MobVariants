@@ -88,8 +88,11 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             if (element.getAsJsonObject().has("weight")) {
                 weight = element.getAsJsonObject().get("weight").getAsInt();
             } else {
-                MoreMobVariants.LOGGER.error("Variant " + namespace + ":" + mobId + "/" + variantId + " has no weight, skipping.");
-                return;
+                // Skip if there is no weight present, UNLESS it is a nametag override, in which case it needs no weight
+                if (!element.getAsJsonObject().has("nametag_override")) {
+                    MoreMobVariants.LOGGER.error("Variant " + namespace + ":" + mobId + "/" + variantId + " has no weight, skipping.");
+                    return;
+                }
             }
 
             if (element.getAsJsonObject().has("name")) {
@@ -138,6 +141,10 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                 if (element.getAsJsonObject().get("custom_eyes").getAsBoolean()) {
                     modifiers.add(new CustomEyesModifier());
                 }
+            }
+
+            if (element.getAsJsonObject().has("nametag_override")) {
+                modifiers.add(new NametagOverrideModifier(element.getAsJsonObject().get("nametag_override").getAsString()));
             }
         }
 

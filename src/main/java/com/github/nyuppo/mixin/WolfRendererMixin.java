@@ -2,7 +2,9 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.client.render.entity.WolfEntityRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -36,6 +38,18 @@ public class WolfRendererMixin {
                     ci.setReturnValue(new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_tame.png"));
                 } else {
                     ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_angry.png") : new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_wild.png"));
+                }
+            }
+        }
+
+        if (wolfEntity.hasCustomName()) {
+            MobVariant variant = Variants.getVariantFromNametag(EntityType.WOLF, wolfEntity.getName().getString());
+            if (variant != null) {
+                Identifier identifier = variant.getIdentifier();
+                if (wolfEntity.isTamed()) {
+                    ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_tame.png"));
+                } else {
+                    ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_angry.png") : new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_wild.png"));
                 }
             }
         }

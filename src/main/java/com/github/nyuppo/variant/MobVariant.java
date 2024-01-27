@@ -144,4 +144,22 @@ public class MobVariant {
         }
         return false;
     }
+
+    public boolean isNametagOverride() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof NametagOverrideModifier) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getNametagOverride() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof NametagOverrideModifier) {
+                return ((NametagOverrideModifier)modifier).nametag();
+            }
+        }
+        return "error";
+    }
 }
