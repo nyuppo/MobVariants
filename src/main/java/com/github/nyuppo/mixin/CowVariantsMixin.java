@@ -47,7 +47,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
             variant = Variants.getDefaultVariant(EntityType.COW);
         }
 
-        // Update all players in the event that this is from modifying entity deata with a command
+        // Update all players in the event that this is from modifying entity data with a command
         // This should be fine since the packet is so small anyways
         MinecraftServer server = ((Entity)(Object)this).getServer();
         if (server != null) {
