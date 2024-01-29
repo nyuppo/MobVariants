@@ -1,4 +1,5 @@
 {
   "weight": 2,
-  "custom_wool": true
+  "custom_wool": true,
+  "has_color_when_sheared": true
 }

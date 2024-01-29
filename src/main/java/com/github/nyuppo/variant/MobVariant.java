@@ -145,6 +145,15 @@ public class MobVariant {
         return false;
     }
 
+    public boolean hasColorWhenSheared() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof ShearedWoolColorModifier) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isNametagOverride() {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof NametagOverrideModifier) {

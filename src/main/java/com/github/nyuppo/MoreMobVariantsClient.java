@@ -1,6 +1,7 @@
 package com.github.nyuppo;
 
 import com.github.nyuppo.client.render.entity.feature.PigMudFeatureRenderer;
+import com.github.nyuppo.client.render.entity.feature.ShearedWoolColorFeatureRenderer;
 import com.github.nyuppo.networking.MMVNetworkingConstants;
 import eu.pb4.polymer.networking.api.client.PolymerClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
@@ -9,11 +10,15 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.render.entity.PigEntityRenderer;
+import net.minecraft.client.render.entity.SheepEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.render.entity.feature.SheepWoolFeatureRenderer;
 import net.minecraft.client.render.entity.model.PigEntityModel;
+import net.minecraft.client.render.entity.model.SheepEntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.network.PacketByteBuf;
@@ -29,6 +34,8 @@ public class MoreMobVariantsClient implements ClientModInitializer {
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
             if (entityRenderer instanceof PigEntityRenderer) {
                 registrationHelper.register(new PigMudFeatureRenderer<PigEntity, PigEntityModel<PigEntity>>((FeatureRendererContext)entityRenderer));
+            } else if (entityRenderer instanceof SheepEntityRenderer) {
+                registrationHelper.register(new ShearedWoolColorFeatureRenderer<SheepEntity, SheepEntityModel<SheepEntity>>((FeatureRendererContext)entityRenderer));
             }
         });
 

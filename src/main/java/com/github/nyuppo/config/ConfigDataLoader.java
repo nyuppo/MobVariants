@@ -137,6 +137,12 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                 }
             }
 
+            if (element.getAsJsonObject().has("has_color_when_sheared")) {
+                if (element.getAsJsonObject().get("has_color_when_sheared").getAsBoolean()) {
+                    modifiers.add(new ShearedWoolColorModifier());
+                }
+            }
+
             if (element.getAsJsonObject().has("custom_eyes")) {
                 if (element.getAsJsonObject().get("custom_eyes").getAsBoolean()) {
                     modifiers.add(new CustomEyesModifier());
