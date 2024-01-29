@@ -2,12 +2,18 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.networking.MMVNetworkingConstants;
 import com.github.nyuppo.variant.MobVariant;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
@@ -39,6 +45,20 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
             }
         } else {
             variant = Variants.getDefaultVariant(EntityType.COW);
+        }
+
+        // Update all players in the event that this is from modifying entity deata with a command
+        // This should be fine since the packet is so small anyways
+        MinecraftServer server = ((Entity)(Object)this).getServer();
+        if (server != null) {
+            server.getPlayerManager().getPlayerList().forEach((player) -> {
+                PacketByteBuf updateBuf = PacketByteBufs.create();
+                updateBuf.writeInt(((Entity)(Object)this).getId());
+                updateBuf.writeString(variant.getIdentifier().toString());
+
+                MoreMobVariants.LOGGER.info("sending " + nbt.getString(MoreMobVariants.NBT_KEY) + " to " + player.getName().getString());
+                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+            });
         }
     }
 
