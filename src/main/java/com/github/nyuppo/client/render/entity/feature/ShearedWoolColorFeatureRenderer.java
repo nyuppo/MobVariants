@@ -26,9 +26,12 @@ public class ShearedWoolColorFeatureRenderer<T extends SheepEntity, M extends Sh
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T sheepEntity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+        /*
         if (!sheepEntity.isSheared()) {
              return;
         }
+        */
+        // It actually looks better without this check lol
 
         NbtCompound nbt = new NbtCompound();
         sheepEntity.writeCustomDataToNbt(nbt);
