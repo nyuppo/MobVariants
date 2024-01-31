@@ -293,13 +293,23 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("default"), 2)
         )));
         defaultVariants.put(EntityType.SHEEP, new ArrayList<>(List.of(
-                new MobVariant(MoreMobVariants.id("patched"), 1)
-                        .addModifier(new CustomWoolModifier()),
-                new MobVariant(MoreMobVariants.id("fuzzy"), 1)
-                        .addModifier(new CustomWoolModifier()),
-                new MobVariant(MoreMobVariants.id("rocky"), 1)
-                        .addModifier(new CustomWoolModifier()),
-                new MobVariant(MoreMobVariants.id("default"), 3)
+                new MobVariant(MoreMobVariants.id("fuzzy"), 2)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new ShearedWoolColorModifier()),
+                new MobVariant(MoreMobVariants.id("inky"), 1)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new ShearedWoolColorModifier()),
+                new MobVariant(MoreMobVariants.id("long_nosed"), 1)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new ShearedWoolColorModifier()),
+                new MobVariant(MoreMobVariants.id("patched"), 2)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new ShearedWoolColorModifier()),
+                new MobVariant(MoreMobVariants.id("rocky"), 2)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new ShearedWoolColorModifier()),
+                new MobVariant(MoreMobVariants.id("default"), 4)
+                        .addModifier(new ShearedWoolColorModifier())
         )));
         defaultVariants.put(EntityType.SKELETON, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("dungeons"), 3),
