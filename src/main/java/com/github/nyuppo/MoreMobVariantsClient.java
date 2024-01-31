@@ -63,7 +63,20 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                 if (entity != null) {
                     NbtCompound nbt = new NbtCompound();
                     entity.writeNbt(nbt);
+
                     nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+
+                    // Muddy pigs
+                    boolean isMuddy;
+                    int muddyTimeLeft;
+                    if (entity instanceof PigEntity) {
+                        isMuddy = buf.readBoolean();
+                        muddyTimeLeft = buf.readInt();
+
+                        nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
+                        nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
+                    }
+
                     entity.readNbt(nbt);
                 }
             }

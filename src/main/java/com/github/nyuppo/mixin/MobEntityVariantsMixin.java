@@ -16,14 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MobEntity.class)
 public abstract class MobEntityVariantsMixin {
     @Inject(
-            method = "initDataTracker",
-            at = @At("RETURN")
-    )
-    protected void onInitDataTracker(CallbackInfo ci) {
-
-    }
-
-    @Inject(
             method = "writeCustomDataToNbt",
             at = @At("RETURN")
     )

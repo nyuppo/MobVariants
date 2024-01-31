@@ -28,20 +28,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CowEntity.class)
 public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
     private MobVariant variant = Variants.getDefaultVariant(EntityType.COW);
-    private static final String NBT_KEY = "Variant";
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putString(NBT_KEY, variant.getIdentifier().toString());
+        nbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (!nbt.getString(NBT_KEY).isEmpty()) {
-            if (nbt.getString(NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.COW, new Identifier(nbt.getString(NBT_KEY)));
+        if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
+            if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
+                variant = Variants.getVariant(EntityType.COW, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
-                variant = Variants.getVariant(EntityType.COW, MoreMobVariants.id(nbt.getString(NBT_KEY)));
+                variant = Variants.getVariant(EntityType.COW, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
             variant = Variants.getDefaultVariant(EntityType.COW);
@@ -56,7 +55,6 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
                 updateBuf.writeInt(((Entity)(Object)this).getId());
                 updateBuf.writeString(variant.getIdentifier().toString());
 
-                MoreMobVariants.LOGGER.info("sending " + nbt.getString(MoreMobVariants.NBT_KEY) + " to " + player.getName().getString());
                 ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
             });
         }
@@ -65,9 +63,6 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.COW, world.getRandom(), world.getBiome(((CowEntity)(Object)this).getBlockPos()), null);
-        NbtCompound nbt = new NbtCompound();
-        ((CowEntity)(Object)this).writeNbt(nbt);
-        nbt.putString(NBT_KEY, variant.getIdentifier().toString());
     }
 
     @Inject(

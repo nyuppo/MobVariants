@@ -3,16 +3,21 @@ package com.github.nyuppo.mixin;
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.networking.MMVNetworkingConstants;
 import com.github.nyuppo.variant.MobVariant;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -24,41 +29,55 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PigEntity.class)
 public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
-    private static final TrackedData<String> VARIANT_ID =
-            DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.STRING);
-    private static final String NBT_KEY = "Variant";
-
-    private static final TrackedData<Boolean> MUDDY_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final String MUDDY_NBT_KEY = "IsMuddy";
-
-    private static final TrackedData<Integer> MUDDY_TIMEOUT_ID = DataTracker.registerData(PigEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final String MUDDY_TIMEOUT_NBT_KEY = "MuddyTimeLeft";
-
-    @Override
-    protected void onInitDataTracker(CallbackInfo ci) {
-        ((PigEntity)(Object)this).getDataTracker().startTracking(VARIANT_ID, MoreMobVariants.id("default").toString());
-        ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_ID, false);
-        ((PigEntity)(Object)this).getDataTracker().startTracking(MUDDY_TIMEOUT_ID, -1);
-    }
+    private MobVariant variant = Variants.getDefaultVariant(EntityType.COW);
+    private boolean isMuddy = false;
+    private int muddyTimeLeft = -1;
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putString(NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID));
-        nbt.putBoolean(MUDDY_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_ID));
-        nbt.putInt(MUDDY_TIMEOUT_NBT_KEY, ((PigEntity)(Object)this).getDataTracker().get(MUDDY_TIMEOUT_ID));
+        nbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
+        nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
+        nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, nbt.getString(NBT_KEY));
-        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, nbt.getBoolean(MUDDY_NBT_KEY));
-        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
+        if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
+            if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
+                variant = Variants.getVariant(EntityType.PIG, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
+            } else {
+                variant = Variants.getVariant(EntityType.PIG, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
+            }
+        } else {
+            variant = Variants.getDefaultVariant(EntityType.PIG);
+        }
+        isMuddy = nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY);
+        muddyTimeLeft = nbt.getInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY);
+
+        // Update all players in the event that this is from modifying entity data with a command
+        // This should be fine since the packet is so small anyways
+        MinecraftServer server = ((Entity)(Object)this).getServer();
+        if (server != null) {
+            server.getPlayerManager().getPlayerList().forEach((player) -> {
+                PacketByteBuf updateBuf = PacketByteBufs.create();
+                updateBuf.writeInt(((Entity)(Object)this).getId());
+                updateBuf.writeString(variant.getIdentifier().toString());
+                updateBuf.writeBoolean(isMuddy);
+                updateBuf.writeInt(muddyTimeLeft);
+
+                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+            });
+        }
     }
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        MobVariant variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
-        ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
+        variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+
+        // 2% chance of pig starting muddy if in swamp
+        if (world.getBiome(((PigEntity)(Object)this).getBlockPos()).isIn(BiomeTags.RUINED_PORTAL_SWAMP_HAS_STRUCTURE) && world.getRandom().nextDouble() < 0.02) {
+            isMuddy = true;
+        }
     }
 
     @Override
@@ -66,36 +85,26 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
         // Handle muddy pigs
         if (VariantSettings.getEnableMuddyPigs()) {
             int muddyPigTimeout = VariantSettings.getMuddyPigTimeout();
-            int currentTimeLeft = ((PigEntity)(Object)this).getDataTracker().get(MUDDY_TIMEOUT_ID);
 
-            if (currentTimeLeft == -1) {
+            if (muddyTimeLeft == -1) {
                 if (((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos()).isIn(MoreMobVariants.PIG_MUD_BLOCKS) || ((PigEntity)(Object)this).getWorld().getBlockState(((PigEntity)(Object)this).getBlockPos().down()).isIn(MoreMobVariants.PIG_MUD_BLOCKS)) {
-                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, true);
+                    isMuddy = true;
                     if (muddyPigTimeout > 0 ) {
-                        ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, 20 * muddyPigTimeout);
+                        muddyTimeLeft = 20 * muddyPigTimeout;
                     }
                 } else if (((PigEntity)(Object)this).isTouchingWaterOrRain()) {
-                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
-                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, -1);
+                    isMuddy = false;
+                    muddyTimeLeft = -1;
                 }
             }
 
-            if (muddyPigTimeout > 0 && currentTimeLeft > 0) {
-                currentTimeLeft--;
-                ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, currentTimeLeft);
-                if (currentTimeLeft == 0) {
-                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_ID, false);
-                    ((PigEntity)(Object)this).getDataTracker().set(MUDDY_TIMEOUT_ID, -1);
+            if (muddyPigTimeout > 0 && muddyTimeLeft > 0) {
+                muddyTimeLeft--;
+                if (muddyTimeLeft == 0) {
+                    isMuddy = false;
+                    muddyTimeLeft = -1;
                 }
             }
-        }
-
-        // Handle mod version upgrades
-        if (((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).isEmpty()) { // 1.2.0 -> 1.2.1 (empty variant id)
-            MobVariant variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getWorld().getRandom(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null);
-            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, variant.getIdentifier().toString());
-        } else if (!((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID).contains(":")) { //  1.2.1 -> 1.3.0 (un-namespaced id)
-            ((PigEntity)(Object)this).getDataTracker().set(VARIANT_ID, MoreMobVariants.id(((PigEntity)(Object)this).getDataTracker().get(VARIANT_ID)).toString());
         }
     }
 

@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CatVariant;
+import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
@@ -28,7 +29,10 @@ public class MoreMobVariants implements ModInitializer {
     public static final String MOD_ID = "moremobvariants";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    // NBT keys
     public static final String NBT_KEY = "Variant";
+    public static final String MUDDY_NBT_KEY = "IsMuddy"; // Muddy pigs
+    public static final String MUDDY_TIMEOUT_NBT_KEY = "MuddyTimeLeft"; // Muddy pigs
 
     public static final Identifier MMB_HELLO_PACKET = new Identifier(MOD_ID, "hello");
 
@@ -71,6 +75,12 @@ public class MoreMobVariants implements ModInitializer {
                     PacketByteBuf responseBuf = PacketByteBufs.create();
                     responseBuf.writeInt(entity.getId());
                     responseBuf.writeString(nbt.getString(NBT_KEY));
+
+                    // Muddy pigs
+                    if (entity instanceof PigEntity) {
+                        responseBuf.writeBoolean(nbt.getBoolean(MUDDY_NBT_KEY));
+                        responseBuf.writeInt(nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
+                    }
 
                     ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
                 }
