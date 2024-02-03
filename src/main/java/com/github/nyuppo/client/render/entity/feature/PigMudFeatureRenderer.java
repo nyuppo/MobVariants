@@ -19,7 +19,6 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class PigMudFeatureRenderer<T extends PigEntity, M extends PigEntityModel<T>> extends FeatureRenderer<T, M> {
     private static final RenderLayer MUD_SKIN = RenderLayer.getEntityTranslucent(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/pig/mud/mud_overlay.png"));
-    private static final String MUDDY_NBT_KEY = "IsMuddy";
 
     public PigMudFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext) {
         super(featureRendererContext);
@@ -30,8 +29,8 @@ public class PigMudFeatureRenderer<T extends PigEntity, M extends PigEntityModel
         NbtCompound nbt = new NbtCompound();
         entity.writeCustomDataToNbt(nbt);
 
-        if (nbt.contains(MUDDY_NBT_KEY)) {
-            if (nbt.getBoolean(MUDDY_NBT_KEY)) {
+        if (nbt.contains(MoreMobVariants.MUDDY_NBT_KEY)) {
+            if (nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY)) {
                 VertexConsumer vertexConsumer = vertexConsumers.getBuffer(this.getMudTexture());
                 ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
             }
