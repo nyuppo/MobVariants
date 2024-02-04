@@ -28,7 +28,8 @@
     "ZombieRendererMixin",
     "PigFlowerMixin",
     "SheepWoolFeatureMixin",
-    "CustomEyesFeatureMixin"
+    "CustomEyesFeatureMixin",
+    "QuadrupedEntityModelPartAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

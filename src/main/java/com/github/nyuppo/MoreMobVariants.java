@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CatVariant;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
@@ -33,6 +34,8 @@ public class MoreMobVariants implements ModInitializer {
     public static final String NBT_KEY = "Variant";
     public static final String MUDDY_NBT_KEY = "IsMuddy"; // Muddy pigs
     public static final String MUDDY_TIMEOUT_NBT_KEY = "MuddyTimeLeft"; // Muddy pigs
+    //public static final String SHEEP_HORNS_NBT_KEY = "HasHorns";
+    public static final String SHEEP_HORN_COLOUR_NBT_KEY = "HornColour";
 
     public static final Identifier MMB_HELLO_PACKET = new Identifier(MOD_ID, "hello");
 
@@ -48,6 +51,7 @@ public class MoreMobVariants implements ModInitializer {
     // Biome tags
     public static final TagKey<Biome> SPAWN_MOSSY_SKELETONS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "spawn_mossy_skeletons"));
     public static final TagKey<Biome> INCREASED_SANDY_SKELETONS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "increased_sandy_skeletons"));
+    public static final TagKey<Biome> SHEEP_SPAWN_WITH_HORNS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "sheep_spawn_with_horns"));
 
 
     @Override
@@ -80,6 +84,11 @@ public class MoreMobVariants implements ModInitializer {
                     if (entity instanceof PigEntity) {
                         responseBuf.writeBoolean(nbt.getBoolean(MUDDY_NBT_KEY));
                         responseBuf.writeInt(nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
+                    }
+
+                    // Sheep horns
+                    if (entity instanceof SheepEntity) {
+                        responseBuf.writeString(nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY));
                     }
 
                     ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);

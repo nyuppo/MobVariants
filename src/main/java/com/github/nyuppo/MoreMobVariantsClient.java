@@ -2,6 +2,7 @@ package com.github.nyuppo;
 
 import com.github.nyuppo.client.render.entity.feature.PigMudFeatureRenderer;
 import com.github.nyuppo.client.render.entity.feature.ShearedWoolColorFeatureRenderer;
+import com.github.nyuppo.client.render.entity.feature.SheepHornsFeatureRenderer;
 import com.github.nyuppo.networking.MMVNetworkingConstants;
 import eu.pb4.polymer.networking.api.client.PolymerClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
@@ -36,6 +37,7 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                 registrationHelper.register(new PigMudFeatureRenderer<PigEntity, PigEntityModel<PigEntity>>((FeatureRendererContext)entityRenderer));
             } else if (entityRenderer instanceof SheepEntityRenderer) {
                 registrationHelper.register(new ShearedWoolColorFeatureRenderer<SheepEntity, SheepEntityModel<SheepEntity>>((FeatureRendererContext)entityRenderer));
+                registrationHelper.register(new SheepHornsFeatureRenderer<SheepEntity, SheepEntityModel<SheepEntity>>((FeatureRendererContext)entityRenderer));
             }
         });
 
@@ -75,6 +77,14 @@ public class MoreMobVariantsClient implements ClientModInitializer {
 
                         nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
                         nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
+                    }
+
+                    // Sheep horns
+                    String hornColour;
+                    if (entity instanceof SheepEntity) {
+                        hornColour = buf.readString();
+
+                        nbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, hornColour);
                     }
 
                     entity.readNbt(nbt);

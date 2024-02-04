@@ -21,6 +21,7 @@ import java.util.*;
 
 public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener {
     private final Identifier SETTINGS_ID = new Identifier(MoreMobVariants.MOD_ID, "settings/settings.json");
+    private final Identifier SHEEP_HORN_SETTINGS_ID = new Identifier(MoreMobVariants.MOD_ID, "settings/sheep_horn_settings.json");
 
     @Override
     public Identifier getFabricId() {
@@ -74,6 +75,16 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             } catch (Exception e) {
                 MoreMobVariants.LOGGER.error("Error occured while loading settings config " + SETTINGS_ID.toShortTranslationKey(), e);
                 VariantSettings.resetSettings();
+            }
+        }
+
+        Optional<Resource> sheepHornSettings = manager.getResource(SHEEP_HORN_SETTINGS_ID);
+        if (sheepHornSettings.isPresent()) {
+            try (InputStream stream = manager.getResource(SHEEP_HORN_SETTINGS_ID).get().getInputStream()) {
+                applySheepHornSettings(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                MoreMobVariants.LOGGER.error("Error occured while loading sheep horn settings config " + SHEEP_HORN_SETTINGS_ID.toShortTranslationKey(), e);
+                SheepHornSettings.resetSettings();
             }
         }
     }
@@ -183,6 +194,36 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             }
             if (element.getAsJsonObject().has("child_random_variant_chance")) {
                 VariantSettings.setChildRandomVariantChance(element.getAsJsonObject().get("child_random_variant_chance").getAsDouble());
+            }
+        }
+    }
+
+    private void applySheepHornSettings(Reader reader) {
+        JsonElement element = JsonParser.parseReader(reader);
+
+        if (element.getAsJsonObject().size() != 0) {
+            if (element.getAsJsonObject().has("chance")) {
+                SheepHornSettings.setHornsChance(element.getAsJsonObject().get("chance").getAsDouble());
+            }
+            if (element.getAsJsonObject().has("inherit_parents_chance")) {
+                SheepHornSettings.setInheritChance(element.getAsJsonObject().get("inherit_parents_chance").getAsDouble());
+            }
+
+            if (element.getAsJsonObject().has("weights")) {
+                JsonElement weights = element.getAsJsonObject().get("weights");
+
+                if (weights.getAsJsonObject().has("brown")) {
+                    SheepHornSettings.setWeight(SheepHornSettings.SheepHornColour.BROWN, weights.getAsJsonObject().get("brown").getAsInt());
+                }
+                if (weights.getAsJsonObject().has("gray")) {
+                    SheepHornSettings.setWeight(SheepHornSettings.SheepHornColour.GRAY, weights.getAsJsonObject().get("gray").getAsInt());
+                }
+                if (weights.getAsJsonObject().has("black")) {
+                    SheepHornSettings.setWeight(SheepHornSettings.SheepHornColour.BLACK, weights.getAsJsonObject().get("black").getAsInt());
+                }
+                if (weights.getAsJsonObject().has("beige")) {
+                    SheepHornSettings.setWeight(SheepHornSettings.SheepHornColour.BEIGE, weights.getAsJsonObject().get("beige").getAsInt());
+                }
             }
         }
     }

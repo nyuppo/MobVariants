@@ -1,0 +1,10 @@
+{
+  "chance": 0.125,
+  "inherit_parents_chance": 0.8,
+  "weights": {
+    "brown": 8,
+    "gray": 6,
+    "black": 3,
+    "beige": 1
+  }
+}
