@@ -254,6 +254,11 @@ public class Variants {
     static {
         variants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
         nametagOverrides = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
+        nametagOverrides.put(EntityType.SHEEP, new ArrayList<>(List.of(
+                new MobVariant(MoreMobVariants.id("rainbow"), 0)
+                        .addModifier(new CustomWoolModifier())
+                        .addModifier(new NametagOverrideModifier("rainbow"))
+        )));
 
         defaultVariants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
         defaultVariants.put(EntityType.CHICKEN, new ArrayList<>(List.of(
