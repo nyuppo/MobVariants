@@ -2,6 +2,7 @@ package com.github.nyuppo.client.render.entity.feature;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
+import com.github.nyuppo.variant.MobVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;
@@ -32,6 +33,21 @@ public class ShearedWoolColorFeatureRenderer<T extends SheepEntity, M extends Sh
         }
         */
         // It actually looks better without this check lol
+
+        // Check for custom name override
+        if (sheepEntity.hasCustomName()) {
+            MobVariant variant = Variants.getVariantFromNametag(EntityType.SHEEP, sheepEntity.getName().getString());
+            if (variant != null) {
+                if (variant.hasColorWhenSheared()) {
+                    float[] hs = SheepEntity.getRgbColor(sheepEntity.getColor());
+
+                    RenderLayer FUR_OVERLAY = RenderLayer.getEntityCutoutNoCull(MoreMobVariants.id("textures/entity/sheep/sheared_color_overlay/" + variant.getIdentifier().getPath() + ".png"));
+                    VertexConsumer vertexConsumer = vertexConsumers.getBuffer(FUR_OVERLAY);
+                    ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, hs[0], hs[1], hs[2], 1.0f);
+                }
+                return;
+            }
+        }
 
         NbtCompound nbt = new NbtCompound();
         sheepEntity.writeCustomDataToNbt(nbt);
