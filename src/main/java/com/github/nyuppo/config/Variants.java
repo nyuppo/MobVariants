@@ -270,6 +270,9 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("stormy"), 2),
                 new MobVariant(MoreMobVariants.id("bone"), 2)
                         .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_NETHER)),
+                new MobVariant(MoreMobVariants.id("duck"), 1)
+                        .addModifier(new ShinyModifier())
+                        .addModifier(new DiscardableModifier(0.75d)),
                 new MobVariant(MoreMobVariants.id("default"), 3)
         )));
         defaultVariants.put(EntityType.COW, new ArrayList<>(List.of(
