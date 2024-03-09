@@ -1,8 +1,4 @@
 {
   "weight": 1,
-  "breeding": {
-    "parent1": "moremobvariants:husky",
-    "parent2": "moremobvariants:german_shepherd",
-    "breeding_chance": 0.5
-  }
+  "biome_tag": "moremobvariants:wolf_black_spawns"
 }

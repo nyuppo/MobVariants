@@ -39,12 +39,12 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
             if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.COW, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
+                variant = Variants.getVariant(EntityType.WOLF, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
-                variant = Variants.getVariant(EntityType.COW, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
+                variant = Variants.getVariant(EntityType.WOLF, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getDefaultVariant(EntityType.COW);
+            variant = Variants.getDefaultVariant(EntityType.WOLF);
         }
 
         // Update all players in the event that this is from modifying entity data with a command

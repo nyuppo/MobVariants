@@ -1,0 +1,9 @@
+{
+  "weight": 1,
+  "name": "german_shepherd",
+  "breeding": {
+    "parent1": "moremobvariants:jupiter",
+    "parent2": "moremobvariants:husky",
+    "breeding_chance": 0.5
+  }
+}

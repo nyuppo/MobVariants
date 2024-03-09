@@ -1,8 +1,9 @@
 {
   "weight": 1,
+  "name": "french_bulldog",
   "breeding": {
     "parent1": "moremobvariants:husky",
-    "parent2": "moremobvariants:jupiter",
+    "parent2": "moremobvariants:golden_retriever",
     "breeding_chance": 0.5
   }
 }

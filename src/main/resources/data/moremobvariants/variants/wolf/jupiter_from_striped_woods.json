@@ -1,0 +1,9 @@
+{
+  "weight": 1,
+  "name": "jupiter",
+  "breeding": {
+    "parent1": "moremobvariants:striped",
+    "parent2": "moremobvariants:woods",
+    "breeding_chance": 0.5
+  }
+}

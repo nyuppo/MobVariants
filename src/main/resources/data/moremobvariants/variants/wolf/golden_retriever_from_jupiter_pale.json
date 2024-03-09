@@ -1,8 +1,9 @@
 {
   "weight": 1,
+  "name": "golden_retriever",
   "breeding": {
     "parent1": "moremobvariants:jupiter",
-    "parent2": "moremobvariants:golden_retriever",
+    "parent2": "moremobvariants:default",
     "breeding_chance": 0.5
   }
 }

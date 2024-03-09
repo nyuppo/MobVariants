@@ -1,0 +1,9 @@
+{
+  "weight": 1,
+  "name": "husky",
+  "breeding": {
+    "parent1": "moremobvariants:snowy",
+    "parent2": "moremobvariants:ashen",
+    "breeding_chance": 0.5
+  }
+}
