@@ -342,40 +342,74 @@ public class Variants {
                 new MobVariant(MoreMobVariants.id("default"), 5)
         )));
         defaultVariants.put(EntityType.WOLF, new ArrayList<>(List.of(
-                new MobVariant(MoreMobVariants.id("jupiter"), 1),
-                new MobVariant(MoreMobVariants.id("husky"), 1),
-                new MobVariant(MoreMobVariants.id("default"), 1),
-                new MobVariant(MoreMobVariants.id("german_shepherd"), 1)
-                        .addModifier(new BreedingResultModifier(
-                                MoreMobVariants.id("husky"),
-                                MoreMobVariants.id("jupiter"),
-                                0.5)),
-                new MobVariant(MoreMobVariants.id("golden_retriever"), 1)
-                        .addModifier(new BreedingResultModifier(
-                                MoreMobVariants.id("jupiter"),
-                                MoreMobVariants.id("default"),
-                                0.5)),
-                new MobVariant(MoreMobVariants.id("french_bulldog"), 1)
-                        .addModifier(new BreedingResultModifier(
-                                MoreMobVariants.id("husky"),
-                                MoreMobVariants.id("golden_retriever"),
-                                0.5)),
+                new MobVariant(MoreMobVariants.id("pale"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_PALE_WOLF)),
+                new MobVariant(MoreMobVariants.id("rusty"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_RUSTY_WOLF)),
+                new MobVariant(MoreMobVariants.id("spotted"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_SPOTTED_WOLF)),
                 new MobVariant(MoreMobVariants.id("black"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_BLACK_WOLF)),
+                new MobVariant(MoreMobVariants.id("striped"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_STRIPED_WOLF)),
+                new MobVariant(MoreMobVariants.id("snowy"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_SNOWY_WOLF)),
+                new MobVariant(MoreMobVariants.id("ashen"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_ASHEN_WOLF)),
+                new MobVariant(MoreMobVariants.id("woods"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_WOODS_WOLF)),
+                new MobVariant(MoreMobVariants.id("chestnut"), 1)
+                        .addModifier(new SpawnableBiomesModifier(MoreMobVariants.SPAWN_CHESTNUT_WOLF)),
+                new MobVariant(MoreMobVariants.id("skeleton"), 1)
+                        .addModifier(new SpawnableBiomesModifier(BiomeTags.IS_NETHER)),
+                new MobVariant(MoreMobVariants.id("basenji_from_jupiter_golden_retriever"), 1)
+                        .addModifier(new CustomVariantNameModifier("basenji"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("jupiter"), MoreMobVariants.id("golden_retriever"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("basenji_from_rusty_ashen"), 1)
+                        .addModifier(new CustomVariantNameModifier("basenji"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("rusty"), MoreMobVariants.id("ashen"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("french_bulldog_from_husky_golden_retriever"), 1)
+                        .addModifier(new CustomVariantNameModifier("french_bulldog"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("husky"), MoreMobVariants.id("golden_retriever"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("french_bulldog_from_rusty_golden_retriever"), 1)
+                        .addModifier(new CustomVariantNameModifier("french_bulldog"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("rusty"), MoreMobVariants.id("golden_retriever"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("german_shepherd_from_jupiter_husky"), 1)
+                        .addModifier(new CustomVariantNameModifier("german_shepherd"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("jupiter"), MoreMobVariants.id("husky"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("german_shepherd_from_woods_chestnut"), 1)
+                        .addModifier(new CustomVariantNameModifier("german_shepherd"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("woods"), MoreMobVariants.id("chestnut"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("golden_retriever_from_jupiter_pale"), 1)
+                        .addModifier(new CustomVariantNameModifier("golden_retriever"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("jupiter"), MoreMobVariants.id("pale"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("golden_retriever_from_rusty_pale"), 1)
+                        .addModifier(new CustomVariantNameModifier("golden_retriever"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("rusty"), MoreMobVariants.id("pale"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("husky_from_black_ashen"), 1)
+                        .addModifier(new CustomVariantNameModifier("husky"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("black"), MoreMobVariants.id("ashen"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("husky_from_snowy_ashen"), 1)
+                        .addModifier(new CustomVariantNameModifier("husky"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("snowy"), MoreMobVariants.id("ashen"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("jupiter_from_rusty_chestnut"), 1)
+                        .addModifier(new CustomVariantNameModifier("jupiter"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("rusty"), MoreMobVariants.id("chestnut"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("jupiter_from_rusty_woods"), 1)
+                        .addModifier(new CustomVariantNameModifier("jupiter"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("rusty"), MoreMobVariants.id("woods"), 0.5d)),
+                new MobVariant(MoreMobVariants.id("jupiter_from_striped_woods"), 1)
+                        .addModifier(new CustomVariantNameModifier("jupiter"))
+                        .addModifier(new BreedingResultModifier(MoreMobVariants.id("striped"), MoreMobVariants.id("woods"), 0.5d))
+
+        )));
+        /*
+        new MobVariant(MoreMobVariants.id("german_shepherd"), 1)
                         .addModifier(new BreedingResultModifier(
                                 MoreMobVariants.id("husky"),
-                                MoreMobVariants.id("german_shepherd"),
-                                0.5)),
-                new MobVariant(MoreMobVariants.id("basenji"), 1)
-                        .addModifier(new BreedingResultModifier(
                                 MoreMobVariants.id("jupiter"),
-                                MoreMobVariants.id("golden_retriever"),
-                                0.5)),
-                new MobVariant(MoreMobVariants.id("white_terrier"), 1)
-                        .addModifier(new BreedingResultModifier(
-                                MoreMobVariants.id("default"),
-                                MoreMobVariants.id("golden_retriever"),
                                 0.5))
-        )));
+         */
         defaultVariants.put(EntityType.ZOMBIE, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("alex"), 2),
                 new MobVariant(MoreMobVariants.id("ari"), 1),
