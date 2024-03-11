@@ -86,6 +86,18 @@ public class Variants {
         return getDefaultVariant(mob);
     }
 
+    @Nullable
+    public static MobVariant getVariantNullable(EntityType<?> mob, Identifier identifier) {
+        ArrayList<MobVariant> variants = getVariants(mob);
+
+        for (MobVariant variant : variants) {
+            if (variant.getIdentifier().equals(identifier)) {
+                return variant;
+            }
+        }
+        return null;
+    }
+
     public static void resetVariants(EntityType<?> mob) {
         variants.remove(mob);
         variants.put(mob, defaultVariants.get(mob));
@@ -113,10 +125,6 @@ public class Variants {
 
     public static void applyBlacklists() {
         variants.keySet().forEach((EntityType<?> mob) -> {
-            if (mob.equals(EntityType.CAT) || variants.get(mob) == null) {
-                return;
-            }
-
             List<MobVariant> variantsList = variants.get(mob);
             if (variantsList.isEmpty()) {
                 return;
@@ -142,7 +150,7 @@ public class Variants {
         throw new IllegalArgumentException("Unknown mob identifier: " + mobId);
     }
 
-    public static MobVariant getRandomVariant(EntityType<?> mob, Random random, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData) {
+    public static MobVariant getRandomVariant(EntityType<?> mob, Random random, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData, @Nullable Float moonSize) {
         ArrayList<MobVariant> variants = getVariants(mob);
         if (variants.isEmpty()) {
             return getDefaultVariant(mob);
@@ -171,12 +179,22 @@ public class Variants {
             // Discard if variant is discardable
             if (variant.shouldDiscard(random)) {
                 i.remove();
+                continue;
             }
 
             // Discord if variant has nametag override
             // Note: they shouldn't be in this pool in the first place, but better safe than sorry
             if (variant.isNametagOverride()) {
                 i.remove();
+                continue;
+            }
+
+            // Discard if minimum moon phase is not present
+            if (moonSize != null && variant.hasMinimumMoonSize()) {
+                if (!variant.meetsMinimumMoonSize(moonSize)) {
+                    i.remove();
+                    continue;
+                }
             }
         }
 
@@ -233,9 +251,9 @@ public class Variants {
             String[] parent2VariantId = parent2Nbt.getString("Variant").split(":");
             MobVariant parent2Variant = Variants.getVariant(mob, new Identifier(parent2VariantId[0], parent2VariantId[1]));
 
-            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant));
+            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant), null);
         } else {
-            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), null);
+            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), null, null);
         }
     }
 

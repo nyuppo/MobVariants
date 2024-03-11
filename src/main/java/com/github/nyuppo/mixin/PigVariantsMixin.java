@@ -72,7 +72,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null);
+        variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         // 2% chance of pig starting muddy if in swamp
         if (world.getBiome(((PigEntity)(Object)this).getBlockPos()).isIn(BiomeTags.RUINED_PORTAL_SWAMP_HAS_STRUCTURE) && world.getRandom().nextDouble() < 0.02) {

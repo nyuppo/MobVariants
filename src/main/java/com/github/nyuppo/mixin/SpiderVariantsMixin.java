@@ -59,6 +59,6 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.SPIDER, world.getRandom(), world.getBiome(((SpiderEntity)(Object)this).getBlockPos()), null);
+        variant = Variants.getRandomVariant(EntityType.SPIDER, world.getRandom(), world.getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 }

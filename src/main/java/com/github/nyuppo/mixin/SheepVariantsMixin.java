@@ -68,7 +68,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null);
+        variant = Variants.getRandomVariant(EntityType.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         SheepHornSettings.SheepHornColour colour = SheepHornSettings.getRandomSheepHornColour(world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()));
         if (colour != null) {

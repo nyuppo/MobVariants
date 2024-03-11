@@ -4,7 +4,6 @@ import com.github.nyuppo.client.render.entity.feature.PigMudFeatureRenderer;
 import com.github.nyuppo.client.render.entity.feature.ShearedWoolColorFeatureRenderer;
 import com.github.nyuppo.client.render.entity.feature.SheepHornsFeatureRenderer;
 import com.github.nyuppo.networking.MMVNetworkingConstants;
-import eu.pb4.polymer.networking.api.client.PolymerClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -13,21 +12,22 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.render.entity.PigEntityRenderer;
 import net.minecraft.client.render.entity.SheepEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.feature.SheepWoolFeatureRenderer;
 import net.minecraft.client.render.entity.model.PigEntityModel;
 import net.minecraft.client.render.entity.model.SheepEntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtInt;
 import net.minecraft.network.PacketByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
 public class MoreMobVariantsClient implements ClientModInitializer {
-    Set<EntityType> validEntities = Set.of(EntityType.CHICKEN, EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.SKELETON, EntityType.SPIDER, EntityType.WOLF, EntityType.ZOMBIE);
+    Set<EntityType> validEntities = Set.of(EntityType.CAT, EntityType.CHICKEN, EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.SKELETON, EntityType.SPIDER, EntityType.WOLF, EntityType.ZOMBIE);
 
     @Override
     public void onInitializeClient() {
@@ -40,9 +40,6 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                 registrationHelper.register(new SheepHornsFeatureRenderer<SheepEntity, SheepEntityModel<SheepEntity>>((FeatureRendererContext)entityRenderer));
             }
         });
-
-        // Polymer handshake
-        PolymerClientNetworking.setClientMetadata(MoreMobVariants.MMB_HELLO_PACKET, NbtInt.of(1));
 
         // Client event to request variant when a mob is loaded
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
@@ -66,7 +63,11 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                     NbtCompound nbt = new NbtCompound();
                     entity.writeNbt(nbt);
 
-                    nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+                    if (entity instanceof CatEntity) { // Mobs that have vanilla 'variant' nbt data
+                        nbt.putString(MoreMobVariants.CUSTOM_NBT_KEY, variantId);
+                    } else {
+                        nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+                    }
 
                     // Muddy pigs
                     boolean isMuddy;

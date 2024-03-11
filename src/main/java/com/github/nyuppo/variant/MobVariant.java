@@ -171,4 +171,22 @@ public class MobVariant {
         }
         return "error";
     }
+
+    public boolean hasMinimumMoonSize() {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof MoonPhaseModifier) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean meetsMinimumMoonSize(float moonSize) {
+        for (VariantModifier modifier : this.modifiers) {
+            if (modifier instanceof MoonPhaseModifier) {
+                return ((MoonPhaseModifier) modifier).canSpawn(moonSize);
+            }
+        }
+        return false;
+    }
 }

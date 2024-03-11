@@ -163,6 +163,10 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             if (element.getAsJsonObject().has("nametag_override")) {
                 modifiers.add(new NametagOverrideModifier(element.getAsJsonObject().get("nametag_override").getAsString()));
             }
+
+            if (element.getAsJsonObject().has("minimum_moon_size")) {
+                modifiers.add(new MoonPhaseModifier(element.getAsJsonObject().get("minimum_moon_size").getAsFloat()));
+            }
         }
 
         Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantId), weight, modifiers));

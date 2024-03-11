@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MobEntityVariantsMixin",
+    "CatVariantsMixin",
     "ChickenVariantsMixin",
     "ChickenEggMixin",
     "PigVariantsMixin",
@@ -13,10 +14,11 @@
     "SpiderVariantsMixin",
     "CowVariantsMixin",
     "WolfVariantsMixin",
-    "ZombieVariantsMixin",
-    "CatBlacklistMixin"
+    "ZombieVariantsMixin"
   ],
   "client": [
+    "CatRendererMixin",
+    "CatFluffMixin",
     "ChickenRendererMixin",
     "PigRendererMixin",
     "SheepRendererMixin",
@@ -24,7 +26,6 @@
     "SpiderRendererMixin",
     "CowRendererMixin",
     "WolfRendererMixin",
-    "CatFluffMixin",
     "ZombieRendererMixin",
     "PigFlowerMixin",
     "SheepWoolFeatureMixin",

@@ -63,7 +63,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.CHICKEN, world.getRandom(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null);
+        variant = Variants.getRandomVariant(EntityType.CHICKEN, world.getRandom(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 
     @Inject(

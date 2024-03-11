@@ -59,6 +59,6 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.ZOMBIE, world.getRandom(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null);
+        variant = Variants.getRandomVariant(EntityType.ZOMBIE, world.getRandom(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 }
