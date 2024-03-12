@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -31,8 +32,8 @@ public class CustomEyesFeatureMixin<T extends Entity> {
             NbtCompound nbt = new NbtCompound();
             spider.writeCustomDataToNbt(nbt);
 
-            if (nbt.contains("Variant")) {
-                String variant = nbt.getString("Variant");
+            if (nbt.contains(MoreMobVariants.NBT_KEY)) {
+                String variant = nbt.getString(MoreMobVariants.NBT_KEY);
                 if (variant.isEmpty()) {
                     return;
                 }

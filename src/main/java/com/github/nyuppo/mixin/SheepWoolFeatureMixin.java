@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
 import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.client.render.entity.feature.SheepWoolFeatureRenderer;
@@ -26,8 +27,8 @@ public class SheepWoolFeatureMixin {
         NbtCompound nbt = new NbtCompound();
         sheepEntity.writeCustomDataToNbt(nbt);
 
-        if (nbt.contains("Variant")) {
-            String variant = nbt.getString("Variant");
+        if (nbt.contains(MoreMobVariants.NBT_KEY)) {
+            String variant = nbt.getString(MoreMobVariants.NBT_KEY);
             if (variant.isEmpty()) {
                 return;
             }

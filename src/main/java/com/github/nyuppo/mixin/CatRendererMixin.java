@@ -22,8 +22,8 @@ public class CatRendererMixin {
         NbtCompound nbt = new NbtCompound();
         catEntity.writeNbt(nbt);
 
-        if (nbt.contains(MoreMobVariants.CUSTOM_NBT_KEY)) {
-            String variant = nbt.getString(MoreMobVariants.CUSTOM_NBT_KEY);
+        if (nbt.contains(MoreMobVariants.NBT_KEY)) {
+            String variant = nbt.getString(MoreMobVariants.NBT_KEY);
             if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {

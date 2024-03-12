@@ -63,11 +63,7 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                     NbtCompound nbt = new NbtCompound();
                     entity.writeNbt(nbt);
 
-                    if (entity instanceof CatEntity) { // Mobs that have vanilla 'variant' nbt data
-                        nbt.putString(MoreMobVariants.CUSTOM_NBT_KEY, variantId);
-                    } else {
-                        nbt.putString(MoreMobVariants.NBT_KEY, variantId);
-                    }
+                    nbt.putString(MoreMobVariants.NBT_KEY, variantId);
 
                     // Muddy pigs
                     boolean isMuddy;

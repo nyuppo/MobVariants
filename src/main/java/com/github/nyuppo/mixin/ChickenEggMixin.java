@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
 import com.github.nyuppo.variant.MobVariant;
 import net.minecraft.entity.EntityType;
@@ -21,7 +22,7 @@ public class ChickenEggMixin {
 
         NbtCompound newNbt = new NbtCompound();
         chickenEntity.writeNbt(newNbt);
-        newNbt.putString("Variant", variant.getIdentifier().toString());
+        newNbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
         chickenEntity.readCustomDataFromNbt(newNbt);
 
         return chickenEntity;

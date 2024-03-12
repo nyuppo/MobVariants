@@ -77,7 +77,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant.getIdentifier().toString());
+        childNbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
     }
 }
