@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -40,7 +41,7 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.SPIDER, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getDefaultVariant(EntityType.SPIDER);
+            variant = Variants.getRandomVariant(EntityType.SPIDER, ((SpiderEntity)(Object)this).getWorld().getRandom(), ((SpiderEntity)(Object)this).getWorld().getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, ((SpiderEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

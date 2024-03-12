@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.SkeletonEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -40,7 +41,7 @@ public class SkeletonVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.SKELETON, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getDefaultVariant(EntityType.SKELETON);
+            variant = Variants.getRandomVariant(EntityType.SKELETON, ((SkeletonEntity)(Object)this).getWorld().getRandom(), ((SkeletonEntity)(Object)this).getWorld().getBiome(((SkeletonEntity)(Object)this).getBlockPos()), null, ((SkeletonEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -40,7 +41,7 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.ZOMBIE, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getDefaultVariant(EntityType.ZOMBIE);
+            variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((ZombieEntity)(Object)this).getWorld().getRandom(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, ((ZombieEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
