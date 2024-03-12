@@ -49,7 +49,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.PIG, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getDefaultVariant(EntityType.PIG);
+            variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getWorld().getRandom(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null, ((PigEntity)(Object)this).getWorld().getMoonSize());
         }
         isMuddy = nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY);
         muddyTimeLeft = nbt.getInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY);
