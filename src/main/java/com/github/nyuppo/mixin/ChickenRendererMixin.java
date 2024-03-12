@@ -22,8 +22,8 @@ public class ChickenRendererMixin {
         NbtCompound nbt = new NbtCompound();
         chickenEntity.writeNbt(nbt);
 
-        if (nbt.contains("Variant")) {
-            String variant = nbt.getString("Variant");
+        if (nbt.contains(MoreMobVariants.NBT_KEY)) {
+            String variant = nbt.getString(MoreMobVariants.NBT_KEY);
             if (variant.equals(MoreMobVariants.id("default").toString()) || variant.isEmpty()) {
                 ci.setReturnValue(DEFAULT);
             } else {

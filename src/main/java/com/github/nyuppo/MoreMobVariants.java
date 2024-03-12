@@ -32,8 +32,7 @@ public class MoreMobVariants implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     // NBT keys
-    public static final String NBT_KEY = "Variant";
-    public static final String CUSTOM_NBT_KEY = "CustomVariant";
+    public static final String NBT_KEY = "VariantID";
     public static final String MUDDY_NBT_KEY = "IsMuddy"; // Muddy pigs
     public static final String MUDDY_TIMEOUT_NBT_KEY = "MuddyTimeLeft"; // Muddy pigs
     public static final String SHEEP_HORN_COLOUR_NBT_KEY = "HornColour";
@@ -85,7 +84,7 @@ public class MoreMobVariants implements ModInitializer {
                 NbtCompound nbt = new NbtCompound();
                 entity.writeNbt(nbt);
 
-                if (nbt.contains(NBT_KEY) && !nbt.contains(CUSTOM_NBT_KEY)) {
+                if (nbt.contains(NBT_KEY)) {
                     PacketByteBuf responseBuf = PacketByteBufs.create();
                     responseBuf.writeInt(entity.getId());
                     responseBuf.writeString(nbt.getString(NBT_KEY));
@@ -100,12 +99,6 @@ public class MoreMobVariants implements ModInitializer {
                     if (entity instanceof SheepEntity) {
                         responseBuf.writeString(nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY));
                     }
-
-                    ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
-                } else if (nbt.contains(CUSTOM_NBT_KEY)) { // Cats
-                    PacketByteBuf responseBuf = PacketByteBufs.create();
-                    responseBuf.writeInt(entity.getId());
-                    responseBuf.writeString(nbt.getString(CUSTOM_NBT_KEY));
 
                     ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
                 }

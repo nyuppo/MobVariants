@@ -108,7 +108,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant.getIdentifier().toString());
+        childNbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
         childNbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, colour);
         child.readCustomDataFromNbt(childNbt);
     }

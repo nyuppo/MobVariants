@@ -33,16 +33,16 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putString(MoreMobVariants.CUSTOM_NBT_KEY, variant.getIdentifier().toString());
+        nbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
     }
 
     @Override
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (!nbt.getString(MoreMobVariants.CUSTOM_NBT_KEY).isEmpty()) {
-            if (nbt.getString(MoreMobVariants.CUSTOM_NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.CAT, new Identifier(nbt.getString(MoreMobVariants.CUSTOM_NBT_KEY)));
+        if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
+            if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
+                variant = Variants.getVariant(EntityType.CAT, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
-                variant = Variants.getVariant(EntityType.CAT, MoreMobVariants.id(nbt.getString(MoreMobVariants.CUSTOM_NBT_KEY)));
+                variant = Variants.getVariant(EntityType.CAT, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
             variant = getDefaultVariant();
@@ -87,7 +87,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
         // Write variant to child's NBT
         NbtCompound childNbt = new NbtCompound();
         child.writeNbt(childNbt);
-        childNbt.putString("Variant", variant.getIdentifier().toString());
+        childNbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
     }
 
