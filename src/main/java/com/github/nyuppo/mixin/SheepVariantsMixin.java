@@ -48,7 +48,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.SHEEP, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SHEEP, ((SheepEntity)(Object)this).getWorld().getRandom(), ((SheepEntity)(Object)this).getWorld().getBiome(((SheepEntity)(Object)this).getBlockPos()), null, ((SheepEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.SHEEP, ((SheepEntity)(Object)this).getWorld().getRandom().nextLong(), ((SheepEntity)(Object)this).getWorld().getBiome(((SheepEntity)(Object)this).getBlockPos()), null, ((SheepEntity)(Object)this).getWorld().getMoonSize());
         }
         hornColour = nbt.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY);
 
@@ -69,7 +69,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.SHEEP, world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.SHEEP, world.getRandom().nextLong(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         SheepHornSettings.SheepHornColour colour = SheepHornSettings.getRandomSheepHornColour(world.getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()));
         if (colour != null) {
