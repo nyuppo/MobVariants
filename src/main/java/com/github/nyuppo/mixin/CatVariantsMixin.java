@@ -27,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.io.IOException;
+
 @Mixin(CatEntity.class)
 public class CatVariantsMixin extends MobEntityVariantsMixin {
     private MobVariant variant = getDefaultVariant();
@@ -66,12 +68,21 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.CAT, world.getRandom(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
-        if (world.toServerWorld().getStructureAccessor().getStructureContaining(((CatEntity)(Object)this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
-            MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
-            if (allBlack != null) {
-                variant = allBlack;
-                ((CatEntity)(Object)this).setPersistent();
+        var catEntity = ((CatEntity) (Object) this);
+        try (ServerWorld serverWorld = world.toServerWorld()) {
+            if (!serverWorld.getStructureAccessor().getStructureContaining(catEntity.getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
+                return;
             }
+
+            MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
+            if (allBlack == null) {
+                return;
+            }
+
+            variant = allBlack;
+            catEntity.setPersistent();
+        } catch (IOException e) {
+            MoreMobVariants.LOGGER.error("Exception thrown while trying to initialize CatEntity {}:\n{}", catEntity, e.getMessage());
         }
     }
 
