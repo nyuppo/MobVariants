@@ -199,7 +199,7 @@ public class Variants {
         }
 
         // Create weighted bag from variants
-        VariantBag bag = new VariantBag(mob, random, variants);
+        VariantBag bag = new VariantBag(mob, variants);
 
         // If we've been provided 2 parents
         if (breedingResultData != null) {
@@ -217,11 +217,11 @@ public class Variants {
                     return random.nextBoolean() ? breedingResultData.parent1() : breedingResultData.parent2();
                 }
             } else { // If there are specialized results, switch to that pool
-                bag = new VariantBag(mob, random, possibleVariants);
+                bag = new VariantBag(mob, possibleVariants);
             }
         }
 
-        return bag.getRandomEntry();
+        return bag.getRandomEntry(random);
     }
 
     @Nullable

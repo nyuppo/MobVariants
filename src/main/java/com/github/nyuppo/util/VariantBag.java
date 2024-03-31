@@ -16,12 +16,10 @@ public class VariantBag {
 
     private List<Entry> entries = new ArrayList<>();
     private double accumulatedWeight;
-    private final Random random;
     private final EntityType<?> mob;
 
-    public VariantBag(EntityType<?> mob, Random random, List<MobVariant> variants) {
+    public VariantBag(EntityType<?> mob, List<MobVariant> variants) {
         this.mob = mob;
-        this.random = random;
         for (MobVariant variant : variants) {
             addEntry(variant);
         }
@@ -35,7 +33,7 @@ public class VariantBag {
         entries.add(e);
     }
 
-    public MobVariant getRandomEntry() {
+    public MobVariant getRandomEntry(Random random) {
         double r = random.nextDouble() * accumulatedWeight;
 
         for (Entry entry : entries) {
