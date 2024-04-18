@@ -68,21 +68,14 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.CAT, world.getRandom().nextLong(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
-        var catEntity = ((CatEntity) (Object) this);
-        try (ServerWorld serverWorld = world.toServerWorld()) {
-            if (!serverWorld.getStructureAccessor().getStructureContaining(catEntity.getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
-                return;
-            }
-
+        // Check if we should spawn black cats (witch huts)
+        ServerWorld serverWorld = (ServerWorld) world;
+        if (serverWorld.getStructureAccessor().getStructureContaining(((CatEntity) (Object) this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
             MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
-            if (allBlack == null) {
-                return;
+            if (allBlack != null) {
+                variant = allBlack;
+                ((CatEntity) (Object) this).setPersistent();
             }
-
-            variant = allBlack;
-            catEntity.setPersistent();
-        } catch (IOException e) {
-            MoreMobVariants.LOGGER.error("Exception thrown while trying to initialize CatEntity {}:\n{}", catEntity, e.getMessage());
         }
     }
 
