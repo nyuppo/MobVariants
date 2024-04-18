@@ -67,8 +67,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
         variant = Variants.getRandomVariant(EntityType.CAT, world.getRandom().nextLong(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         // Check if we should spawn black cats (witch huts)
-        ServerWorld serverWorld = (ServerWorld) world;
-        if (serverWorld.getStructureAccessor().getStructureContaining(((CatEntity) (Object) this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
+        if (world.toServerWorld().getStructureAccessor().getStructureContaining(((CatEntity) (Object) this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
             MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
             if (allBlack != null) {
                 variant = allBlack;
