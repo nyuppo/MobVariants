@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.io.IOException;
-
 @Mixin(CatEntity.class)
 public class CatVariantsMixin extends MobEntityVariantsMixin {
     private MobVariant variant = getDefaultVariant();
