@@ -93,7 +93,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
     }
 
     private MobVariant getDefaultVariant() {
-        return new MobVariant(MoreMobVariants.id("tabby"), 1);
+        return new MobVariant(new Identifier("tabby"), 1);
     }
 }
 
