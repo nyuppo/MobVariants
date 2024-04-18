@@ -250,10 +250,10 @@ public class Variants {
         NbtCompound parent2Nbt = new NbtCompound();
         parent2.writeNbt(parent2Nbt);
 
-        if (parent1Nbt.contains("Variant") && parent2Nbt.contains("Variant")) {
-            String[] parent1VariantId = parent1Nbt.getString("Variant").split(":");
+        if (parent1Nbt.contains(MoreMobVariants.NBT_KEY) && parent2Nbt.contains(MoreMobVariants.NBT_KEY)) {
+            String[] parent1VariantId = parent1Nbt.getString(MoreMobVariants.NBT_KEY).split(":");
             MobVariant parent1Variant = Variants.getVariant(mob, new Identifier(parent1VariantId[0], parent1VariantId[1]));
-            String[] parent2VariantId = parent2Nbt.getString("Variant").split(":");
+            String[] parent2VariantId = parent2Nbt.getString(MoreMobVariants.NBT_KEY).split(":");
             MobVariant parent2Variant = Variants.getVariant(mob, new Identifier(parent2VariantId[0], parent2VariantId[1]));
 
             return Variants.getRandomVariant(mob, world.getRandom().nextLong(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant), null);
