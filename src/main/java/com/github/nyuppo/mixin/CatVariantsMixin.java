@@ -45,7 +45,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.CAT, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.CAT, ((CatEntity)(Object)this).getWorld().getRandom(), ((CatEntity)(Object)this).getWorld().getBiome(((CatEntity)(Object)this).getBlockPos()), null, ((CatEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.CAT, ((CatEntity)(Object)this).getWorld().getRandom().nextLong(), ((CatEntity)(Object)this).getWorld().getBiome(((CatEntity)(Object)this).getBlockPos()), null, ((CatEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -64,8 +64,9 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.CAT, world.getRandom(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.CAT, world.getRandom().nextLong(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
+        // Check if we should spawn black cats (witch huts)
         if (world.toServerWorld().getStructureAccessor().getStructureContaining(((CatEntity)(Object)this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
             MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
             if (allBlack != null) {

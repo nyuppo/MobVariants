@@ -11,6 +11,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
@@ -150,11 +151,15 @@ public class Variants {
         throw new IllegalArgumentException("Unknown mob identifier: " + mobId);
     }
 
-    public static MobVariant getRandomVariant(EntityType<?> mob, Random random, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData, @Nullable Float moonSize) {
+    public static MobVariant getRandomVariant(EntityType<?> mob, long randomSeed, @Nullable RegistryEntry<Biome> spawnBiome, @Nullable BreedingResultData breedingResultData, @Nullable Float moonSize) {
         ArrayList<MobVariant> variants = getVariants(mob);
         if (variants.isEmpty()) {
             return getDefaultVariant(mob);
         }
+
+        // Split the random to ensure no off-thread access of ThreadLocalRandom occurs
+        // This fixes issues with Distant Horizons and C2ME
+        var random = new CheckedRandom(randomSeed);
 
         // Handle modifiers
         Iterator<MobVariant> i = variants.iterator();
@@ -199,7 +204,7 @@ public class Variants {
         }
 
         // Create weighted bag from variants
-        VariantBag bag = new VariantBag(mob, random, variants);
+        VariantBag bag = new VariantBag(mob, variants);
 
         // If we've been provided 2 parents
         if (breedingResultData != null) {
@@ -217,11 +222,11 @@ public class Variants {
                     return random.nextBoolean() ? breedingResultData.parent1() : breedingResultData.parent2();
                 }
             } else { // If there are specialized results, switch to that pool
-                bag = new VariantBag(mob, random, possibleVariants);
+                bag = new VariantBag(mob, possibleVariants);
             }
         }
 
-        return bag.getRandomEntry();
+        return bag.getRandomEntry(random);
     }
 
     @Nullable
@@ -251,9 +256,9 @@ public class Variants {
             String[] parent2VariantId = parent2Nbt.getString("Variant").split(":");
             MobVariant parent2Variant = Variants.getVariant(mob, new Identifier(parent2VariantId[0], parent2VariantId[1]));
 
-            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant), null);
+            return Variants.getRandomVariant(mob, world.getRandom().nextLong(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant), null);
         } else {
-            return Variants.getRandomVariant(mob, world.getRandom(), world.getBiome(parent1.getBlockPos()), null, null);
+            return Variants.getRandomVariant(mob, world.getRandom().nextLong(), world.getBiome(parent1.getBlockPos()), null, null);
         }
     }
 

@@ -40,7 +40,7 @@ public class SkeletonVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.SKELETON, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SKELETON, ((SkeletonEntity)(Object)this).getWorld().getRandom(), ((SkeletonEntity)(Object)this).getWorld().getBiome(((SkeletonEntity)(Object)this).getBlockPos()), null, ((SkeletonEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.SKELETON, ((SkeletonEntity)(Object)this).getWorld().getRandom().nextLong(), ((SkeletonEntity)(Object)this).getWorld().getBiome(((SkeletonEntity)(Object)this).getBlockPos()), null, ((SkeletonEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -59,6 +59,6 @@ public class SkeletonVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.SKELETON, world.getRandom(), world.getBiome(((SkeletonEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.SKELETON, world.getRandom().nextLong(), world.getBiome(((SkeletonEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 }
