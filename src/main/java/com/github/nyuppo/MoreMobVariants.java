@@ -11,9 +11,11 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.RegistryKeys;
@@ -88,6 +90,11 @@ public class MoreMobVariants implements ModInitializer {
                     PacketByteBuf responseBuf = PacketByteBufs.create();
                     responseBuf.writeInt(entity.getId());
                     responseBuf.writeString(nbt.getString(NBT_KEY));
+
+                    // For some reason, "Sitting" syncing breaks, so send that too I guess
+                    if (entity instanceof TameableEntity) {
+                        responseBuf.writeBoolean(nbt.getBoolean("Sitting"));
+                    }
 
                     // Muddy pigs
                     if (entity instanceof PigEntity) {
