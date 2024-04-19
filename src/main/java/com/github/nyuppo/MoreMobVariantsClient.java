@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import org.slf4j.Logger;
@@ -64,6 +65,11 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                     entity.writeNbt(nbt);
 
                     nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+
+                    // For some reason, "Sitting" syncing breaks, so get that too I guess
+                    if (entity instanceof TameableEntity) {
+                        nbt.putBoolean("Sitting", buf.readBoolean());
+                    }
 
                     // Muddy pigs
                     boolean isMuddy;
