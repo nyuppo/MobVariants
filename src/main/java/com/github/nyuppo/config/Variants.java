@@ -74,6 +74,11 @@ public class Variants {
                 return variant;
             }
         }
+
+        if (mob == EntityType.CAT) {
+            return new MobVariant(new Identifier("tabby"), 1);
+        }
+
         return new MobVariant(MoreMobVariants.id("default"), 1);
     }
 

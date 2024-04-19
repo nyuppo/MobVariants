@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CatEntity.class)
 public class CatVariantsMixin extends MobEntityVariantsMixin {
-    private MobVariant variant = getDefaultVariant();
+    private MobVariant variant = Variants.getDefaultVariant(EntityType.CAT);
 
     @Override
     protected void onWriteCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
@@ -90,10 +90,6 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
         child.writeNbt(childNbt);
         childNbt.putString(MoreMobVariants.NBT_KEY, variant.getIdentifier().toString());
         child.readCustomDataFromNbt(childNbt);
-    }
-
-    private MobVariant getDefaultVariant() {
-        return new MobVariant(new Identifier("tabby"), 1);
     }
 }
 
