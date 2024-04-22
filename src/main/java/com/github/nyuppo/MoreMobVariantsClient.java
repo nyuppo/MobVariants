@@ -57,42 +57,43 @@ public class MoreMobVariantsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, ((client, handler, buf, responseSender) -> {
             int id = buf.readInt();
             String variantId = buf.readString();
+            client.execute(() -> {
+                if (client.world != null) {
+                    Entity entity = client.world.getEntityById(id);
+                    if (entity != null) {
+                        NbtCompound nbt = new NbtCompound();
+                        entity.writeNbt(nbt);
 
-            if (client.world != null) {
-                Entity entity = client.world.getEntityById(id);
-                if (entity != null) {
-                    NbtCompound nbt = new NbtCompound();
-                    entity.writeNbt(nbt);
+                        nbt.putString(MoreMobVariants.NBT_KEY, variantId);
 
-                    nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+                        // For some reason, "Sitting" syncing breaks, so get that too I guess
+                        if (entity instanceof TameableEntity) {
+                            nbt.putBoolean("Sitting", buf.readBoolean());
+                        }
 
-                    // For some reason, "Sitting" syncing breaks, so get that too I guess
-                    if (entity instanceof TameableEntity) {
-                        nbt.putBoolean("Sitting", buf.readBoolean());
+                        // Muddy pigs
+                        boolean isMuddy;
+                        int muddyTimeLeft;
+                        if (entity instanceof PigEntity) {
+                            isMuddy = buf.readBoolean();
+                            muddyTimeLeft = buf.readInt();
+
+                            nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
+                            nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
+                        }
+
+                        // Sheep horns
+                        String hornColour;
+                        if (entity instanceof SheepEntity) {
+                            hornColour = buf.readString();
+
+                            nbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, hornColour);
+                        }
+
+                        entity.readNbt(nbt);
                     }
-
-                    // Muddy pigs
-                    boolean isMuddy;
-                    int muddyTimeLeft;
-                    if (entity instanceof PigEntity) {
-                        isMuddy = buf.readBoolean();
-                        muddyTimeLeft = buf.readInt();
-
-                        nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
-                        nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
-                    }
-
-                    // Sheep horns
-                    String hornColour;
-                    if (entity instanceof SheepEntity) {
-                        hornColour = buf.readString();
-
-                        nbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, hornColour);
-                    }
-
-                    entity.readNbt(nbt);
                 }
-            }
+            });
         }));
     }
 
