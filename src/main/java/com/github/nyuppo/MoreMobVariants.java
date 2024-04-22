@@ -91,21 +91,29 @@ public class MoreMobVariants implements ModInitializer {
                         responseBuf.writeInt(entity.getId());
                         responseBuf.writeString(nbt.getString(NBT_KEY));
 
+                        //going to pass all three of these regardless, so buf structure is constant. More cases can be added and hook into these as needed.
+                        boolean bl = false;
+                        int i = 0;
+                        String str = "";
+
                         // For some reason, "Sitting" syncing breaks, so send that too I guess
                         if (entity instanceof TameableEntity) {
-                            responseBuf.writeBoolean(nbt.getBoolean("Sitting"));
+                            bl = nbt.getBoolean("Sitting");
                         }
 
                         // Muddy pigs
                         if (entity instanceof PigEntity) {
-                            responseBuf.writeBoolean(nbt.getBoolean(MUDDY_NBT_KEY));
-                            responseBuf.writeInt(nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
+                            bl = nbt.getBoolean(MUDDY_NBT_KEY);
+                            i = nbt.getInt(MUDDY_TIMEOUT_NBT_KEY);
                         }
 
                         // Sheep horns
                         if (entity instanceof SheepEntity) {
-                            responseBuf.writeString(nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY));
+                            str = nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY);
                         }
+                        responseBuf.writeBoolean(bl);
+                        responseBuf.writeVarInt(i);
+                        responseBuf.writeString(str);
 
                         ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
                     }

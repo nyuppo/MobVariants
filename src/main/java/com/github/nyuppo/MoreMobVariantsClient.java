@@ -57,6 +57,10 @@ public class MoreMobVariantsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, ((client, handler, buf, responseSender) -> {
             int id = buf.readInt();
             String variantId = buf.readString();
+            //read all three buffer values regardless, in the Netty loop. use as needed in the client.
+            boolean bl = buf.readBoolean();
+            int i = buf.readVarInt();
+            String str = buf.readString();
             client.execute(() -> {
                 if (client.world != null) {
                     Entity entity = client.world.getEntityById(id);
@@ -68,15 +72,15 @@ public class MoreMobVariantsClient implements ClientModInitializer {
 
                         // For some reason, "Sitting" syncing breaks, so get that too I guess
                         if (entity instanceof TameableEntity) {
-                            nbt.putBoolean("Sitting", buf.readBoolean());
+                            nbt.putBoolean("Sitting",bl);
                         }
 
                         // Muddy pigs
                         boolean isMuddy;
                         int muddyTimeLeft;
                         if (entity instanceof PigEntity) {
-                            isMuddy = buf.readBoolean();
-                            muddyTimeLeft = buf.readInt();
+                            isMuddy = bl;
+                            muddyTimeLeft = i;
 
                             nbt.putBoolean(MoreMobVariants.MUDDY_NBT_KEY, isMuddy);
                             nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, muddyTimeLeft);
@@ -85,7 +89,7 @@ public class MoreMobVariantsClient implements ClientModInitializer {
                         // Sheep horns
                         String hornColour;
                         if (entity instanceof SheepEntity) {
-                            hornColour = buf.readString();
+                            hornColour = str;
 
                             nbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, hornColour);
                         }
