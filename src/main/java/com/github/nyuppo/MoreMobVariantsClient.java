@@ -54,7 +54,25 @@ public class MoreMobVariantsClient implements ClientModInitializer {
             }
         });
 
-        // Client event to handle response from server about mob variant
+        // Client event to handle response from server about basic mob variants
+        ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_BASIC_VARIANT_ID, ((client, handler, buf, responseSender) -> {
+            int id = buf.readInt();
+            String variantId = buf.readString();
+            client.execute(() -> {
+                if (client.world != null) {
+                    Entity entity = client.world.getEntityById(id);
+                    if (entity != null) {
+                        NbtCompound nbt = new NbtCompound();
+                        entity.writeNbt(nbt);
+                        nbt.putString(MoreMobVariants.NBT_KEY, variantId);
+                        entity.readNbt(nbt);
+                    }
+                }
+            });
+        }));
+
+
+        // Client event to handle response from server about complex mob variants
         ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, ((client, handler, buf, responseSender) -> {
             int id = buf.readInt();
             String variantId = buf.readString();

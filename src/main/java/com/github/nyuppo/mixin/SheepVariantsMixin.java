@@ -59,6 +59,9 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
                 PacketByteBuf updateBuf = PacketByteBufs.create();
                 updateBuf.writeInt(((Entity)(Object)this).getId());
                 updateBuf.writeString(variant.getIdentifier().toString());
+                //all three values in the "regular" packet post update
+                updateBuf.writeBoolean(false);
+                updateBuf.writeVarInt(0);
                 updateBuf.writeString(hornColour);
 
                 ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
