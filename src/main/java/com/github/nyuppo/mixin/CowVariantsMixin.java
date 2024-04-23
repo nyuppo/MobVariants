@@ -55,7 +55,7 @@ public abstract class CowVariantsMixin extends MobEntityVariantsMixin {
                 updateBuf.writeInt(((Entity)(Object)this).getId());
                 updateBuf.writeString(variant.getIdentifier().toString());
 
-                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_BASIC_VARIANT_ID, updateBuf);
             });
         }
     }
