@@ -62,8 +62,10 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
                 PacketByteBuf updateBuf = PacketByteBufs.create();
                 updateBuf.writeInt(((Entity)(Object)this).getId());
                 updateBuf.writeString(variant.getIdentifier().toString());
+                //all three values in the "regular" packet post update
                 updateBuf.writeBoolean(isMuddy);
-                updateBuf.writeInt(muddyTimeLeft);
+                updateBuf.writeVarInt(muddyTimeLeft);
+                updateBuf.writeString("");
 
                 ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
             });

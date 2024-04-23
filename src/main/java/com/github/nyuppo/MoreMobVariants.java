@@ -70,46 +70,56 @@ public class MoreMobVariants implements ModInitializer {
         // Server event to respond to client request for a variant
         ServerPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.CLIENT_REQUEST_VARIANT_ID, ((server, player, handler, buf, responseSender) -> {
             UUID uuid = buf.readUuid();
-            Entity entity = server.getOverworld().getEntity(uuid);
+            server.execute( () -> {
+                Entity entity = server.getOverworld().getEntity(uuid);
 
-            // If we couldn't find the mob in the overworld, start checking all other worlds
-            if (entity == null) {
-                for (ServerWorld serverWorld : server.getWorlds()) {
-                    Entity entity2 = serverWorld.getEntity(uuid);
-                    if (entity2 != null) {
-                        entity = entity2;
+                // If we couldn't find the mob in the overworld, start checking all other worlds
+                if (entity == null) {
+                    for (ServerWorld serverWorld : server.getWorlds()) {
+                        Entity entity2 = serverWorld.getEntity(uuid);
+                        if (entity2 != null) {
+                            entity = entity2;
+                        }
                     }
                 }
-            }
 
-            if (entity != null) {
-                NbtCompound nbt = new NbtCompound();
-                entity.writeNbt(nbt);
+                if (entity != null) {
+                    NbtCompound nbt = new NbtCompound();
+                    entity.writeNbt(nbt);
 
-                if (nbt.contains(NBT_KEY)) {
-                    PacketByteBuf responseBuf = PacketByteBufs.create();
-                    responseBuf.writeInt(entity.getId());
-                    responseBuf.writeString(nbt.getString(NBT_KEY));
+                    if (nbt.contains(NBT_KEY)) {
+                        PacketByteBuf responseBuf = PacketByteBufs.create();
+                        responseBuf.writeInt(entity.getId());
+                        responseBuf.writeString(nbt.getString(NBT_KEY));
 
-                    // For some reason, "Sitting" syncing breaks, so send that too I guess
-                    if (entity instanceof TameableEntity) {
-                        responseBuf.writeBoolean(nbt.getBoolean("Sitting"));
+                        //going to pass all three of these regardless, so buf structure is constant. More cases can be added and hook into these as needed.
+                        boolean bl = false;
+                        int i = 0;
+                        String str = "";
+
+                        // For some reason, "Sitting" syncing breaks, so send that too I guess
+                        if (entity instanceof TameableEntity) {
+                            bl = nbt.getBoolean("Sitting");
+                        }
+
+                        // Muddy pigs
+                        if (entity instanceof PigEntity) {
+                            bl = nbt.getBoolean(MUDDY_NBT_KEY);
+                            i = nbt.getInt(MUDDY_TIMEOUT_NBT_KEY);
+                        }
+
+                        // Sheep horns
+                        if (entity instanceof SheepEntity) {
+                            str = nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY);
+                        }
+                        responseBuf.writeBoolean(bl);
+                        responseBuf.writeVarInt(i);
+                        responseBuf.writeString(str);
+
+                        ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
                     }
-
-                    // Muddy pigs
-                    if (entity instanceof PigEntity) {
-                        responseBuf.writeBoolean(nbt.getBoolean(MUDDY_NBT_KEY));
-                        responseBuf.writeInt(nbt.getInt(MUDDY_TIMEOUT_NBT_KEY));
-                    }
-
-                    // Sheep horns
-                    if (entity instanceof SheepEntity) {
-                        responseBuf.writeString(nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY));
-                    }
-
-                    ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
                 }
-            }
+            });
         }));
     }
 

@@ -57,7 +57,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
                 updateBuf.writeInt(((Entity)(Object)this).getId());
                 updateBuf.writeString(variant.getIdentifier().toString());
 
-                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_BASIC_VARIANT_ID, updateBuf);
             });
         }
     }
@@ -92,5 +92,3 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
         child.readCustomDataFromNbt(childNbt);
     }
 }
-
-
