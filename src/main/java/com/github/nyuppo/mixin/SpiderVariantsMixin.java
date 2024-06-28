@@ -41,7 +41,7 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.SPIDER, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SPIDER, ((SpiderEntity)(Object)this).getWorld().getRandom().nextLong(), ((SpiderEntity)(Object)this).getWorld().getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, ((SpiderEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.SPIDER, ((SpiderEntity)(Object)this).getRandom().nextLong(), ((SpiderEntity)(Object)this).getWorld().getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, ((SpiderEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -60,6 +60,6 @@ public class SpiderVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.SPIDER, world.getRandom().nextLong(), world.getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.SPIDER, ((SpiderEntity)(Object)this).getRandom().nextLong(), world.getBiome(((SpiderEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 }
