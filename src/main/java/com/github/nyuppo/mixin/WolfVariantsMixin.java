@@ -44,7 +44,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.WOLF, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.WOLF, ((WolfEntity)(Object)this).getWorld().getRandom().nextLong(), ((WolfEntity)(Object)this).getWorld().getBiome(((WolfEntity)(Object)this).getBlockPos()), null, ((WolfEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.WOLF, ((WolfEntity)(Object)this).getRandom().nextLong(), ((WolfEntity)(Object)this).getWorld().getBiome(((WolfEntity)(Object)this).getBlockPos()), null, ((WolfEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -63,7 +63,7 @@ public class WolfVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.WOLF, world.getRandom().nextLong(), world.getBiome(((WolfEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.WOLF, ((WolfEntity)(Object)this).getRandom().nextLong(), world.getBiome(((WolfEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 
     @Inject(
