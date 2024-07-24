@@ -1,5 +1,9 @@
 {
   "values": [
-    "minecraft:taiga"
+    "minecraft:taiga",
+
+    "regions_unexplored:alpha_grove",
+    "regions_unexplored:pine_slopes",
+    "regions_unexplored:maple_forest"
   ]
 }

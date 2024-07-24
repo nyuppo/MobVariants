@@ -2,6 +2,10 @@
   "values": [
     "minecraft:bamboo_jungle",
     "minecraft:jungle",
-    "minecraft:sparse_jungle"
+    "minecraft:sparse_jungle",
+
+    "regions_unexplored:bamboo_forest",
+    "regions_unexplored:sparse_redwoods",
+    "regions_unexplored:redwoods"
   ]
 }

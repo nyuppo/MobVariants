@@ -5,6 +5,17 @@
     "minecraft:sparse_jungle",
     "minecraft:swamp",
     "minecraft:mangrove_swamp",
-    "minecraft:lush_caves"
+    "minecraft:lush_caves",
+
+    "regions_unexplored:bamboo_forest",
+    "regions_unexplored:bayou",
+    "regions_unexplored:fen",
+    "regions_unexplored:fungal_fen",
+    "regions_unexplored:marsh",
+    "regions_unexplored:muddy_river",
+    "regions_unexplored:old_growth_bayou",
+    "regions_unexplored:rainforest",
+    "regions_unexplored:sparse_rainforest",
+    "regions_unexplored:tropics"
   ]
 }

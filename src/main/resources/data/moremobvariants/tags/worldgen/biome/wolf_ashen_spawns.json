@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:snowy_taiga"
+    "minecraft:snowy_taiga",
+
+    "regions_unexplored:frozen_pine_taiga"
   ]
 }
