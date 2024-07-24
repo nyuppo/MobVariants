@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -45,7 +44,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.CHICKEN, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getWorld().getRandom().nextLong(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, ((ChickenEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getRandom().nextLong(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, ((ChickenEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -64,7 +63,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.CHICKEN, world.getRandom().nextLong(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getRandom().nextLong(), world.getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 
     @Inject(
