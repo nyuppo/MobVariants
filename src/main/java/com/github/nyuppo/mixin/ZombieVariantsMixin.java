@@ -40,7 +40,7 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.ZOMBIE, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((ZombieEntity)(Object)this).getWorld().getRandom().nextLong(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, ((ZombieEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((ZombieEntity)(Object)this).getRandom().nextLong(), ((ZombieEntity)(Object)this).getWorld().getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, ((ZombieEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
@@ -59,6 +59,6 @@ public class ZombieVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.ZOMBIE, world.getRandom().nextLong(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((ZombieEntity)(Object)this).getRandom().nextLong(), world.getBiome(((ZombieEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
     }
 }

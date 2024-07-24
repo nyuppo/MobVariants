@@ -44,7 +44,7 @@ public abstract class ChickenVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.CHICKEN, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getWorld().getRandom().nextLong(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, ((ChickenEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.CHICKEN, ((ChickenEntity)(Object)this).getRandom().nextLong(), ((ChickenEntity)(Object)this).getWorld().getBiome(((ChickenEntity)(Object)this).getBlockPos()), null, ((ChickenEntity)(Object)this).getWorld().getMoonSize());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

@@ -49,7 +49,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
                 variant = Variants.getVariant(EntityType.PIG, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getWorld().getRandom().nextLong(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null, ((PigEntity)(Object)this).getWorld().getMoonSize());
+            variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getRandom().nextLong(), ((PigEntity)(Object)this).getWorld().getBiome(((PigEntity)(Object)this).getBlockPos()), null, ((PigEntity)(Object)this).getWorld().getMoonSize());
         }
         isMuddy = nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY);
         muddyTimeLeft = nbt.getInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY);
@@ -74,7 +74,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
 
     @Override
     protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
-        variant = Variants.getRandomVariant(EntityType.PIG, world.getRandom().nextLong(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
+        variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getRandom().nextLong(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         // 2% chance of pig starting muddy if in swamp
         if (world.getBiome(((PigEntity)(Object)this).getBlockPos()).isIn(BiomeTags.RUINED_PORTAL_SWAMP_HAS_STRUCTURE) && world.getRandom().nextDouble() < 0.02) {
