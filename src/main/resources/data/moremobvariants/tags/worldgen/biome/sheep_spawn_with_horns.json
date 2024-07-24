@@ -13,6 +13,15 @@
     "minecraft:frozen_river",
     "minecraft:snowy_beach",
     "minecraft:snowy_plains",
-    "minecraft:ice_spikes"
+    "minecraft:ice_spikes",
+
+    "regions_unexplored:cold_boreal_taiga",
+    "regions_unexplored:cold_deciduous_forest",
+    "regions_unexplored:frozen_pine_taiga",
+    "regions_unexplored:frozen_tundra",
+    "regions_unexplored:highland_fields",
+    "regions_unexplored:icy_heights",
+    "regions_unexplored:spires",
+    "regions_unexplored:towering_cliffs"
   ]
 }

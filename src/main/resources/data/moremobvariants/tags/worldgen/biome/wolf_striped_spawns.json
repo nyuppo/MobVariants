@@ -2,6 +2,9 @@
   "values": [
     "minecraft:badlands",
     "minecraft:eroded_badlands",
-    "minecraft:wooded_badlands"
+    "minecraft:wooded_badlands",
+
+    "regions_unexplored:dry_bushland",
+    "regions_unexplored:prairie"
   ]
 }

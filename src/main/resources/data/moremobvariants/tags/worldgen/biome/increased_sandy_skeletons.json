@@ -1,5 +1,9 @@
 {
   "values": [
-    "minecraft:desert"
+    "minecraft:desert",
+
+    "regions_unexplored:joshua_desert",
+    "regions_unexplored:grassy_beach",
+    "regions_unexplored:saguaro_desert"
   ]
 }

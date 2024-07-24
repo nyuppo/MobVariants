@@ -5,6 +5,13 @@
     "minecraft:birch_forest",
     "minecraft:old_growth_birch_forest",
     "minecraft:dark_forest",
-    "minecraft:grove"
+    "minecraft:grove",
+
+    "regions_unexplored:cold_deciduous_forest",
+    "regions_unexplored:deciduous_forest",
+    "regions_unexplored:maple_forest",
+    "regions_unexplored:silver_birch_forest",
+    "regions_unexplored:orchard"
+  ]
   ]
 }
