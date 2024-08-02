@@ -7,10 +7,25 @@
     "minecraft:dark_forest",
     "minecraft:grove",
 
-    "regions_unexplored:cold_deciduous_forest",
-    "regions_unexplored:deciduous_forest",
-    "regions_unexplored:maple_forest",
-    "regions_unexplored:silver_birch_forest",
-    "regions_unexplored:orchard"
+    {
+      "id": "regions_unexplored:cold_deciduous_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:deciduous_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:maple_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:silver_birch_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:orchard",
+      "required": false
+    }
   ]
 }

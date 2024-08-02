@@ -4,8 +4,17 @@
     "minecraft:jungle",
     "minecraft:sparse_jungle",
 
-    "regions_unexplored:bamboo_forest",
-    "regions_unexplored:sparse_redwoods",
-    "regions_unexplored:redwoods"
+    {
+      "id": "regions_unexplored:bamboo_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:sparse_redwoods",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:redwoods",
+      "required": false
+    }
   ]
 }

@@ -2,8 +2,17 @@
   "values": [
     "minecraft:desert",
 
-    "regions_unexplored:joshua_desert",
-    "regions_unexplored:grassy_beach",
-    "regions_unexplored:saguaro_desert"
+    {
+      "id": "regions_unexplored:joshua_desert",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:grassy_beach",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:saguaro_desert",
+      "required": false
+    }
   ]
 }
