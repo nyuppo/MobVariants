@@ -2,8 +2,17 @@
   "values": [
     "minecraft:grove",
 
-    "regions_unexplored:frozen_tundra",
-    "regions_unexplored:spires",
-    "regions_unexplored:icy_heights"
+    {
+      "id": "regions_unexplored:frozen_tundra",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:spires",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:icy_heights",
+      "required": false
+    }
   ]
 }

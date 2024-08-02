@@ -4,7 +4,13 @@
     "minecraft:savanna_plateau",
     "minecraft:windswept_savanna",
 
-    "regions_unexplored:baobab_savanna",
-    "regions_unexplored:steppe"
+    {
+      "id": "regions_unexplored:baobab_savanna",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:steppe",
+      "required": false
+    }
   ]
 }

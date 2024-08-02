@@ -2,8 +2,17 @@
   "values": [
     "minecraft:old_growth_spruce_taiga",
 
-    "regions_unexplored:boreal_taiga",
-    "regions_unexplored:cold_boreal_taiga",
-    "regions_unexplored:golden_boreal_taiga"
+    {
+      "id": "regions_unexplored:boreal_taiga",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:cold_boreal_taiga",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:golden_boreal_taiga",
+      "required": false
+    }
   ]
 }

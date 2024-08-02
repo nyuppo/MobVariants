@@ -2,7 +2,13 @@
   "values": [
     "minecraft:old_growth_pine_taiga",
 
-    "regions_unexplored:blackwood_taiga",
-    "regions_unexplored:pine_taiga"
+    {
+      "id": "regions_unexplored:blackwood_taiga",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:pine_taiga",
+      "required": false
+    }
   ]
 }
