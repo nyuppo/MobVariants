@@ -39,11 +39,11 @@ public class ShearedWoolColorFeatureRenderer<T extends SheepEntity, M extends Sh
             MobVariant variant = Variants.getVariantFromNametag(EntityType.SHEEP, sheepEntity.getName().getString());
             if (variant != null) {
                 if (variant.hasColorWhenSheared()) {
-                    float[] hs = SheepEntity.getRgbColor(sheepEntity.getColor());
+                    int color = SheepEntity.getRgbColor(sheepEntity.getColor());
 
                     RenderLayer FUR_OVERLAY = RenderLayer.getEntityCutoutNoCull(MoreMobVariants.id("textures/entity/sheep/sheared_color_overlay/" + variant.getIdentifier().getPath() + ".png"));
                     VertexConsumer vertexConsumer = vertexConsumers.getBuffer(FUR_OVERLAY);
-                    ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, hs[0], hs[1], hs[2], 1.0f);
+                    ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, color);
                 }
                 return;
             }
@@ -53,13 +53,13 @@ public class ShearedWoolColorFeatureRenderer<T extends SheepEntity, M extends Sh
         sheepEntity.writeCustomDataToNbt(nbt);
 
         if (nbt.contains(MoreMobVariants.NBT_KEY)) {
-            Identifier variant = new Identifier(nbt.getString(MoreMobVariants.NBT_KEY));
+            Identifier variant = Identifier.of(nbt.getString(MoreMobVariants.NBT_KEY));
             if (Variants.getVariant(EntityType.SHEEP, variant).hasColorWhenSheared()) {
-                float[] hs = SheepEntity.getRgbColor(sheepEntity.getColor());
+                int color = SheepEntity.getRgbColor(sheepEntity.getColor());
 
                 RenderLayer FUR_OVERLAY = RenderLayer.getEntityCutoutNoCull(MoreMobVariants.id("textures/entity/sheep/sheared_color_overlay/" + variant.getPath() + ".png"));
                 VertexConsumer vertexConsumer = vertexConsumers.getBuffer(FUR_OVERLAY);
-                ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, hs[0], hs[1], hs[2], 1.0f);
+                ((Model)this.getContextModel()).render(matrices, vertexConsumer, 0xF00000, OverlayTexture.DEFAULT_UV, color);
             }
         }
 

@@ -3,7 +3,10 @@ package com.github.nyuppo;
 import com.github.nyuppo.client.render.entity.feature.PigMudFeatureRenderer;
 import com.github.nyuppo.client.render.entity.feature.ShearedWoolColorFeatureRenderer;
 import com.github.nyuppo.client.render.entity.feature.SheepHornsFeatureRenderer;
+import com.github.nyuppo.networking.ClientRequestVariantPayload;
 import com.github.nyuppo.networking.MMVNetworkingConstants;
+import com.github.nyuppo.networking.ServerRespondBasicVariantPayload;
+import com.github.nyuppo.networking.ServerRespondVariantPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -46,17 +49,15 @@ public class MoreMobVariantsClient implements ClientModInitializer {
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             // Check if entity can have variants so we don't make useless requests
             if (validEntities.contains(entity.getType())) {
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeUuid(entity.getUuid());
-
-                ClientPlayNetworking.send(MMVNetworkingConstants.CLIENT_REQUEST_VARIANT_ID, buf);
+                ClientPlayNetworking.send(new ClientRequestVariantPayload(entity.getUuid()));
             }
         });
 
         // Client event to handle response from server about basic mob variants
-        ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_BASIC_VARIANT_ID, ((client, handler, buf, responseSender) -> {
-            int id = buf.readInt();
-            String variantId = buf.readString();
+        ClientPlayNetworking.registerGlobalReceiver(ServerRespondBasicVariantPayload.ID, ((payload, context) -> {
+            var client = context.client();
+            int id = payload.entityId();
+            String variantId = payload.variantId();
             client.execute(() -> {
                 if (client.world != null) {
                     Entity entity = client.world.getEntityById(id);
@@ -72,13 +73,16 @@ public class MoreMobVariantsClient implements ClientModInitializer {
 
 
         // Client event to handle response from server about complex mob variants
-        ClientPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, ((client, handler, buf, responseSender) -> {
-            int id = buf.readInt();
-            String variantId = buf.readString();
+        ClientPlayNetworking.registerGlobalReceiver(ServerRespondVariantPayload.ID, ((payload, context) -> {
+            var client = context.client();
+            int id = payload.entityId();
+            String variantId = payload.variant();
+
             //read all three buffer values regardless, in the Netty loop. use as needed in the client.
-            boolean bl = buf.readBoolean();
-            int i = buf.readVarInt();
-            String str = buf.readString();
+            boolean bl = payload.sittingOrMuddy();
+            int i = payload.muddyTimeout();
+            String str = payload.sheepHornColour();
+
             client.execute(() -> {
                 if (client.world != null) {
                     Entity entity = client.world.getEntityById(id);

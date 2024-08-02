@@ -2,9 +2,8 @@ package com.github.nyuppo.mixin;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.Variants;
-import com.github.nyuppo.networking.MMVNetworkingConstants;
+import com.github.nyuppo.networking.ServerRespondBasicVariantPayload;
 import com.github.nyuppo.variant.MobVariant;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
@@ -13,7 +12,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -40,7 +38,7 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
             if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.CAT, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
+                variant = Variants.getVariant(EntityType.CAT, Identifier.of(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
                 variant = Variants.getVariant(EntityType.CAT, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
@@ -53,22 +51,18 @@ public class CatVariantsMixin extends MobEntityVariantsMixin {
         MinecraftServer server = ((Entity)(Object)this).getServer();
         if (server != null) {
             server.getPlayerManager().getPlayerList().forEach((player) -> {
-                PacketByteBuf updateBuf = PacketByteBufs.create();
-                updateBuf.writeInt(((Entity)(Object)this).getId());
-                updateBuf.writeString(variant.getIdentifier().toString());
-
-                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_BASIC_VARIANT_ID, updateBuf);
+                ServerPlayNetworking.send(player, new ServerRespondBasicVariantPayload(((Entity)(Object)this).getId(), variant.getIdentifier().toString()));
             });
         }
     }
 
     @Override
-    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
+    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.CAT, ((CatEntity)(Object)this).getRandom().nextLong(), world.getBiome(((CatEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         // Check if we should spawn black cats (witch huts)
         if (world.toServerWorld().getStructureAccessor().getStructureContaining(((CatEntity) (Object) this).getBlockPos(), StructureTags.CATS_SPAWN_AS_BLACK).hasChildren()) {
-            MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, new Identifier("all_black"));
+            MobVariant allBlack = Variants.getVariantNullable(EntityType.CAT, Identifier.ofVanilla("all_black"));
             if (allBlack != null) {
                 variant = allBlack;
                 ((CatEntity) (Object) this).setPersistent();

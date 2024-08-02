@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WolfEntityRenderer.class)
 public class WolfRendererMixin {
-    private static final Identifier DEFAULT_WILD = new Identifier("textures/entity/wolf/wolf.png");
-    private static final Identifier DEFAULT_TAMED = new Identifier("textures/entity/wolf/wolf_tame.png");
-    private static final Identifier DEFAULT_ANGRY = new Identifier("textures/entity/wolf/wolf_angry.png");
+    private static final Identifier DEFAULT_WILD = Identifier.ofVanilla("textures/entity/wolf/wolf.png");
+    private static final Identifier DEFAULT_TAMED = Identifier.ofVanilla("textures/entity/wolf/wolf_tame.png");
+    private static final Identifier DEFAULT_ANGRY = Identifier.ofVanilla("textures/entity/wolf/wolf_angry.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(WolfEntity wolfEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -35,9 +35,9 @@ public class WolfRendererMixin {
             } else {
                 String[] split = Variants.splitVariant(variant);
                 if (wolfEntity.isTamed()) {
-                    ci.setReturnValue(new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_tame.png"));
+                    ci.setReturnValue(Identifier.of(split[0], "textures/entity/wolf/" + split[1] + "_tame.png"));
                 } else {
-                    ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_angry.png") : new Identifier(split[0], "textures/entity/wolf/" + split[1] + "_wild.png"));
+                    ci.setReturnValue(wolfEntity.hasAngerTime() ? Identifier.of(split[0], "textures/entity/wolf/" + split[1] + "_angry.png") : Identifier.of(split[0], "textures/entity/wolf/" + split[1] + "_wild.png"));
                 }
             }
         }
@@ -47,9 +47,9 @@ public class WolfRendererMixin {
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
                 if (wolfEntity.isTamed()) {
-                    ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_tame.png"));
+                    ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_tame.png"));
                 } else {
-                    ci.setReturnValue(wolfEntity.hasAngerTime() ? new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_angry.png") : new Identifier(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_wild.png"));
+                    ci.setReturnValue(wolfEntity.hasAngerTime() ? Identifier.of(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_angry.png") : Identifier.of(identifier.getNamespace(), "textures/entity/wolf/" + identifier.getPath() + "_wild.png"));
                 }
             }
         }

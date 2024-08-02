@@ -19,10 +19,10 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class SheepHornsFeatureRenderer<T extends SheepEntity, M extends SheepEntityModel<T>> extends FeatureRenderer<T, M> {
-    private static final RenderLayer HORNS_BROWN = RenderLayer.getEntityCutoutNoCull(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_brown.png"));
-    private static final RenderLayer HORNS_GRAY = RenderLayer.getEntityCutoutNoCull(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_gray.png"));
-    private static final RenderLayer HORNS_BLACK = RenderLayer.getEntityCutoutNoCull(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_black.png"));
-    private static final RenderLayer HORNS_BEIGE = RenderLayer.getEntityCutoutNoCull(new Identifier(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_beige.png"));
+    private static final RenderLayer HORNS_BROWN = RenderLayer.getEntityCutoutNoCull(Identifier.of(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_brown.png"));
+    private static final RenderLayer HORNS_GRAY = RenderLayer.getEntityCutoutNoCull(Identifier.of(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_gray.png"));
+    private static final RenderLayer HORNS_BLACK = RenderLayer.getEntityCutoutNoCull(Identifier.of(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_black.png"));
+    private static final RenderLayer HORNS_BEIGE = RenderLayer.getEntityCutoutNoCull(Identifier.of(MoreMobVariants.MOD_ID, "textures/entity/sheep/horns/horns_beige.png"));
     private final ModelPart horns = getTexturedModelData().createModel();
 
     public SheepHornsFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext) {

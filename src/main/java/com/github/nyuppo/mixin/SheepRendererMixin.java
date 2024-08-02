@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SheepEntityRenderer.class)
 public class SheepRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/sheep/sheep.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/sheep/sheep.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(SheepEntity sheepEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class SheepRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);;
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/sheep/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/sheep/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class SheepRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.SHEEP, sheepEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/sheep/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/sheep/" + identifier.getPath() + ".png"));
             }
         }
     }

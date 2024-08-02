@@ -3,19 +3,16 @@ package com.github.nyuppo.mixin;
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.SheepHornSettings;
 import com.github.nyuppo.config.Variants;
-import com.github.nyuppo.networking.MMVNetworkingConstants;
+import com.github.nyuppo.networking.ServerRespondVariantPayload;
 import com.github.nyuppo.variant.MobVariant;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -43,7 +40,7 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
             if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.SHEEP, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
+                variant = Variants.getVariant(EntityType.SHEEP, Identifier.of(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
                 variant = Variants.getVariant(EntityType.SHEEP, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
@@ -57,21 +54,13 @@ public abstract class SheepVariantsMixin extends MobEntityVariantsMixin {
         MinecraftServer server = ((Entity)(Object)this).getServer();
         if (server != null) {
             server.getPlayerManager().getPlayerList().forEach((player) -> {
-                PacketByteBuf updateBuf = PacketByteBufs.create();
-                updateBuf.writeInt(((Entity)(Object)this).getId());
-                updateBuf.writeString(variant.getIdentifier().toString());
-                //all three values in the "regular" packet post update
-                updateBuf.writeBoolean(false);
-                updateBuf.writeVarInt(0);
-                updateBuf.writeString(hornColour);
-
-                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+                ServerPlayNetworking.send(player, new ServerRespondVariantPayload(((Entity)(Object)this).getId(), variant.getIdentifier().toString(), false, 0, hornColour));
             });
         }
     }
 
     @Override
-    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
+    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.SHEEP, ((SheepEntity)(Object)this).getRandom().nextLong(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         SheepHornSettings.SheepHornColour colour = SheepHornSettings.getRandomSheepHornColour(((SheepEntity)(Object)this).getRandom(), world.getBiome(((SheepEntity)(Object)this).getBlockPos()));

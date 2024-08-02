@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SpiderEntityRenderer.class)
 public class SpiderRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/spider/spider.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/spider/spider.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(SpiderEntity spiderEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class SpiderRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/spider/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/spider/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class SpiderRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.SPIDER, spiderEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/spider/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/spider/" + identifier.getPath() + ".png"));
             }
         }
     }

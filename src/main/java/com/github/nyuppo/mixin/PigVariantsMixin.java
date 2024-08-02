@@ -3,7 +3,7 @@ package com.github.nyuppo.mixin;
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.Variants;
-import com.github.nyuppo.networking.MMVNetworkingConstants;
+import com.github.nyuppo.networking.ServerRespondVariantPayload;
 import com.github.nyuppo.variant.MobVariant;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -44,7 +44,7 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.getString(MoreMobVariants.NBT_KEY).isEmpty()) {
             if (nbt.getString(MoreMobVariants.NBT_KEY).contains(":")) {
-                variant = Variants.getVariant(EntityType.PIG, new Identifier(nbt.getString(MoreMobVariants.NBT_KEY)));
+                variant = Variants.getVariant(EntityType.PIG, Identifier.of(nbt.getString(MoreMobVariants.NBT_KEY)));
             } else {
                 variant = Variants.getVariant(EntityType.PIG, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
@@ -59,21 +59,13 @@ public abstract class PigVariantsMixin extends MobEntityVariantsMixin {
         MinecraftServer server = ((Entity)(Object)this).getServer();
         if (server != null) {
             server.getPlayerManager().getPlayerList().forEach((player) -> {
-                PacketByteBuf updateBuf = PacketByteBufs.create();
-                updateBuf.writeInt(((Entity)(Object)this).getId());
-                updateBuf.writeString(variant.getIdentifier().toString());
-                //all three values in the "regular" packet post update
-                updateBuf.writeBoolean(isMuddy);
-                updateBuf.writeVarInt(muddyTimeLeft);
-                updateBuf.writeString("");
-
-                ServerPlayNetworking.send(player, MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, updateBuf);
+                ServerPlayNetworking.send(player, new ServerRespondVariantPayload(((Entity)(Object)this).getId(), variant.getIdentifier().toString(), isMuddy, muddyTimeLeft, ""));
             });
         }
     }
 
     @Override
-    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt, CallbackInfoReturnable<EntityData> ci) {
+    protected void onInitialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, CallbackInfoReturnable<EntityData> ci) {
         variant = Variants.getRandomVariant(EntityType.PIG, ((PigEntity)(Object)this).getRandom().nextLong(), world.getBiome(((PigEntity)(Object)this).getBlockPos()), null, world.getMoonSize());
 
         // 2% chance of pig starting muddy if in swamp

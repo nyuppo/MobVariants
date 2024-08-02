@@ -41,7 +41,7 @@ public class CustomEyesFeatureMixin<T extends Entity> {
                 String[] split = Variants.splitVariant(variant);
 
                 if (Variants.getVariant(EntityType.SPIDER, Identifier.of(split[0], split[1])).hasCustomEyes()) {
-                    args.set(0, RenderLayer.getEyes(new Identifier(split[0], "textures/entity/spider/eyes/" + split[1] + ".png")));
+                    args.set(0, RenderLayer.getEyes(Identifier.of(split[0], "textures/entity/spider/eyes/" + split[1] + ".png")));
                 }
             }
         }

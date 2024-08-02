@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ZombieBaseEntityRenderer.class)
 public class ZombieRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/zombie/zombie.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/zombie/zombie.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(ZombieEntity zombieEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class ZombieRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/zombie/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/zombie/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class ZombieRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.ZOMBIE, zombieEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/zombie/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/zombie/" + identifier.getPath() + ".png"));
             }
         }
     }

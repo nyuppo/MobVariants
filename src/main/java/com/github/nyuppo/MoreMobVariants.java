@@ -1,11 +1,15 @@
 package com.github.nyuppo;
 
 import com.github.nyuppo.config.ConfigDataLoader;
+import com.github.nyuppo.networking.ClientRequestVariantPayload;
 import com.github.nyuppo.networking.MMVNetworkingConstants;
+import com.github.nyuppo.networking.ServerRespondBasicVariantPayload;
+import com.github.nyuppo.networking.ServerRespondVariantPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
@@ -39,22 +43,22 @@ public class MoreMobVariants implements ModInitializer {
     public static final String SHEEP_HORN_COLOUR_NBT_KEY = "HornColour";
 
     // Pig mud tag
-    public static final TagKey<Block> PIG_MUD_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "pig_mud_blocks"));
+    public static final TagKey<Block> PIG_MUD_BLOCKS = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "pig_mud_blocks"));
 
     // Biome tags
-    public static final TagKey<Biome> SPAWN_MOSSY_SKELETONS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "spawn_mossy_skeletons"));
-    public static final TagKey<Biome> INCREASED_SANDY_SKELETONS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "increased_sandy_skeletons"));
-    public static final TagKey<Biome> SHEEP_SPAWN_WITH_HORNS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "sheep_spawn_with_horns"));
-    public static final TagKey<Biome> SPAWN_PALE_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_pale_spawns"));
-    public static final TagKey<Biome> SPAWN_RUSTY_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_rusty_spawns"));
-    public static final TagKey<Biome> SPAWN_SPOTTED_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_spotted_spawns"));
-    public static final TagKey<Biome> SPAWN_BLACK_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_black_spawns"));
-    public static final TagKey<Biome> SPAWN_STRIPED_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_striped_spawns"));
-    public static final TagKey<Biome> SPAWN_SNOWY_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_snowy_spawns"));
-    public static final TagKey<Biome> SPAWN_ASHEN_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_ashen_spawns"));
-    public static final TagKey<Biome> SPAWN_WOODS_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_woods_spawns"));
-    public static final TagKey<Biome> SPAWN_CHESTNUT_WOLF = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "wolf_chestnut_spawns"));
-    public static final TagKey<Biome> ADDITIONAL_WOLF_SPAWNS = TagKey.of(RegistryKeys.BIOME, new Identifier(MOD_ID, "additional_wolf_spawns"));
+    public static final TagKey<Biome> SPAWN_MOSSY_SKELETONS = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "spawn_mossy_skeletons"));
+    public static final TagKey<Biome> INCREASED_SANDY_SKELETONS = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "increased_sandy_skeletons"));
+    public static final TagKey<Biome> SHEEP_SPAWN_WITH_HORNS = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "sheep_spawn_with_horns"));
+    public static final TagKey<Biome> SPAWN_PALE_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_pale_spawns"));
+    public static final TagKey<Biome> SPAWN_RUSTY_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_rusty_spawns"));
+    public static final TagKey<Biome> SPAWN_SPOTTED_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_spotted_spawns"));
+    public static final TagKey<Biome> SPAWN_BLACK_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_black_spawns"));
+    public static final TagKey<Biome> SPAWN_STRIPED_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_striped_spawns"));
+    public static final TagKey<Biome> SPAWN_SNOWY_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_snowy_spawns"));
+    public static final TagKey<Biome> SPAWN_ASHEN_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_ashen_spawns"));
+    public static final TagKey<Biome> SPAWN_WOODS_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_woods_spawns"));
+    public static final TagKey<Biome> SPAWN_CHESTNUT_WOLF = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "wolf_chestnut_spawns"));
+    public static final TagKey<Biome> ADDITIONAL_WOLF_SPAWNS = TagKey.of(RegistryKeys.BIOME, Identifier.of(MOD_ID, "additional_wolf_spawns"));
 
     @Override
     public void onInitialize() {
@@ -66,9 +70,15 @@ public class MoreMobVariants implements ModInitializer {
         // Make wolves spawn in more biomes
         BiomeModifications.addSpawn(BiomeSelectors.tag(ADDITIONAL_WOLF_SPAWNS), SpawnGroup.CREATURE, EntityType.WOLF, 5, 4, 4);
 
+        // Register payloads
+        PayloadTypeRegistry.playC2S().register(ClientRequestVariantPayload.ID, ClientRequestVariantPayload.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(ServerRespondBasicVariantPayload.ID, ServerRespondBasicVariantPayload.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(ServerRespondVariantPayload.ID, ServerRespondVariantPayload.PACKET_CODEC);
+
         // Server event to respond to client request for a variant
-        ServerPlayNetworking.registerGlobalReceiver(MMVNetworkingConstants.CLIENT_REQUEST_VARIANT_ID, ((server, player, handler, buf, responseSender) -> {
-            UUID uuid = buf.readUuid();
+        ServerPlayNetworking.registerGlobalReceiver(ClientRequestVariantPayload.ID, ((payload, context) -> {
+            var server = context.server();
+            var uuid = payload.uuid();
             server.execute( () -> {
                 Entity entity = server.getOverworld().getEntity(uuid);
 
@@ -87,10 +97,6 @@ public class MoreMobVariants implements ModInitializer {
                     entity.writeNbt(nbt);
 
                     if (nbt.contains(NBT_KEY)) {
-                        PacketByteBuf responseBuf = PacketByteBufs.create();
-                        responseBuf.writeInt(entity.getId());
-                        responseBuf.writeString(nbt.getString(NBT_KEY));
-
                         //going to pass all three of these regardless, so buf structure is constant. More cases can be added and hook into these as needed.
                         boolean bl = false;
                         int i = 0;
@@ -111,11 +117,9 @@ public class MoreMobVariants implements ModInitializer {
                         if (entity instanceof SheepEntity) {
                             str = nbt.getString(SHEEP_HORN_COLOUR_NBT_KEY);
                         }
-                        responseBuf.writeBoolean(bl);
-                        responseBuf.writeVarInt(i);
-                        responseBuf.writeString(str);
 
-                        ServerPlayNetworking.send(handler.getPlayer(), MMVNetworkingConstants.SERVER_RESPOND_VARIANT_ID, responseBuf);
+                        var responsePayload = new ServerRespondVariantPayload(entity.getId(), nbt.getString(NBT_KEY), bl, i, str);
+                        ServerPlayNetworking.send(context.player(), responsePayload);
                     }
                 }
             });
@@ -123,6 +127,6 @@ public class MoreMobVariants implements ModInitializer {
     }
 
     public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
 }

@@ -20,12 +20,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener {
-    private final Identifier SETTINGS_ID = new Identifier(MoreMobVariants.MOD_ID, "settings/settings.json");
-    private final Identifier SHEEP_HORN_SETTINGS_ID = new Identifier(MoreMobVariants.MOD_ID, "settings/sheep_horn_settings.json");
+    private final Identifier SETTINGS_ID = Identifier.of(MoreMobVariants.MOD_ID, "settings/settings.json");
+    private final Identifier SHEEP_HORN_SETTINGS_ID = Identifier.of(MoreMobVariants.MOD_ID, "settings/sheep_horn_settings.json");
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier(MoreMobVariants.MOD_ID, MoreMobVariants.MOD_ID);
+        return Identifier.of(MoreMobVariants.MOD_ID, MoreMobVariants.MOD_ID);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
 
             if (element.getAsJsonObject().has("biome_tag")) {
                 String[] biomesIdentifier = element.getAsJsonObject().get("biome_tag").getAsString().split(":");
-                TagKey<Biome> biomes = TagKey.of(RegistryKeys.BIOME, new Identifier(biomesIdentifier[0], biomesIdentifier[1]));
+                TagKey<Biome> biomes = TagKey.of(RegistryKeys.BIOME, Identifier.of(biomesIdentifier[0], biomesIdentifier[1]));
                 modifiers.add(new SpawnableBiomesModifier(biomes));
             }
 
@@ -136,8 +136,8 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                     double breedingChance = breeding.getAsJsonObject().get("breeding_chance").getAsDouble();
 
                     modifiers.add(new BreedingResultModifier(
-                            new Identifier(parent1[0], parent1[1]),
-                            new Identifier(parent2[0], parent2[1]),
+                            Identifier.of(parent1[0], parent1[1]),
+                            Identifier.of(parent2[0], parent2[1]),
                             breedingChance));
                 }
             }
@@ -169,7 +169,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
             }
         }
 
-        Variants.addVariant(Variants.getMob(mobId), new MobVariant(new Identifier(namespace, variantId), weight, modifiers));
+        Variants.addVariant(Variants.getMob(mobId), new MobVariant(Identifier.of(namespace, variantId), weight, modifiers));
     }
 
     private void applyBlacklist(Reader reader, String mob) {
@@ -180,7 +180,7 @@ public class ConfigDataLoader implements SimpleSynchronousResourceReloadListener
                 JsonArray blacklist = element.getAsJsonObject().get("blacklist").getAsJsonArray();
                 for (JsonElement entry : blacklist) {
                     String[] entrySplit = entry.getAsString().split(":");
-                    VariantBlacklist.blacklist(Variants.getMob(mob), new Identifier(entrySplit[0], entrySplit[1]));
+                    VariantBlacklist.blacklist(Variants.getMob(mob), Identifier.of(entrySplit[0], entrySplit[1]));
                 }
             }
         }

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CowEntityRenderer.class)
 public class CowRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/cow/cow.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/cow/cow.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(CowEntity cowEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class CowRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/cow/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/cow/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class CowRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.COW, cowEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/cow/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/cow/" + identifier.getPath() + ".png"));
             }
         }
     }

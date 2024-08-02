@@ -64,7 +64,7 @@ public class MobVariant {
     public Identifier getCustomVariantName() {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof CustomVariantNameModifier) {
-                return new Identifier(this.identifier.getNamespace(), ((CustomVariantNameModifier) modifier).variantName());
+                return Identifier.of(this.identifier.getNamespace(), ((CustomVariantNameModifier) modifier).variantName());
             }
         }
 

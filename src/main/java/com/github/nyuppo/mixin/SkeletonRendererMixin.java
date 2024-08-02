@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SkeletonEntityRenderer.class)
 public class SkeletonRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/skeleton/skeleton.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/skeleton/skeleton.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(AbstractSkeletonEntity skeletonEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class SkeletonRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/skeleton/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/skeleton/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class SkeletonRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.SKELETON, skeletonEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/skeleton/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/skeleton/" + identifier.getPath() + ".png"));
             }
         }
     }

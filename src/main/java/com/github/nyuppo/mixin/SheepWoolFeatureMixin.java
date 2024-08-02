@@ -15,12 +15,9 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(SheepWoolFeatureRenderer.class)
 public class SheepWoolFeatureMixin {
-    private static final Identifier DEFAULT_FUR = new Identifier("textures/entity/sheep/sheep_fur.png");
-    private static final Identifier TEST = new Identifier("moremobvariants", "textures/entity/sheep/wool/fuzzy.png");
-
     @ModifyArgs(
-            method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/SheepEntity;FFFFFF)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/feature/SheepWoolFeatureRenderer;render(Lnet/minecraft/client/render/entity/model/EntityModel;Lnet/minecraft/client/render/entity/model/EntityModel;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFFFFF)V")
+            method = "Lnet/minecraft/client/render/entity/feature/SheepWoolFeatureRenderer;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/passive/SheepEntity;FFFFFF)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/feature/SheepWoolFeatureRenderer;render(Lnet/minecraft/client/render/entity/model/EntityModel;Lnet/minecraft/client/render/entity/model/EntityModel;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFFI)V")
     )
     private void mixinSheepFurTexture(Args args) {
         SheepEntity sheepEntity = args.get(6);
@@ -36,13 +33,13 @@ public class SheepWoolFeatureMixin {
             String[] split = Variants.splitVariant(variant);
 
             if (Variants.getVariant(EntityType.SHEEP, Identifier.of(split[0], split[1])).hasCustomWool()) {
-                args.set(2, new Identifier(split[0], "textures/entity/sheep/wool/" + split[1] + ".png"));
+                args.set(2, Identifier.of(split[0], "textures/entity/sheep/wool/" + split[1] + ".png"));
 
                 if (sheepEntity.hasCustomName()) {
                     MobVariant nametagVariant = Variants.getVariantFromNametag(EntityType.SHEEP, sheepEntity.getName().getString());
                     if (nametagVariant != null) {
                         Identifier identifier = nametagVariant.getIdentifier();
-                        args.set(2, new Identifier(identifier.getNamespace(), "textures/entity/sheep/wool/" + identifier.getPath() + ".png"));
+                        args.set(2, Identifier.of(identifier.getNamespace(), "textures/entity/sheep/wool/" + identifier.getPath() + ".png"));
                     }
                 }
             }

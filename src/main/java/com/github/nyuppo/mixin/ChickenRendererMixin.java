@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChickenEntityRenderer.class)
 public class ChickenRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/chicken.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/chicken.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(ChickenEntity chickenEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class ChickenRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/chicken/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/chicken/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class ChickenRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.CHICKEN, chickenEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/chicken/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/chicken/" + identifier.getPath() + ".png"));
             }
         }
     }

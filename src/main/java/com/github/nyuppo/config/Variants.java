@@ -12,8 +12,6 @@ import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.CheckedRandom;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.math.random.RandomSplitter;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +74,7 @@ public class Variants {
         }
 
         if (mob == EntityType.CAT) {
-            return new MobVariant(new Identifier("tabby"), 1);
+            return new MobVariant(Identifier.of("tabby"), 1);
         }
 
         return new MobVariant(MoreMobVariants.id("default"), 1);
@@ -257,9 +255,9 @@ public class Variants {
 
         if (parent1Nbt.contains(MoreMobVariants.NBT_KEY) && parent2Nbt.contains(MoreMobVariants.NBT_KEY)) {
             String[] parent1VariantId = parent1Nbt.getString(MoreMobVariants.NBT_KEY).split(":");
-            MobVariant parent1Variant = Variants.getVariant(mob, new Identifier(parent1VariantId[0], parent1VariantId[1]));
+            MobVariant parent1Variant = Variants.getVariant(mob, Identifier.of(parent1VariantId[0], parent1VariantId[1]));
             String[] parent2VariantId = parent2Nbt.getString(MoreMobVariants.NBT_KEY).split(":");
-            MobVariant parent2Variant = Variants.getVariant(mob, new Identifier(parent2VariantId[0], parent2VariantId[1]));
+            MobVariant parent2Variant = Variants.getVariant(mob, Identifier.of(parent2VariantId[0], parent2VariantId[1]));
 
             return Variants.getRandomVariant(mob, world.getRandom().nextLong(), world.getBiome(parent1.getBlockPos()), new BreedingResultData(parent1Variant, parent2Variant), null);
         } else {
@@ -290,18 +288,18 @@ public class Variants {
 
         defaultVariants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
         defaultVariants.put(EntityType.CAT, new ArrayList<>(List.of(
-                new MobVariant(new Identifier("all_black"), 1)
+                new MobVariant(Identifier.ofVanilla("all_black"), 1)
                         .addModifier(new MoonPhaseModifier(0.9f)),
-                new MobVariant(new Identifier("black"), 1),
-                new MobVariant(new Identifier("british_shorthair"), 1),
-                new MobVariant(new Identifier("calico"), 1),
-                new MobVariant(new Identifier("jellie"), 1),
-                new MobVariant(new Identifier("persian"), 1),
-                new MobVariant(new Identifier("ragdoll"), 1),
-                new MobVariant(new Identifier("red"), 1),
-                new MobVariant(new Identifier("siamese"), 1),
-                new MobVariant(new Identifier("tabby"), 1),
-                new MobVariant(new Identifier("white"), 1),
+                new MobVariant(Identifier.ofVanilla("black"), 1),
+                new MobVariant(Identifier.ofVanilla("british_shorthair"), 1),
+                new MobVariant(Identifier.ofVanilla("calico"), 1),
+                new MobVariant(Identifier.ofVanilla("jellie"), 1),
+                new MobVariant(Identifier.ofVanilla("persian"), 1),
+                new MobVariant(Identifier.ofVanilla("ragdoll"), 1),
+                new MobVariant(Identifier.ofVanilla("red"), 1),
+                new MobVariant(Identifier.ofVanilla("siamese"), 1),
+                new MobVariant(Identifier.ofVanilla("tabby"), 1),
+                new MobVariant(Identifier.ofVanilla("white"), 1),
                 new MobVariant(MoreMobVariants.id("doug"), 1),
                 new MobVariant(MoreMobVariants.id("gray_tabby"), 1),
                 new MobVariant(MoreMobVariants.id("handsome"), 1),

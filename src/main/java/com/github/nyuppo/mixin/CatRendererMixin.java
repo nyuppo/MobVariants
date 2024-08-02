@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CatEntityRenderer.class)
 public class CatRendererMixin {
-    private static final Identifier DEFAULT = new Identifier("textures/entity/cat/tabby.png");
+    private static final Identifier DEFAULT = Identifier.ofVanilla("textures/entity/cat/tabby.png");
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void onGetTexture(CatEntity catEntity, CallbackInfoReturnable<Identifier> ci) {
@@ -28,7 +28,7 @@ public class CatRendererMixin {
                 ci.setReturnValue(DEFAULT);
             } else {
                 String[] split = Variants.splitVariant(variant);
-                ci.setReturnValue(new Identifier(split[0], "textures/entity/cat/" + split[1] + ".png"));
+                ci.setReturnValue(Identifier.of(split[0], "textures/entity/cat/" + split[1] + ".png"));
             }
         }
 
@@ -36,7 +36,7 @@ public class CatRendererMixin {
             MobVariant variant = Variants.getVariantFromNametag(EntityType.CAT, catEntity.getName().getString());
             if (variant != null) {
                 Identifier identifier = variant.getIdentifier();
-                ci.setReturnValue(new Identifier(identifier.getNamespace(), "textures/entity/cat/" + identifier.getPath() + ".png"));
+                ci.setReturnValue(Identifier.of(identifier.getNamespace(), "textures/entity/cat/" + identifier.getPath() + ".png"));
             }
         }
     }
