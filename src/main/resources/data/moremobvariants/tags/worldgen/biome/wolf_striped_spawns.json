@@ -4,7 +4,13 @@
     "minecraft:eroded_badlands",
     "minecraft:wooded_badlands",
 
-    "regions_unexplored:dry_bushland",
-    "regions_unexplored:prairie"
+    {
+      "id": "regions_unexplored:dry_bushland",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:prairie",
+      "required": false
+    }
   ]
 }

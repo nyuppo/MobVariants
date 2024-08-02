@@ -15,13 +15,37 @@
     "minecraft:snowy_plains",
     "minecraft:ice_spikes",
 
-    "regions_unexplored:cold_boreal_taiga",
-    "regions_unexplored:cold_deciduous_forest",
-    "regions_unexplored:frozen_pine_taiga",
-    "regions_unexplored:frozen_tundra",
-    "regions_unexplored:highland_fields",
-    "regions_unexplored:icy_heights",
-    "regions_unexplored:spires",
-    "regions_unexplored:towering_cliffs"
+    {
+      "id": "regions_unexplored:cold_boreal_taiga",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:cold_deciduous_forest",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:frozen_pine_taiga",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:frozen_tundra",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:highland_fields",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:icy_heights",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:spires",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:towering_cliffs",
+      "required": false
+    }
   ]
 }
